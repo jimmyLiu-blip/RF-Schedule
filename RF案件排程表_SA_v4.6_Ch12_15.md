@@ -1,5 +1,5 @@
-# SA v4.6 — Ch.12~15 濃縮版
-# 11. Domain Model（完整詳細版）
+# SA v4.6 — Ch.11~15 
+# 11. Domain Model
 
 ## 11.1 User（使用者）
 **用途**  
@@ -59,7 +59,7 @@
 - ProjectName 必填且不可重複  
 - StartDate ≤ EndDate（若都有填）  
 
-**自動狀態（v4.6 新增）**
+**自動狀態**
 | 條件 | Project.Status |
 |------|----------------|
 | 所有 TestItem = NotStarted | Draft |
@@ -237,7 +237,7 @@
 
 
 
-## 12. Web API 設計（濃縮）
+## 12. Web API 設計
 核心原則：RESTful、分層、可版本化、支援 RBAC 與 AuditLog。
 
 ### 12.1 API 結構
@@ -276,7 +276,7 @@
 
 ---
 
-## 13. 架構（Architecture）（濃縮）
+## 13. 架構（Architecture）
 
 ### 13.1 方案架構
 WinForms（DevExpress）
@@ -302,7 +302,7 @@ WinForms（DevExpress）
 
 ---
 
-## 14. 非功能需求（Non-Functional Requirements）（濃縮）
+## 14. 非功能需求（Non-Functional Requirements）
 
 ### 14.1 效能
 - Loading 計算 < 2 秒
@@ -328,7 +328,7 @@ WinForms（DevExpress）
 
 ---
 
-## 15. 例外與併發控制（濃縮）
+## 15. 例外與併發控制
 
 ### 15.1 併發編輯
 - 採用 RowVersion（樂觀鎖）
@@ -353,12 +353,3 @@ WinForms（DevExpress）
 - Manager 收到通知清單
 
 ---
-
-## 濃縮總結
-12～15 章節的核心精神是：
-- API 清楚分層、可版本化
-- 架構採 WinForms + Web API + EF Core
-- 提供企業級非功能需求（效能、安全、擴展）
-- 完整處理例外、併發與資料一致性
-
-此濃縮版可直接附加於 SA v4.6 主體文件中。
