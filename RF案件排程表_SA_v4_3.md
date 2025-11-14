@@ -343,7 +343,8 @@ AuditLog 記錄：
 
 ## 8. ER Diagram
 
-![alt text](ER Diagram.png)
+<img width="865" height="663" alt="image" src="https://github.com/user-attachments/assets/8b87c60b-fcc1-4207-8f06-ce4d18a362c6" />
+
 
 ---
 
