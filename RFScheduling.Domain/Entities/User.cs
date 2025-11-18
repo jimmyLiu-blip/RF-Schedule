@@ -1,17 +1,22 @@
 ﻿using RFScheduling.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace RFScheduling.Domain.Entities
 {
-    public class User : ISoftDeletable
+    public class User : ISoftDeletable, ICreatableNullable, IModifiable
     {
         public int UserId { get; set; }
 
+        [MaxLength(50)]
         public string Account { get; set; } = string.Empty;
 
+        [MaxLength(255)]
         public string PasswordHash { get; set; } = string.Empty;
 
+        [MaxLength(100)]
         public string DisplayName { get; set; } = string.Empty;
 
+        [MaxLength(255)]
         public string Email { get; set; } = string.Empty;
 
         public int RoleId { get; set; }
@@ -32,6 +37,7 @@ namespace RFScheduling.Domain.Entities
 
         public DateTime? DeletedDate { get; set; }
 
+        [Timestamp]
         public byte[] RowVersion { get; set; } = Array.Empty<byte>();
 
         // Navigation Properties

@@ -1,11 +1,15 @@
-﻿namespace RFScheduling.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RFScheduling.Domain.Entities
 {
     public class Role
     {
         public int RoleId { get; set; }
 
+        [MaxLength(50)]
         public string RoleName { get; set; } = string.Empty;
 
+        [MaxLength(50)]
         public string Description {  get; set; } = string.Empty;
 
         // Navigation Properties

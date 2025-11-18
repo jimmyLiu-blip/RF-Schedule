@@ -1,6 +1,6 @@
 ﻿namespace RFScheduling.Domain.Interfaces
 {
-    public interface ICreatable
+    public interface ICreatableRequired
     {
         int CreatedByUserId { get; set; }
 

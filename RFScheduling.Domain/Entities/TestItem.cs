@@ -3,7 +3,7 @@ using RFScheduling.Domain.Enums;
 
 namespace RFScheduling.Domain.Entities
 {
-    public class TestItem : ISoftDeletable, ICreatable, IModifiable
+    public class TestItem : ISoftDeletable, ICreatableRequired, IModifiable
     {
         public int TestItemId { get; set; }
         

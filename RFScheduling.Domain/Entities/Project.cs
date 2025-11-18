@@ -1,14 +1,17 @@
-﻿using RFScheduling.Domain.Interfaces;
-using RFScheduling.Domain.Enums;
+﻿using RFScheduling.Domain.Enums;
+using RFScheduling.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace RFScheduling.Domain.Entities
 {
-    public class Project : ISoftDeletable, ICreatable, IModifiable
+    public class Project : ISoftDeletable, ICreatableRequired, IModifiable
     {
         public int ProjectId { get; set; }
 
+        [MaxLength(200)]
         public string ProjectName { get; set; } = string.Empty;
 
+        [MaxLength(200)]
         public string? Customer {  get; set; }
 
         public PriorityLevel Priority {  get; set; } = PriorityLevel.Medium;
@@ -19,6 +22,7 @@ namespace RFScheduling.Domain.Entities
 
         public DateTime? EndDate { get; set; }
 
+        [MaxLength(1000)]
         public string? Note { get; set; }
 
         // ICreatable & IModifiable
@@ -32,6 +36,7 @@ namespace RFScheduling.Domain.Entities
         public DateTime? DeletedDate { get; set; }
 
         // Concurrency Token
+        [Timestamp]
         public byte[] RowVersion { get; set; } = Array.Empty<byte>();
 
         // Navigation Properties

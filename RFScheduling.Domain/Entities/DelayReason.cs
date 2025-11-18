@@ -4,7 +4,7 @@ using RFScheduling.Domain.Enums;
 
 namespace RFScheduling.Domain.Entities
 {
-    public class DelayReason : ICreatable, IModifiable
+    public class DelayReason : ICreatableRequired, IModifiable
     {
         public int DelayReasonId { get; set; }
 

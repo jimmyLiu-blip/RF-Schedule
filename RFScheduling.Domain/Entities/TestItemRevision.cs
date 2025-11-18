@@ -2,7 +2,7 @@
 
 namespace RFScheduling.Domain.Entities
 {
-    public class TestItemRevision : ISoftDeletable, ICreatable, IModifiable
+    public class TestItemRevision : ISoftDeletable, ICreatableRequired, IModifiable
     {
         public int RevisionId { get; set; }
 

@@ -4,7 +4,7 @@ using RFScheduling.Domain.Enums;
 // 檢查要多注意
 namespace RFScheduling.Domain.Entities
 {
-    public class WorkLog : ICreatable, IModifiable
+    public class WorkLog : ICreatableRequired, IModifiable
     {
         public int WorkLogId { get; set; }
 

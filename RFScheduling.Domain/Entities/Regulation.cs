@@ -2,7 +2,7 @@
 
 namespace RFScheduling.Domain.Entities
 {
-    public class Regulation : ISoftDeletable, ICreatable, IModifiable
+    public class Regulation : ISoftDeletable, ICreatableRequired, IModifiable
     {
         public int RegulationId { get; set; }
 
