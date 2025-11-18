@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RFScheduling.Domain.Interfaces;
+using RFScheduling.Domain.Enums;
 
 namespace RFScheduling.Domain.Entities
 {
-    internal class WorkLogDelayReason
+    public class WorkLogDelayReason
     {
+        public int WorkLogDelayReasonId { get; set; }
+
+        public int WorkLogId { get; set; }
+
+        public int DelayReasonId { get; set; }
+
+        // Navigation Properties
+        public WorkLog WorkLog { get; set; } = null!;
+
+        public DelayReason DelayReason { get; set; } = null!;
     }
 }
