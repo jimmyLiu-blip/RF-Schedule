@@ -1038,6 +1038,7 @@ Services/
      "email": "User@Example.com",
      "password": "P@ssw0rd!"
    }
+
 AuthController 呼叫 IAuthService.LoginLocal(email, password)：
 
 先將 email 轉成小寫：emailNormalized = email.Trim().ToLower()。
@@ -1054,7 +1055,7 @@ AuthType 包含 Local（可為 Local 或日後擴充 Mixed）。
 
 驗證成功後，由 IAuthService.GenerateJwt(user) 產生 JWT，回傳給 Client（含 Token、DisplayName、Role 等）。
 
-6.1.3 AD 登入流程
+#### 7.1.3 AD 登入流程
 
 WinForms Login 畫面：
 
@@ -1098,8 +1099,8 @@ Role 採預設角色（例如 Engineer），後續可由 Admin 調整。
 
 由 IAuthService.GenerateJwt(user) 產生 JWT 回傳。
 
-6.2 JWT Token 設計
-6.2.1 基本設定
+#### 7.2 JWT Token 設計
+### 7.2.1 基本設定
 
 簽章演算法： HS256（HMAC-SHA256）。
 
@@ -1113,7 +1114,7 @@ Audience（aud）：Jwt:Audience
 
 Expires（exp）：例如登入後 8 小時。
 
-6.2.2 Token Claims 設計（建議）
+### 7.2.2 Token Claims 設計
 
 標準 Claim：
 
@@ -1133,12 +1134,11 @@ role：Engineer / Manager / Admin。
 
 nbf / iat：Token 生效時間與建立時間。
 
-6.2.3 Middleware 與授權流程
+### 7.2.3 Middleware 與授權流程
 
 WinForms 每次呼叫 API 時，在 Header 加上：
 
 Authorization: Bearer {token}
-
 
 Web API 啟用 JWT Bearer Authentication：
 
@@ -1158,7 +1158,7 @@ Controller 或 Action 標註 [Authorize]：
 
 透過 User.FindFirst("email") 取得 Email。
 
-6.3 Email 正規化與一致性
+### 7.3 Email 正規化與一致性
 
 所有會寫入或查詢 Email 的地方（AuthService、UserService、UserController）必須統一走以下邏輯：
 
@@ -1176,7 +1176,7 @@ User.Email 永遠是小寫。
 
 因為 DB 中已經全部是小寫，加上查詢時也先轉小寫，自然達成 不區分大小寫（case-insensitive） 的效果。
 
-6.4 狀態計算與 JWT / 權限的關係
+### 7.4 狀態計算與 JWT / 權限的關係
 
 狀態計算（Regulation.Status / Project.Status）：
 
