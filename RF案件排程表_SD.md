@@ -1,4 +1,4 @@
-# 📙 RF案件排程系統 — 系統設計文件 (SD v2.0)
+# 📙 RF案件排程系統 — 系統設計文件 (SD v2.1)
 
 ---
 
@@ -107,25 +107,36 @@
 ---
 
 #### 1.2.2 Application Layer (Web API)
-**職責：**
-- 接收HTTP請求
-- 身份驗證與授權
-- 業務邏輯處理
-- Transaction管理
-- 回應HTTP回應
 
-**技術：**
-- ASP.NET Core Web API 8.0
-- JWT Bearer Authentication
-- AutoMapper (DTO映射)
-- FluentValidation (驗證)
+- **API 專案：** `RFScheduling.Api`
+- **主要責任：**
+  - 暴露 RESTful API 給 WinForms Client。
+  - 實作混合登入（Local 帳號 + AD 帳號）：
+    - 兩種登入流程最終都會找到 / 建立同一筆 `User` 資料（以 Email 為唯一識別）。
+    - 統一由 `IAuthService` 簽發 JWT，WinForms 之後一律用 JWT 呼叫 API。
+  - 實作 RBAC 權限檢查（AuthorizeAttribute + Policy / Claim）。
+  - 統一處理例外（Exception Middleware）、回傳標準錯誤格式。
+  - 實作 JWT 簽發與驗證 Middleware（Bearer Authentication）。
 
-**關鍵Service：**
-- **ProjectService:** 案件建立、修改、狀態計算
-- **WorkLogService:** 工時回報、狀態同步
-- **LoadingService:** Loading計算
-- **AuditLogService:** 稽核日誌記錄
-- **EmailService:** Email發送（密碼重設、通知）
+- **關鍵元件：**
+  - Controllers：
+    - `AuthController`：處理 Local 登入、AD 登入、取得使用者資訊等。
+    - `ProjectController`：案件查詢、建立、狀態查詢。
+    - `RegulationController`：法規層資料與狀態。
+    - `TestItemController`：測試項目維護與狀態更新。
+    - `WorkLogController`：工時紀錄新增、查詢。
+    - `UserController`：使用者管理（新增、停用、調整工時）。
+  - Service 介面：
+    - `IAuthService`：混合登入流程、Email 正規化（轉小寫）、JWT Token 簽發。
+    - `IUserService`：User CRUD、重設密碼、AD 使用者同步。
+    - `IProjectService`：Project 建立、狀態計算（由 Regulation.Status 彙總）。
+    - `IRegulationService`：Regulation 建立、狀態計算（由 TestItem.Status 彙總）。
+    - `ITestItemService`：TestItem / TestItemRevision 維護、狀態更新。
+    - `IWorkLogService`：WorkLog 新增 / 修改 / 刪除，包含 RevisionId 檢查。
+  - DTO / ViewModel：
+    - 登入 Request / Response DTO（含 JWT Token）。
+    - 案件清單、法規 + 測試項目樹狀結構 DTO。
+    - 工時回報 DTO（含 RevisionId）。
 
 ---
 
@@ -197,14 +208,26 @@ INSERT INTO [Role] (RoleName, Description) VALUES
 #### 2.2.2 User (使用者)
 ```sql
 CREATE TABLE [dbo].[User] (
-    [UserId]                INT          IDENTITY(1,1) NOT NULL,
-    [Account]               NVARCHAR(50)   NOT NULL,
-    [PasswordHash]          NVARCHAR(255)  NOT NULL,
+    [UserId]                INT IDENTITY(1,1) NOT NULL,
+    [Account]               NVARCHAR(50)   NOT NULL,  -- 顯示帳號
+    [PasswordHash]          NVARCHAR(255)  NULL,      -- Local 才使用
     [DisplayName]           NVARCHAR(100)  NOT NULL,
-    [Email]                 NVARCHAR(255)  NOT NULL,
-    [RoleId]                INT            NOT NULL,
+    [Email]                 NVARCHAR(255)  NOT NULL,  -- 唯一識別（Local/AD）
+    [RoleId]                INT            NOT NULL,  -- FK → Role
+    
     [WeeklyAvailableHours]  DECIMAL(5,2)   NOT NULL DEFAULT 37.5,
     [IsActive]              BIT            NOT NULL DEFAULT 1,
+
+    -- 🔵 AD 支援欄位
+    [AuthType]              NVARCHAR(20)   NOT NULL DEFAULT 'Local',  -- Local/AD
+    [ADAccount]             NVARCHAR(100)  NULL,      -- 使用者在 Active Directory 中的帳號
+    [ADDomain]              NVARCHAR(100)  NULL,      -- 公司網域
+
+    -- 🔵 登入紀錄欄位
+    [LastLoginDate]         DATETIME       NULL,
+    [LastLoginIP]           NVARCHAR(50)   NULL,
+
+    -- 建立、修改、刪除（軟刪除）
     [CreatedByUserId]       INT            NULL,
     [CreatedDate]           DATETIME       NOT NULL DEFAULT GETDATE(),
     [ModifiedDate]          DATETIME       NULL,
@@ -212,16 +235,21 @@ CREATE TABLE [dbo].[User] (
     [DeletedByUserId]       INT            NULL,
     [DeletedDate]           DATETIME       NULL,
     [RowVersion]            ROWVERSION     NOT NULL,
+
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([UserId]),
-    CONSTRAINT [FK_User_Role] FOREIGN KEY ([RoleId]) 
-        REFERENCES [Role]([RoleId]),
+    CONSTRAINT [FK_User_Role] FOREIGN KEY ([RoleId]) REFERENCES [Role]([RoleId]),
     CONSTRAINT [UQ_User_Account] UNIQUE ([Account]),
-    CONSTRAINT [UQ_User_Email] UNIQUE ([Email]),
-    CONSTRAINT [CK_User_WeeklyHours] CHECK ([WeeklyAvailableHours] > 0 AND [WeeklyAvailableHours] <= 72)
+    CONSTRAINT [UQ_User_Email] UNIQUE ([Email]) -- Email 唯一識別
 );
 
-CREATE NONCLUSTERED INDEX [IX_User_RoleId] ON [User]([RoleId]);
+CREATE UNIQUE NONCLUSTERED INDEX [UX_User_Email] ON [User]([Email]) WHERE [IsDeleted] = 0;
+
+CREATE UNIQUE NONCLUSTERED INDEX [UX_User_Account] ON [User]([Account]) WHERE [IsDeleted] = 0;
+
+CREATE NONCLUSTERED INDEX [IX_User_RoleId] ON [User]([RoleId]) WHERE [IsDeleted] = 0;
+
 CREATE NONCLUSTERED INDEX [IX_User_IsActive] ON [User]([IsActive]) WHERE [IsDeleted] = 0;
+
 ```
 
 **欄位說明：**
@@ -295,24 +323,37 @@ CREATE TABLE [dbo].[Regulation] (
     [RegulationId]      INT             IDENTITY(1,1) NOT NULL,
     [ProjectId]         INT             NOT NULL,
     [RegulationName]    NVARCHAR(100)   NOT NULL, -- FCC, NCC, CE, IC, TELEC
+
     [StartDate]         DATE            NOT NULL,
     [EndDate]           DATE            NOT NULL,
+
+    [Status]            NVARCHAR(20)    NOT NULL DEFAULT 'NotStarted',
+
     [Note]              NVARCHAR(500)   NULL,
+
     [CreatedByUserId]   INT             NOT NULL,
     [CreatedDate]       DATETIME        NOT NULL DEFAULT GETDATE(),
+
     [ModifiedDate]      DATETIME        NULL,
+    [ModifiedByUserId]  INT             NULL,
+
     [IsDeleted]         BIT             NOT NULL DEFAULT 0,
     [DeletedByUserId]   INT             NULL,
     [DeletedDate]       DATETIME        NULL,
+
     CONSTRAINT [PK_Regulation] PRIMARY KEY CLUSTERED ([RegulationId]),
     CONSTRAINT [FK_Regulation_Project] FOREIGN KEY ([ProjectId]) 
         REFERENCES [Project]([ProjectId]),
     CONSTRAINT [FK_Regulation_CreatedBy] FOREIGN KEY ([CreatedByUserId]) 
         REFERENCES [User]([UserId]),
+    CONSTRAINT [FK_Regulation_ModifiedBy] FOREIGN KEY ([ModifiedByUserId]) 
+        REFERENCES [User]([UserId]),
     CONSTRAINT [CK_Regulation_DateRange] CHECK ([EndDate] >= [StartDate])
 );
 
 CREATE NONCLUSTERED INDEX [IX_Regulation_ProjectId] ON [Regulation]([ProjectId]) WHERE [IsDeleted] = 0;
+
+CREATE NONCLUSTERED INDEX [IX_Regulation_Status] ON [Regulation]([Status]) WHERE [IsDeleted] = 0;
 ```
 
 ---
@@ -430,15 +471,37 @@ CREATE TABLE [dbo].[WorkLog] (
     [ActualHours]           DECIMAL(10,2)   NOT NULL,
     [Status]                NVARCHAR(20)    NOT NULL, -- InProgress, Completed, Delayed
     [Comment]               NVARCHAR(500)   NULL,
+
     [CreatedDate]           DATETIME        NOT NULL DEFAULT GETDATE(),
+    [ModifiedByUserId]      INT             NULL,
     [ModifiedDate]          DATETIME        NULL,
     [ModificationReason]    NVARCHAR(500)   NULL, -- Manager覆寫時填寫
+
+    [IsDeleted]             BIT            NOT NULL DEFAULT 0,
+    [DeletedByUserId]       INT            NULL,
+    [DeletedDate]           DATETIME       NULL,
     CONSTRAINT [PK_WorkLog] PRIMARY KEY CLUSTERED ([WorkLogId]),
+
     CONSTRAINT [FK_WorkLog_TestItem] FOREIGN KEY ([TestItemId]) 
         REFERENCES [TestItem]([TestItemId]),
+
     CONSTRAINT [FK_WorkLog_Revision] FOREIGN KEY ([RevisionId]) 
         REFERENCES [TestItemRevision]([RevisionId]),
+
+    CONSTRAINT [FK_WorkLog_Engineer] FOREIGN KEY ([EngineerUserId])
+        REFERENCES [User]([UserId]),
+
+    CONSTRAINT [FK_WorkLog_CreatedBy] FOREIGN KEY ([CreatedByUserId])
+        REFERENCES [User]([UserId]),
+
+    CONSTRAINT [FK_WorkLog_ModifiedBy] FOREIGN KEY ([ModifiedByUserId])
+        REFERENCES [User]([UserId]),
+
+    CONSTRAINT [FK_WorkLog_DeletedBy] FOREIGN KEY ([DeletedByUserId])
+        REFERENCES [User]([UserId]),
+
     CONSTRAINT [CK_WorkLog_Status] CHECK ([Status] IN ('InProgress', 'Completed', 'Delayed')),
+
     CONSTRAINT [CK_WorkLog_ActualHours] CHECK ([ActualHours] > 0 AND [ActualHours] <= 12)
 );
 
@@ -944,9 +1007,191 @@ Services/
 ```
 ---
 
-## 7. 部署架構
 
-### 7.1 部署拓撲圖
+---
+
+### 新增第 7 章：身分驗證與授權設計
+
+```md
+## 7. 身分驗證與授權設計
+
+---
+
+### 7.1 混合登入流程（Local + AD）
+
+#### 7.1.1 共用原則
+
+- **Email 為唯一識別鍵：**
+  - 無論 Local 登入或 AD 登入，只要 Email 相同（不區分大小寫）即視為同一位 User。
+  - 實作策略：所有 Email 一律以小寫形式存入資料庫，查詢時也先轉為小寫。
+- **User 資料只維護一筆：**
+  - 不會出現「同一個人 Local 一筆 + AD 再一筆」的情況。
+  - AD 成功登入時，如 Email 已存在就更新該筆 User 的 AD 資訊，不再新增新 User。
+
+#### 7.1.2 Local 登入流程
+
+1. WinForms Login 畫面：
+   - 使用者輸入 `Email` + `Password`。
+2. Client 呼叫 `POST /api/auth/login-local`，Body 例如：
+   ```json
+   {
+     "email": "User@Example.com",
+     "password": "P@ssw0rd!"
+   }
+AuthController 呼叫 IAuthService.LoginLocal(email, password)：
+
+先將 email 轉成小寫：emailNormalized = email.Trim().ToLower()。
+
+以 Email = emailNormalized 查詢 User。
+
+檢查：
+
+IsActive = 1
+
+AuthType 包含 Local（可為 Local 或日後擴充 Mixed）。
+
+驗證 PasswordHash。
+
+驗證成功後，由 IAuthService.GenerateJwt(user) 產生 JWT，回傳給 Client（含 Token、DisplayName、Role 等）。
+
+6.1.3 AD 登入流程
+
+WinForms Login 畫面：
+
+使用者選擇「Windows 驗證登入」。
+
+可傳入 Email 或 ADAccount（視 UI 設計），基本需求是最終取得使用者的 Email。
+
+Client 呼叫 POST /api/auth/login-ad。
+
+AuthController 呼叫 IAuthService.LoginAd(loginRequest)：
+
+透過 AD / LDAP 驗證帳密或使用 Windows 整合驗證。
+
+從 AD 取得使用者資訊：Email、Display Name、sAMAccountName、Domain 等。
+
+Email 正規化流程：
+
+emailNormalized = emailFromAd.Trim().ToLower()
+
+以 Email = emailNormalized 查詢 User：
+
+若存在：
+
+更新 AuthType = AD（若原本為 Local 則改為 AD 或 Mixed，依 Spec 設計）。
+
+更新 ADAccount、ADDomain 等欄位。
+
+若不存在：
+
+建立新 User：
+
+Email = emailNormalized
+
+DisplayName 來自 AD。
+
+AuthType = AD
+
+ADAccount、ADDomain 填入。
+
+Role 採預設角色（例如 Engineer），後續可由 Admin 調整。
+
+由 IAuthService.GenerateJwt(user) 產生 JWT 回傳。
+
+6.2 JWT Token 設計
+6.2.1 基本設定
+
+簽章演算法： HS256（HMAC-SHA256）。
+
+密鑰來源： appsettings.json 中的 Jwt:Key，由 Admin 設定，不提交到 Git。
+
+其他設定：
+
+Issuer（iss）：Jwt:Issuer
+
+Audience（aud）：Jwt:Audience
+
+Expires（exp）：例如登入後 8 小時。
+
+6.2.2 Token Claims 設計（建議）
+
+標準 Claim：
+
+sub：UserId。
+
+email：使用者 Email（小寫）。
+
+name：DisplayName。
+
+角色 / 權限 Claim：
+
+role：Engineer / Manager / Admin。
+
+日後可加入 permissions（以逗號分隔字串，對應 PermissionCode）。
+
+其他：
+
+nbf / iat：Token 生效時間與建立時間。
+
+6.2.3 Middleware 與授權流程
+
+WinForms 每次呼叫 API 時，在 Header 加上：
+
+Authorization: Bearer {token}
+
+
+Web API 啟用 JWT Bearer Authentication：
+
+每次請求時驗證 Token 簽章、過期時間、Issuer/Audience。
+
+驗證成功後，把 Claims 映射到 HttpContext.User。
+
+Controller 或 Action 標註 [Authorize]：
+
+依 Role / Policy 控制存取，例如：
+
+[Authorize(Roles = "Manager,Admin")]：只允許主管 / 管理員。
+
+取得目前登入者資訊：
+
+透過 User.FindFirst("sub") 取得 UserId。
+
+透過 User.FindFirst("email") 取得 Email。
+
+6.3 Email 正規化與一致性
+
+所有會寫入或查詢 Email 的地方（AuthService、UserService、UserController）必須統一走以下邏輯：
+
+email = email.Trim()
+
+emailNormalized = email.ToLower()
+
+查詢與寫入都使用 emailNormalized。
+
+儲存到 DB 時：
+
+User.Email 永遠是小寫。
+
+比對時：
+
+因為 DB 中已經全部是小寫，加上查詢時也先轉小寫，自然達成 不區分大小寫（case-insensitive） 的效果。
+
+6.4 狀態計算與 JWT / 權限的關係
+
+狀態計算（Regulation.Status / Project.Status）：
+
+只在 Service 層計算，Controller 只呼叫 Service，不直接操作 EF Core。
+
+JWT 與狀態 API：
+
+查詢案件 / 法規 / 測試項目狀態需要登入（帶 JWT）。
+
+更新 WorkLog、變更 TestItem 狀態等操作，會由角色與 PermissionCode 控制是否允許。
+
+
+## 8. 部署架構
+
+### 8.1 部署拓撲圖
 
 ```
 ┌────────────────────────────────────────────────┐

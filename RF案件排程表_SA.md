@@ -1,13 +1,13 @@
-# 📘 RF案件排程系統 — 系統分析文件 (SA v2.0)
+# 📘 RF案件排程系統 — 系統分析文件 (SA v2.1)
 
 ---
 
 ## 📖 文件說明
 
 **版本歷程：**
-- v1.0 (2024-01-10)：初版分析文件
-- v2.0 (2024-01-20)：調整職責邊界，移除技術實作細節
-
+- v1.0 (2025-11-14)：初版分析文件
+- v2.0 (2025-11-17)：調整職責邊界，移除技術實作細節
+- v2.1 (2025-11-19)：補充混合登入機制（Local + Windows 驗證）、JWT 安全性說明、IAM 權限模型（Permission / PermissionGroup / UserPermission）
 ---
 
 ## 1. 專案背景與問題陳述
@@ -67,6 +67,35 @@ RF測試實驗室目前面臨的挑戰：
 - **現象：** 兩人同時編輯同一Excel，後存檔者覆蓋前者
 - **影響：** 資料遺失，需重新輸入
 
+---
+
+## 1.3 使用者身份合併機制（Email-Based Identity Merge）
+
+系統採用 **Email 作為跨登入來源的唯一身份識別（Primary Identity Key）**，
+
+用於整合 Local 帳密登入與 Windows AD 驗證登入，使同一位使用者以不同方式登入時，仍能被識別為同一個系統帳號。
+
+### （1）合併原則
+當使用者以任一方式登入（Local 或 AD）時，系統執行：
+
+1. 從登入來源取得 Email（Local 由使用者輸入；AD 由 AD Server 提供）。
+2. 查詢：SELECT * FROM Users WHERE Email = {LoginEmail}
+
+3. 若找到相同 Email → 視為同一使用者，不新增 User 紀錄。
+4. 若找不到 → 建立新使用者（依登入來源決定 AuthType）。
+
+### （2）Email 為唯一身份識別
+- Email 欄位必須為 **唯一值（UNIQUE）**
+- Local / AD 兩種登入方式都需提供 Email
+- 不允許兩筆使用者用相同 Email
+
+### （3）使用者分類
+| 登入方式 | Email 來源 | 使用欄位 |
+|----------|------------|----------|
+| Local 帳密登入 | 使用者輸入 | Account + Email |
+| AD 驗證登入 | AD 提供 | ADAccount + Email |
+
+無論使用者以哪種方式登入，Email 相同即視為同一使用者。
 ---
 
 ## 2. 專案目標與成功指標
@@ -209,10 +238,14 @@ RF測試實驗室目前面臨的挑戰：
 RF案件排程系統
 │
 ├─ 1. 認證與授權模組
-│   ├─ 1.1 使用者登入
-│   ├─ 1.2 忘記密碼（Email重設）
-│   ├─ 1.3 角色權限控管（RBAC）
-│   └─ 1.4 登入安全機制（失敗次數限制）
+│   ├─ 1.1 使用者登入（Local 帳號）
+│   ├─ 1.2 Windows 驗證登入（AD 帳號）
+│   ├─ 1.3 忘記密碼（Email重設）
+│   ├─ 1.4 角色與權限控管（RBAC + IAM）
+│   │   ├─ 角色：Engineer / Manager / Admin
+│   │   ├─ 權限：以 PermissionCode 控制（例如 PROJECT_CREATE, WORKLOG_VIEW_OWN）
+│   │   └─ 權限群組：預設 Engineer / Manager / Admin 權限集合，可再個別加減
+│   └─ 1.5 登入安全機制（失敗次數限制、Token 過期）
 │
 ├─ 2. 案件管理模組
 │   ├─ 2.1 Wizard建案流程
@@ -365,14 +398,47 @@ RF案件排程系統
 
 ### 6.1 認證與授權需求
 
-#### FR-AUTH-001：使用者登入
+#### FR-AUTH-001：使用者登入（Local）
 - **優先級：** 必須 (Must Have)
-- **描述：** 使用者需以帳號與密碼登入系統
+- **描述：** 使用者以帳號與密碼登入系統，登入成功後需依 Email 合併為最終身份識別。
 - **驗收標準：**
-  - 輸入正確帳密可成功登入
-  - 輸入錯誤帳密顯示「帳號或密碼錯誤」
+  - 驗證 Account 與 PasswordHash 是否正確
+  - 取得使用者 Email，並以 Email 為唯一身份識別
+  - 若 Email 已存在於其他登入來源（如 AD），則視為同一使用者，不可建立第二筆身份
   - 停用帳號無法登入
-  - 連續失敗5次鎖定10分鐘
+  - 連續失敗 5 次需鎖定帳號 10 分鐘
+
+---
+
+#### FR-AUTH-101：Windows AD 登入（Email 合併版）
+- **優先級：** 應該 (Should Have)
+- **描述：** 支援 Windows AD 驗證登入，並以 Email 為唯一身份識別，以避免一名員工多個身份分裂。
+- **驗收標準：**
+  - 系統可取得 ADAccount、DisplayName、Email
+  - 若 Email 存在於 User 表，視為同一使用者：
+    - 不新增 UserId
+    - 更新 ADAccount / AuthType / LastLoginType
+  - 若 Email 不存在於 User 表：
+    - 建立新的 AD 使用者（AuthType=AD）
+  - AD 未提供 Email → 登入失敗（需明確錯誤碼）
+  - 停用帳號無法登入
+
+#### FR-AUTH-102：JWT Token 驗證與 Payload 規範
+- **優先級：** 必須 (Must Have)  
+- **描述：** 系統使用 JWT（JSON Web Token）作為前端與 Web API 間的身份驗證憑證，需定義 Token 結構、簽章演算法、有效期限與驗證規則。
+- **驗收標準：**
+  - JWT 結構包含：
+    - Header：宣告演算法（alg）與類型（typ=JWT）
+    - Payload：只放「授權相關必要資訊」，例如：UserId、顯示名稱、角色、權限清單摘要等
+    - Signature：使用伺服器端的密鑰與 HMAC-SHA256（HS256）產生
+  - Payload 不加密，僅採 Base64Url 編碼，因此：
+    - **不得**在 Token 內放入密碼、工時明細、Email 內容等敏感資料
+    - 僅放「識別與授權」所需的最低資訊
+  - 每次 API 呼叫需驗證：
+    - Token 是否存在且格式正確
+    - 簽章是否有效（防止被竄改）
+    - Token 是否已過期（過期需重新登入）
+  - Token 過期時間可由 SystemSetting 設定（例如 8 小時），並在 SA/Spec 中明確描述。
 
 #### FR-AUTH-002：密碼安全儲存
 - **優先級：** 必須 (Must Have)
@@ -579,12 +645,13 @@ RF案件排程系統
 
 #### FR-USER-001：使用者新增
 - **優先級：** 必須 (Must Have)
-- **描述：** 主管可新增使用者
+- **描述：** 管理者可新增使用者，Email 需作為唯一身份識別。
 - **驗收標準：**
-  - 帳號唯一不可重複
-  - Email唯一不可重複
-  - 系統自動產生初始密碼
-  - 自動發送Email通知新使用者
+  - Account 唯一（僅適用 Local 帳號）
+  - Email 必須唯一，兩筆使用者不得使用相同 Email
+  - 若 Email 已存在（不論 Local 或 AD）→ 禁止新增
+  - 系統自動產生初始密碼（僅 Local）
+  - 自動發送 Email 給新使用者
 
 #### FR-USER-002：使用者停用
 - **優先級：** 必須 (Must Have)
@@ -602,6 +669,16 @@ RF案件排程系統
   - 可修改顯示名稱、Email、角色
   - 帳號不可修改
   - 每週可用工時可調整
+
+#### FR-USER-101：權限與群組管理介面（IAM）
+- **優先級：** 應該 (Should Have)  
+- **描述：** 具備管理權限的使用者（例如 Admin / Manager），可透過介面管理使用者的角色、權限群組與個別權限（Permission）。
+- **驗收標準：**
+  - 可將使用者指派至一個或多個權限群組（例如：Engineer、Manager、Auditor）。
+  - 可為特定使用者額外授予或撤銷個別 Permission（例如暫時開啟 WORKLOG_VIEW_ALL）。
+  - 可設定臨時權限的到期日，過期後自動失效。
+  - 可查詢某一位使用者目前的「有效權限」來源（群組繼承＋個別授權）。
+  - 所有權限變更皆須寫入 AuditLog（Who / What / When / Why）。
 
 ---
 
@@ -728,6 +805,30 @@ RF案件排程系統
 - **需求：** 連續失敗5次鎖定10分鐘
 - **標準：** IP或帳號層級鎖定
 - **優先級：** 應該 (Should Have)
+
+#### NFR-SEC-007：JWT 結構與簽章安全
+- **需求：** JWT Token 必須使用對稱簽章演算法 HMAC-SHA256（HS256），並妥善保護伺服器端密鑰。  
+- **說明：**
+  - Header.alg = "HS256"，Header.typ = "JWT"
+  - Signature = HMAC-SHA256( base64UrlEncode(header) + "." + base64UrlEncode(payload), SecretKey )
+  - SecretKey 僅存放於伺服器端設定檔，不得硬編碼在程式碼中，也不得傳到前端。
+- **優先級：** 必須 (Must Have)
+
+#### NFR-SEC-008：JWT Payload 資料最小化
+- **需求：** JWT Payload 只保留授權必須的資訊，避免敏感資料外洩風險。  
+- **說明：**
+  - Payload 建議欄位：
+    - `sub`：UserId
+    - `name`：顯示名稱
+    - `role` 或 `roles`：角色列表（Engineer / Manager / Admin）
+    - `perms`：必要的 PermissionCode 清單或壓縮表示
+    - `exp`：Token 過期時間
+  - **不得**在 Payload 放入：
+    - 密碼或 Hash
+    - 完整工時內容（WorkLog 詳細資料）
+    - Email 內文、重設連結等敏感資訊
+  - 前端若需要工時或報表內容，必須透過 API 以授權身分查詢，而不是從 Token 讀取。
+- **優先級：** 必須 (Must Have)
 
 ---
 
@@ -970,18 +1071,26 @@ RF案件排程系統
 ### 9.1 主要資料實體
 
 #### 9.1.1 User (使用者)
-- **說明：** 系統使用者，包含工程師與主管
+
+- **說明：** 系統使用者，包含工程師、主管、系統管理者，支援 Local 帳號與 AD 帳號兩種身份來源。
 - **關鍵屬性：**
-  - 帳號（唯一）
-  - 密碼Hash
-  - 顯示名稱
-  - Email（唯一）
-  - 角色（Engineer/Manager）
-  - 每週可用工時
-  - 是否啟用
+  - 帳號（Account，唯一）
+  - 密碼 Hash（PasswordHash，僅適用於 AuthType = Local）
+  - 顯示名稱（DisplayName）
+  - Email（唯一，用於登入身份合併。Local 與 AD 共用同一 Email 作為唯一識別鍵）
+  - 角色（Role：Engineer / Manager / Admin）— 保留為粗顆粒度分類
+  - 每週可用工時（WeeklyAvailableHours）
+  - 是否啟用（IsActive）
+  - 驗證類型（AuthType：Local / AD）
+  - AD 帳號（ADAccount，可為 DOMAIN\Account 或 sAMAccountName，僅 AuthType=AD 需要）
+  - 最後登入時間（LastLoginDate）
+  - 最後登入 IP（LastLoginIP）
+
 - **關聯：**
-  - 一位User可負責多個TestItem
-  - 一位User可有多筆WorkLog
+  - 一位 User 可負責多個 TestItem（透過 TestItemEngineer）
+  - 一位 User 可有多筆 WorkLog
+  - 一位 User 可屬於多個 PermissionGroup（透過 UserGroup）
+  - 一位 User 可被授予多個個別 Permission（透過 UserPermission）
 
 #### 9.1.2 Project (案件)
 - **說明：** RF測試案件
@@ -1070,7 +1179,72 @@ RF案件排程系統
   - 操作時間
   - 修改理由
 
+#### 9.1.10 Permission (權限)
+- **說明：** 系統內可被授與與檢查的最小權限單位，例如「建立案件」「查看所有工時」。
+- **關鍵屬性：**
+  - PermissionCode：權限代碼（唯一，如 PROJECT_CREATE, WORKLOG_VIEW_ALL）
+  - PermissionName：顯示名稱（如「建立案件」「查看所有工時」）
+  - Category：分類（Project / TestItem / WorkLog / User / Report...）
+  - Description：說明文字
+  - IsActive：是否啟用
+
 ---
+
+#### 9.1.11 PermissionGroup (權限群組)
+- **說明：** 權限的集合，用來對應「工程師」「主管」「系統管理者」這類角色，讓管理者不用一條一條勾選 Permission。
+- **關鍵屬性：**
+  - GroupName：群組名稱（例如 Engineer / Manager / Admin / Auditor）
+  - Description：說明
+  - IsActive：是否啟用
+- **關聯：**
+  - 一個 PermissionGroup 可以包含多個 Permission（透過 PermissionGroupMapping）
+  - 一個 User 可以屬於多個 PermissionGroup（透過 UserGroup）
+
+---
+
+#### 9.1.12 PermissionGroupMapping (群組－權限對應)
+- **說明：** 定義「某個群組擁有哪些權限」的對應表。
+- **關鍵屬性：**
+  - GroupId：對應 PermissionGroup
+  - PermissionId：對應 Permission
+- **關聯：**
+  - 多筆 Mapping 組成一個群組的權限集合。
+  - 例如：Engineer 群組預設擁有 PROJECT_VIEW、TESTITEM_VIEW、WORKLOG_VIEW_OWN、WORKLOG_CREATE 等。
+
+---
+
+#### 9.1.13 UserGroup / UserPermission (使用者群組與個別權限)
+- **UserGroup（使用者群組）：**
+  - **說明：** 表示某位使用者屬於哪些權限群組。
+  - **關鍵屬性：**
+    - UserId：使用者
+    - GroupId：權限群組
+    - AssignedDate：指派日期
+
+- **UserPermission（使用者個別權限）：**
+  - **說明：** 直接賦予某位使用者的個別權限，用來覆蓋或補充群組預設權限，例如「暫時授權某工程師查看所有工時」。
+  - **關鍵屬性：**
+    - UserId：使用者
+    - PermissionId：權限
+    - GrantedByUserId：授權人
+    - GrantedDate：授權日期
+    - ExpireDate：到期日（可為 NULL 表示永久）
+    - IsActive：是否有效
+
+- **權限判斷原則：**
+  - 使用者是否擁有某權限 =  
+    「UserPermission 中有效的授權」 **或** 「透過 UserGroup 所屬群組繼承而來」  
+  - 系統在 API 層根據 PermissionCode 檢查，無權限則回傳 403 Forbidden。
+---
+
+#### 9.1.14 Email 唯一識別規則（新增）
+- Email 必須為 **唯一值（UNIQUE）**
+- Email 不可為 NULL
+- 所有身份來源（Local / AD）皆需提供 Email
+- Local 建立使用者時：
+  - 若 Email 已存在，系統不得再建立第二筆使用者
+- AD 登入時：
+  - 若 Email 已存在，必須合併至既有使用者
 
 ### 9.2 資料關聯概念圖
 
@@ -1093,6 +1267,81 @@ WorkLog (工時記錄)
 AuditLog (稽核日誌)
   └─ 記錄所有實體的異動
 ```
+---
+# 附錄 A：混合登入與 IAM
+
+## A.1 混合登入機制概觀
+
+本系統支援兩種身份來源：
+
+1. **Local 帳號登入**
+   - 使用者輸入系統帳號與密碼。
+   - 後端驗證 PasswordHash。
+   - 驗證成功後簽發 JWT Token，後續 API 皆須附帶 Token。
+
+2. **Windows 驗證登入**
+   - 適用於：每位使用者有專屬電腦、且系統部署於公司內部網路。
+   - 系統透過 Windows Authentication 取得目前登入 Windows 的使用者帳號。
+   - 伺服器端將 AD 帳號對應到系統 User 紀錄（必要時自動建立預設角色與群組）。
+   - 實驗室目前因「同一台電腦多個班別共用」情境。
+
+> 本系統使用 Email 作為跨登入來源（Local / AD）的唯一身份識別鍵。
+若 AD 帳號與 Local 帳號具有相同 Email，登入時視為同一使用者。
+
+### A.1.1 AD 登入 Email 合併流程（新增）
+
+AD 登入流程必須依 Email 進行合併：
+
+1. 取得 ADAccount、DisplayName、Email
+2. 若 Email = NULL → 拒絕登入（AUTH-101）
+3. 查詢：
+SELECT * FROM Users WHERE Email = {Email}
+4. 若已存在：
+- 視為同一使用者
+- 更新 ADAccount、AuthType、LastLoginType
+5. 若不存在：
+- 建立新 AD 使用者
+6. 簽發 JWT Token
+---
+
+## A.2 JWT 與 IAM 的角色
+
+1. **JWT 負責：我是誰？（Who）**
+   - 通過登入後，由系統簽發 JWT Token。
+   - Token 內放 UserId / 顯示名稱 / 角色 / 關鍵 Permission。
+   - 每次呼叫 API 時，後端會驗證 Token 的：
+     - 簽章是否正確
+     - 是否過期
+     - 是否被系統列為無效（例如強制登出）
+
+2. **IAM 負責：我可以做什麼？（What）**
+   - 使用 Permission / PermissionGroup / UserGroup / UserPermission 四個實體，決定：
+     - 這個使用者可以「建立案件」嗎？
+     - 可以「修改別人的工時」嗎？
+     - 可以「查看所有工程師的 Loading」嗎？
+   - 未來新增功能，只要新增對應的 PermissionCode，不必重寫角色邏輯。
 
 ---
+
+## A.3 Engineer / Manager / Admin 的對應方式
+
+- **Engineer 群組預期權限：**
+  - 可查看自己相關的 Project / Regulation / TestItem。
+  - 可回報、查詢、修改「自己的」 WorkLog（7 天內）。
+  - 可查看自己的 Loading 與報表。
+
+- **Manager 群組預期權限：**
+  - 可建立 / 修改 / 刪除案件。
+  - 可分配工程師、建立補測版本。
+  - 可查看所有工程師的 Loading、工時統計、延遲分析。
+  - 可覆寫工時（含理由），可停用使用者。
+  - 可查詢 AuditLog。
+
+- **Admin 群組預期權限：**
+  - 擁有大部分或全部 Permission。
+  - 可維護 Permission / PermissionGroup / UserGroup / SystemSetting 等。
+
+> 對使用者來說，他只會看到「我是工程師」或「我是主管」這種簡單角色。  
+> 對系統來說，底層是用一堆 PermissionCode 去精準控制每顆按鈕、每支 API 能不能用。
+
 
