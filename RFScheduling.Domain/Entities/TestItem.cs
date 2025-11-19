@@ -1,5 +1,6 @@
-﻿using RFScheduling.Domain.Interfaces;
-using RFScheduling.Domain.Enums;
+﻿using RFScheduling.Domain.Enums;
+using RFScheduling.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace RFScheduling.Domain.Entities
 {
@@ -9,16 +10,20 @@ namespace RFScheduling.Domain.Entities
         
         public int RegulationId { get; set; }
 
+        [MaxLength(200)]
         public string TestItemName { get; set; } = string.Empty;
 
+        [MaxLength(100)]
         public string TestType {  get; set; } = string.Empty ;
 
+        [MaxLength(100)]
         public string TestLocation {  get; set; } = string.Empty ;
 
-        public decimal EstimateHours { get; set; }
+        public decimal EstimatedHours { get; set; }
 
         public TestItemStatus Status { get; set; } = TestItemStatus.NotStarted ;
 
+        [MaxLength(500)]
         public string? ManagerNote { get; set; }
 
         // ICreatable & IModifiable
@@ -32,6 +37,7 @@ namespace RFScheduling.Domain.Entities
         public DateTime? DeletedDate { get; set; }
 
         // Concurrency Token
+        [Timestamp]
         public byte[] RowVersion { get; set; } = Array.Empty<byte>();
 
         // Navigation Properties

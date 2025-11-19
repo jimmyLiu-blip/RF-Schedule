@@ -1,7 +1,7 @@
-﻿using RFScheduling.Domain.Interfaces;
-using RFScheduling.Domain.Enums;
+﻿using RFScheduling.Domain.Enums;
+using RFScheduling.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
-// 檢查要多注意
 namespace RFScheduling.Domain.Entities
 {
     public class WorkLog : ICreatableRequired, IModifiable
@@ -20,6 +20,7 @@ namespace RFScheduling.Domain.Entities
 
         public WorkLogStatus Status { get; set; }
 
+        [MaxLength(500)]
         public string? Comment { get; set; }
 
         // ICreatable & IModifiable
@@ -29,6 +30,7 @@ namespace RFScheduling.Domain.Entities
 
         public DateTime? ModifiedDate { get; set; }
 
+        [MaxLength(500)]
         public string? ModificationReason { get; set; }
 
         // Navigation Properties
@@ -36,6 +38,8 @@ namespace RFScheduling.Domain.Entities
         public TestItem TestItem { get; set; } = null!;
 
         public TestItemRevision? TestItemRevision { get; set; }
+
+        public User CreatedBy { get; set; } = null!;
 
         public User Engineer { get; set; } = null!;
 

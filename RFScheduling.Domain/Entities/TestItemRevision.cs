@@ -1,4 +1,5 @@
 ﻿using RFScheduling.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace RFScheduling.Domain.Entities
 {
@@ -8,12 +9,15 @@ namespace RFScheduling.Domain.Entities
 
         public int TestItemId { get; set; }
 
+        [MaxLength(10)]
         public string RevisionNumber { get; set; } = string.Empty;
 
         public decimal EstimatedHours { get; set; }
 
+        [MaxLength(200)]
         public string Reason { get; set; } = string.Empty;
 
+        [MaxLength(500)]
         public string? Description {  get; set; }
 
         // ICreatable & IModifiable
@@ -30,7 +34,7 @@ namespace RFScheduling.Domain.Entities
 
         public TestItem TestItem { get; set; } = null!;
 
-        public User User { get; set; } = null!;
+        public User CreatedBy { get; set; } = null!;
 
         public ICollection<WorkLog> WorkLogs  { get; set; } = new List<WorkLog>();
     }

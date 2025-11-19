@@ -1,7 +1,4 @@
-﻿using RFScheduling.Domain.Interfaces;
-using RFScheduling.Domain.Enums;
-
-namespace RFScheduling.Domain.Entities
+﻿namespace RFScheduling.Domain.Entities
 {
     public class WorkLogDelayReason
     {

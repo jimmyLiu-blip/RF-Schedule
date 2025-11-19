@@ -1,5 +1,6 @@
-﻿using RFScheduling.Domain.Interfaces;
-using RFScheduling.Domain.Enums;
+﻿using RFScheduling.Domain.Enums;
+using RFScheduling.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace RFScheduling.Domain.Entities
@@ -8,9 +9,10 @@ namespace RFScheduling.Domain.Entities
     {
         public int DelayReasonId { get; set; }
 
+        [MaxLength(200)]
         public string ReasonText { get; set; } = string.Empty;
 
-        public DelayReasonType DelayReasonType { get; set; }
+        public DelayReasonType ReasonType { get; set; }
 
         public bool IsActive { get; set; } = true;
 

@@ -1,4 +1,5 @@
 ﻿using RFScheduling.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace RFScheduling.Domain.Entities
 {
@@ -8,12 +9,14 @@ namespace RFScheduling.Domain.Entities
 
         public int ProjectId { get; set; }
 
+        [MaxLength(100)]
         public string RegulationName { get; set; } = string.Empty;
 
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 
+        [MaxLength(500)]
         public string? Note {  get; set; }
 
         // ICreatable & IModifiable
