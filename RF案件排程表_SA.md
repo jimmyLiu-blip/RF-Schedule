@@ -1,4 +1,5 @@
-# 📘 RF案件排程系統 — 系統分析文件 (SA v2.1)
+
+# 📘 RF案件排程系統 — 系統分析文件 (SA v2.2)
 
 ---
 
@@ -8,6 +9,8 @@
 - v1.0 (2025-11-14)：初版分析文件
 - v2.0 (2025-11-17)：調整職責邊界，移除技術實作細節
 - v2.1 (2025-11-19)：補充混合登入機制（Local + Windows 驗證）、JWT 安全性說明、IAM 權限模型（Permission / PermissionGroup / UserPermission）
+- v2.2 (2025-11-20)：補充 TestItem 狀態計算邏輯、狀態逆向操作規則、完整 ERD 圖
+
 ---
 
 ## 1. 專案背景與問題陳述
@@ -71,18 +74,15 @@ RF測試實驗室目前面臨的挑戰：
 
 ## 1.3 使用者身份合併機制（Email-Based Identity Merge）
 
-系統採用 **Email 作為跨登入來源的唯一身份識別（Primary Identity Key）**，
-
-用於整合 Local 帳密登入與 Windows AD 驗證登入，使同一位使用者以不同方式登入時，仍能被識別為同一個系統帳號。
+系統採用 **Email 作為跨登入來源的唯一身份識別（Primary Identity Key）**，用於整合 Local 帳密登入與 Windows AD 驗證登入，使同一位使用者以不同方式登入時，仍能被識別為同一個系統帳號。
 
 ### （1）合併原則
 當使用者以任一方式登入（Local 或 AD）時，系統執行：
 
-1. 從登入來源取得 Email（Local 由使用者輸入；AD 由 AD Server 提供）。
-2. 查詢：SELECT * FROM Users WHERE Email = {LoginEmail}
-
-3. 若找到相同 Email → 視為同一使用者，不新增 User 紀錄。
-4. 若找不到 → 建立新使用者（依登入來源決定 AuthType）。
+1. 從登入來源取得 Email（Local 由使用者輸入；AD 由 AD Server 提供）
+2. 查詢：`SELECT * FROM Users WHERE Email = {LoginEmail}`
+3. 若找到相同 Email → 視為同一使用者，不新增 User 紀錄
+4. 若找不到 → 建立新使用者（依登入來源決定 AuthType）
 
 ### （2）Email 為唯一身份識別
 - Email 欄位必須為 **唯一值（UNIQUE）**
@@ -90,12 +90,14 @@ RF測試實驗室目前面臨的挑戰：
 - 不允許兩筆使用者用相同 Email
 
 ### （3）使用者分類
+
 | 登入方式 | Email 來源 | 使用欄位 |
 |----------|------------|----------|
 | Local 帳密登入 | 使用者輸入 | Account + Email |
 | AD 驗證登入 | AD 提供 | ADAccount + Email |
 
 無論使用者以哪種方式登入，Email 相同即視為同一使用者。
+
 ---
 
 ## 2. 專案目標與成功指標
@@ -133,7 +135,6 @@ RF測試實驗室目前面臨的挑戰：
 
 #### 目標6：完整稽核機制
 - **描述：** 所有資料異動皆可追蹤
-- **衡量指標：** 
 
 ---
 
@@ -206,7 +207,8 @@ RF測試實驗室目前面臨的挑戰：
 - ✅ Soft Delete機制
 
 ---
-### 4.1 系統與外部系統互動
+
+### 4.2 系統與外部系統互動
 
 ```
 ┌─────────────────────────────────────┐
@@ -243,16 +245,12 @@ RF案件排程系統
 │   ├─ 1.3 忘記密碼（Email重設）
 │   ├─ 1.4 角色與權限控管（RBAC + IAM）
 │   │   ├─ 角色：Engineer / Manager / Admin
-│   │   ├─ 權限：以 PermissionCode 控制（例如 PROJECT_CREATE, WORKLOG_VIEW_OWN）
-│   │   └─ 權限群組：預設 Engineer / Manager / Admin 權限集合，可再個別加減
+│   │   ├─ 權限：以 PermissionCode 控制
+│   │   └─ 權限群組：預設權限集合，可個別加減
 │   └─ 1.5 登入安全機制（失敗次數限制、Token 過期）
 │
 ├─ 2. 案件管理模組
 │   ├─ 2.1 Wizard建案流程
-│   │   ├─ Step 1: 案件基本資料
-│   │   ├─ Step 2: 選擇法規
-│   │   ├─ Step 3: 新增測試項目
-│   │   └─ Step 4: 分配工程師
 │   ├─ 2.2 案件查詢與瀏覽
 │   ├─ 2.3 案件修改（含理由記錄）
 │   ├─ 2.4 案件刪除（Soft Delete）
@@ -262,15 +260,11 @@ RF案件排程系統
 │   ├─ 3.1 測項新增與修改
 │   ├─ 3.2 工程師分配（Main/Sub）
 │   ├─ 3.3 補測版本管理（Revision）
-│   ├─ 3.4 測項狀態追蹤
+│   ├─ 3.4 測項狀態追蹤與逆向操作
 │   └─ 3.5 測項刪除（Soft Delete）
 │
 ├─ 4. 工時管理模組
 │   ├─ 4.1 工時回報（工程師端）
-│   │   ├─ 選擇測項與版本
-│   │   ├─ 輸入日期與工時
-│   │   ├─ 設定狀態（進行中/完成/延遲）
-│   │   └─ 選擇延遲原因（若延遲）
 │   ├─ 4.2 工時查詢（工程師可查自己）
 │   ├─ 4.3 工時修改（7天內可改）
 │   ├─ 4.4 工時統計（主管端）
@@ -278,73 +272,35 @@ RF案件排程系統
 │
 ├─ 5. Loading分析模組
 │   ├─ 5.1 工程師Loading總覽
-│   │   ├─ 計算Assigned Loading
-│   │   ├─ 計算Actual Loading
-│   │   └─ 超載警示（顏色標示）
 │   ├─ 5.2 工程師Loading明細
-│   │   ├─ 測項清單
-│   │   ├─ 工時統計
-│   │   └─ 趨勢圖表
 │   └─ 5.3 Loading報表匯出
 │
 ├─ 6. 延遲管理模組
 │   ├─ 6.1 延遲原因字典維護
-│   │   ├─ 新增/修改延遲原因
-│   │   ├─ 停用/啟用（已使用不可刪除）
-│   │   └─ 延遲原因分類（設備/客戶/工程師/場地）
 │   ├─ 6.2 延遲案件追蹤
 │   └─ 6.3 延遲原因分析報表
 │
 ├─ 7. 使用者管理模組
 │   ├─ 7.1 使用者新增
-│   │   ├─ 自動產生初始密碼
-│   │   └─ 發送Email通知
 │   ├─ 7.2 使用者修改
 │   ├─ 7.3 使用者停用/啟用
-│   │   └─ 停用前檢查負責測項
 │   └─ 7.4 使用者查詢
 │
 ├─ 8. 稽核日誌模組
 │   ├─ 8.1 自動記錄資料異動
-│   │   ├─ 記錄誰（Who）
-│   │   ├─ 改了什麼（What）
-│   │   ├─ 何時改（When）
-│   │   └─ 為何改（Why - 理由欄位）
 │   ├─ 8.2 稽核日誌查詢
-│   │   ├─ 依資料表篩選
-│   │   ├─ 依操作類型篩選
-│   │   ├─ 依操作人篩選
-│   │   └─ 依時間區間篩選
 │   └─ 8.3 稽核日誌詳細檢視
-│       └─ Before/After比對
 │
 ├─ 9. 報表模組
 │   ├─ 9.1 案件進度報表
-│   │   ├─ 案件概要
-│   │   ├─ 法規完成度
-│   │   ├─ 測項進度明細
-│   │   └─ 工時統計
 │   ├─ 9.2 工時統計報表
-│   │   ├─ 依案件統計
-│   │   ├─ 依工程師統計
-│   │   └─ 依期間統計
 │   ├─ 9.3 延遲分析報表
-│   │   ├─ 延遲原因分布
-│   │   ├─ 延遲測項清單
-│   │   └─ 延遲趨勢分析
 │   └─ 9.4 報表匯出（Excel）
 │
 └─ 10. 系統設定模組
     ├─ 10.1 一般參數設定
-    │   ├─ 預設每週工時
-    │   ├─ WorkLog可修改天數
-    │   └─ 登入失敗鎖定設定
     ├─ 10.2 Email設定
-    │   ├─ SMTP伺服器設定
-    │   └─ Email範本設定
     └─ 10.3 資料保留政策
-        ├─ AuditLog保留天數
-        └─ 已刪除資料保留天數
 ```
 
 ---
@@ -357,7 +313,7 @@ RF案件排程系統
 │                                             │
 │  ┌──────────────────────────────────────┐  │
 │  │  認證與授權                           │  │
-│  │  • 登入                               │  │
+│  │  • 登入（Local / AD）                 │  │
 │  │  • 忘記密碼                           │  │
 │  └──────────────────────────────────────┘  │
 │                                             │
@@ -367,6 +323,7 @@ RF案件排程系統
 │  │  • 回報工時                           │  │
 │  │  • 查詢工時記錄                       │  │
 │  │  • 修改工時(7天內)                    │  │
+│  │  • 取消測項完成狀態                   │  │
 │  └──────────────────────────────────────┘  │
 │             ↑                               │
 │         Engineer                            │
@@ -375,12 +332,12 @@ RF案件排程系統
 │  │  主管功能                             │  │
 │  │  • Wizard建案                         │  │
 │  │  • 管理案件                           │  │
-│  │  • 管理測項                           │  │
+│  │  • 管理測項與狀態覆寫                 │  │
 │  │  • 分配工程師                         │  │
 │  │  • 建立補測版本                       │  │
 │  │  • 查看Loading報表                    │  │
 │  │  • 查看延遲分析                       │  │
-│  │  • 管理使用者                         │  │
+│  │  • 管理使用者與權限                   │  │
 │  │  • 管理延遲原因                       │  │
 │  │  • 查詢稽核日誌                       │  │
 │  │  • 產出各類報表                       │  │
@@ -400,45 +357,33 @@ RF案件排程系統
 
 #### FR-AUTH-001：使用者登入（Local）
 - **優先級：** 必須 (Must Have)
-- **描述：** 使用者以帳號與密碼登入系統，登入成功後需依 Email 合併為最終身份識別。
+- **描述：** 使用者以帳號與密碼登入系統，登入成功後需依 Email 合併為最終身份識別
 - **驗收標準：**
   - 驗證 Account 與 PasswordHash 是否正確
   - 取得使用者 Email，並以 Email 為唯一身份識別
-  - 若 Email 已存在於其他登入來源（如 AD），則視為同一使用者，不可建立第二筆身份
+  - 若 Email 已存在於其他登入來源（如 AD），則視為同一使用者
   - 停用帳號無法登入
   - 連續失敗 5 次需鎖定帳號 10 分鐘
 
----
-
 #### FR-AUTH-101：Windows AD 登入（Email 合併版）
 - **優先級：** 應該 (Should Have)
-- **描述：** 支援 Windows AD 驗證登入，並以 Email 為唯一身份識別，以避免一名員工多個身份分裂。
+- **描述：** 支援 Windows AD 驗證登入，並以 Email 為唯一身份識別
 - **驗收標準：**
   - 系統可取得 ADAccount、DisplayName、Email
-  - 若 Email 存在於 User 表，視為同一使用者：
-    - 不新增 UserId
-    - 更新 ADAccount / AuthType / LastLoginType
-  - 若 Email 不存在於 User 表：
-    - 建立新的 AD 使用者（AuthType=AD）
-  - AD 未提供 Email → 登入失敗（需明確錯誤碼）
+  - 若 Email 存在於 User 表，視為同一使用者
+  - 若 Email 不存在，建立新的 AD 使用者
+  - AD 未提供 Email → 登入失敗
   - 停用帳號無法登入
 
 #### FR-AUTH-102：JWT Token 驗證與 Payload 規範
 - **優先級：** 必須 (Must Have)  
-- **描述：** 系統使用 JWT（JSON Web Token）作為前端與 Web API 間的身份驗證憑證，需定義 Token 結構、簽章演算法、有效期限與驗證規則。
+- **描述：** 系統使用 JWT 作為身份驗證憑證
 - **驗收標準：**
-  - JWT 結構包含：
-    - Header：宣告演算法（alg）與類型（typ=JWT）
-    - Payload：只放「授權相關必要資訊」，例如：UserId、顯示名稱、角色、權限清單摘要等
-    - Signature：使用伺服器端的密鑰與 HMAC-SHA256（HS256）產生
-  - Payload 不加密，僅採 Base64Url 編碼，因此：
-    - **不得**在 Token 內放入密碼、工時明細、Email 內容等敏感資料
-    - 僅放「識別與授權」所需的最低資訊
-  - 每次 API 呼叫需驗證：
-    - Token 是否存在且格式正確
-    - 簽章是否有效（防止被竄改）
-    - Token 是否已過期（過期需重新登入）
-  - Token 過期時間可由 SystemSetting 設定（例如 8 小時），並在 SA/Spec 中明確描述。
+  - JWT 結構：Header + Payload + Signature
+  - Payload 只放授權相關必要資訊
+  - 使用 HMAC-SHA256 簽章
+  - 每次 API 呼叫需驗證 Token
+  - Token 過期時間可由 SystemSetting 設定
 
 #### FR-AUTH-002：密碼安全儲存
 - **優先級：** 必須 (Must Have)
@@ -456,7 +401,6 @@ RF案件排程系統
   - 系統發送重設連結至註冊Email
   - 連結30分鐘內有效
   - 連結僅能使用一次
-  - 不顯示帳號是否存在（安全性）
 
 #### FR-AUTH-004：角色權限控管
 - **優先級：** 必須 (Must Have)
@@ -526,6 +470,39 @@ RF案件排程系統
   - 建立補測後測項狀態改為InProgress
   - 需填寫補測原因
 
+#### FR-TEST-004：測項狀態計算邏輯（新增）
+- **優先級：** 必須 (Must Have)
+- **描述：** TestItem 狀態依優先順序自動計算，並支援手動覆寫
+- **驗收標準：**
+  - **狀態計算優先順序：**
+    1. IF 主管手動設定 OnHold → **OnHold**（最高優先級）
+    2. ELSE IF 發生「建立 TestItemRevision」事件 → **InProgress**（補測事件覆蓋舊狀態）
+    3. ELSE IF WorkLog 中存在 Delayed 狀態 → **Delayed**
+    4. ELSE IF 任一工程師按「Complete TestItem」→ **Completed**
+    5. ELSE IF WorkLog 中存在 InProgress 狀態 → **InProgress**
+    6. ELSE → **NotStarted**（初始狀態）
+  - 系統需記錄狀態變更歷程至 AuditLog
+  - 主管手動設定的 OnHold 狀態需額外標記，避免被自動邏輯覆蓋
+
+#### FR-TEST-005：測項狀態逆向操作（新增）
+- **優先級：** 必須 (Must Have)
+- **描述：** TestItem 狀態允許逆向修改，非單向不可逆
+- **驗收標準：**
+  - **工程師權限：**
+    - 可取消自己誤按的 Completed 狀態
+    - 可將 Completed 改回 InProgress
+    - 需提供「取消完成」按鈕
+    - 取消操作需寫入 AuditLog
+  - **主管權限：**
+    - 可覆寫 TestItem 的任何狀態
+    - 可修改：Completed → InProgress / Delayed / OnHold
+    - 可修改：Delayed → InProgress / Completed
+    - 可修改：OnHold → 任何狀態
+    - 修改需填寫理由，記錄至 AuditLog
+  - **自動狀態亦可覆寫：**
+    - 建立 TestItemRevision 自動產生的 InProgress 可由主管手動改為其他狀態
+  - 所有狀態變更皆需記錄：Who / When / From / To / Why
+
 ---
 
 ### 6.4 工時管理需求
@@ -553,7 +530,7 @@ RF案件排程系統
 - **驗收標準：**
   - 首次回報→測項InProgress
   - 任一工程師回報延遲→測項Delayed
-  - 所有工程師完成→測項Completed
+  - 工程師按完成→觸發測項狀態重算
 
 #### FR-WORK-004：工時查詢
 - **優先級：** 必須 (Must Have)
@@ -595,753 +572,4 @@ RF案件排程系統
 
 #### FR-LOAD-003：Loading明細
 - **優先級：** 必須 (Must Have)
-- **描述：** 可查看工程師Loading明細
-- **驗收標準：**
-  - 顯示負責的所有測項
-  - 顯示各測項分配/實際/剩餘工時
-  - 提供工時趨勢圖表
-
-#### FR-LOAD-004：超載預警
-- **優先級：** 應該 (Should Have)
-- **描述：** 分配工作時若導致超載需警告
-- **驗收標準：**
-  - 分配時即時計算新Loading
-  - >100%顯示警告對話框
-  - 允許繼續或取消
-
----
-
-### 6.6 延遲管理需求
-
-#### FR-DELAY-001：延遲原因字典
-- **優先級：** 必須 (Must Have)
-- **描述：** 主管可維護延遲原因清單
-- **驗收標準：**
-  - 可新增延遲原因（含類型：設備/客戶/工程師/場地）
-  - 可修改延遲原因文字
-  - 可停用/啟用
-  - 已使用的不可刪除（僅能停用）
-
-#### FR-DELAY-002：延遲原因記錄
-- **優先級：** 必須 (Must Have)
-- **描述：** 工時狀態=延遲時需選原因
-- **驗收標準：**
-  - 可多選延遲原因
-  - 至少需選1個
-  - 未選擇無法送出
-
-#### FR-DELAY-003：延遲分析報表
-- **優先級：** 應該 (Should Have)
-- **描述：** 提供延遲原因統計分析
-- **驗收標準：**
-  - 顯示延遲原因分布（圓餅圖）
-  - 顯示延遲測項清單
-  - 可依期間/案件篩選
-  - 可匯出Excel
-
----
-
-### 6.7 使用者管理需求
-
-#### FR-USER-001：使用者新增
-- **優先級：** 必須 (Must Have)
-- **描述：** 管理者可新增使用者，Email 需作為唯一身份識別。
-- **驗收標準：**
-  - Account 唯一（僅適用 Local 帳號）
-  - Email 必須唯一，兩筆使用者不得使用相同 Email
-  - 若 Email 已存在（不論 Local 或 AD）→ 禁止新增
-  - 系統自動產生初始密碼（僅 Local）
-  - 自動發送 Email 給新使用者
-
-#### FR-USER-002：使用者停用
-- **優先級：** 必須 (Must Have)
-- **描述：** 主管可停用使用者
-- **驗收標準：**
-  - 停用前檢查是否負責未完成測項
-  - 若有負責測項顯示警告
-  - 停用後無法登入
-  - 歷史資料保留
-
-#### FR-USER-003：使用者資料修改
-- **優先級：** 必須 (Must Have)
-- **描述：** 主管可修改使用者資料
-- **驗收標準：**
-  - 可修改顯示名稱、Email、角色
-  - 帳號不可修改
-  - 每週可用工時可調整
-
-#### FR-USER-101：權限與群組管理介面（IAM）
-- **優先級：** 應該 (Should Have)  
-- **描述：** 具備管理權限的使用者（例如 Admin / Manager），可透過介面管理使用者的角色、權限群組與個別權限（Permission）。
-- **驗收標準：**
-  - 可將使用者指派至一個或多個權限群組（例如：Engineer、Manager、Auditor）。
-  - 可為特定使用者額外授予或撤銷個別 Permission（例如暫時開啟 WORKLOG_VIEW_ALL）。
-  - 可設定臨時權限的到期日，過期後自動失效。
-  - 可查詢某一位使用者目前的「有效權限」來源（群組繼承＋個別授權）。
-  - 所有權限變更皆須寫入 AuditLog（Who / What / When / Why）。
-
----
-
-### 6.8 稽核日誌需求
-
-#### FR-AUDIT-001：自動記錄異動
-- **優先級：** 必須 (Must Have)
-- **描述：** 系統自動記錄重要資料異動
-- **驗收標準：**
-  - 記錄資料表名稱
-  - 記錄記錄ID
-  - 記錄操作類型（Create/Update/Delete）
-  - 記錄操作人
-  - 記錄操作時間
-  - 記錄變更前後值（JSON格式）
-
-#### FR-AUDIT-002：稽核日誌查詢
-- **優先級：** 必須 (Must Have)
-- **描述：** 主管可查詢稽核日誌
-- **驗收標準：**
-  - 可依資料表篩選
-  - 可依操作類型篩選
-  - 可依操作人篩選
-  - 可依時間區間篩選
-  - 可匯出Excel
-
-#### FR-AUDIT-003：變更比對檢視
-- **優先級：** 應該 (Should Have)
-- **描述：** 可檢視資料變更前後差異
-- **驗收標準：**
-  - 雙欄顯示Before/After
-  - 變更欄位以顏色標示
-  - 支援JSON格式解析
-
----
-
-### 6.9 報表需求
-
-#### FR-REPORT-001：案件進度報表
-- **優先級：** 必須 (Must Have)
-- **描述：** 顯示案件整體進度
-- **驗收標準：**
-  - 顯示案件基本資訊
-  - 顯示法規完成度（長條圖）
-  - 顯示測項進度明細
-  - 顯示工時統計（預估vs實際）
-  - 支援excel匯出
-
-#### FR-REPORT-002：工時統計報表
-- **優先級：** 必須 (Must Have)
-- **描述：** 提供多維度工時統計
-- **驗收標準：**
-  - 可依案件統計
-  - 可依工程師統計
-  - 可依期間統計
-  - 提供圖表視覺化
-  - 支援Excel匯出
-
-#### FR-REPORT-003：延遲分析報表
-- **優先級：** 應該 (Should Have)
-- **描述：** 分析延遲原因與趨勢
-- **驗收標準：**
-  - 延遲原因分布圓餅圖
-  - 延遲測項清單
-  - 平均延遲天數統計
-  - 可依期間篩選
-
----
-
-## 7. 非功能需求
-
-### 7.1 效能需求 (Performance)
-
-#### NFR-PERF-001：回應時間
-- **需求：** 一般查詢操作回應時間<2秒
-- **測試條件：** 50筆資料以內
-- **優先級：** 必須 (Must Have)
-
-#### NFR-PERF-002：工時查詢效能
-- **需求：** 單一案件工時查詢<3秒
-- **測試條件：** 500筆WorkLog記錄
-- **優先級：** 必須 (Must Have)
-
-#### NFR-PERF-003：Loading計算效能
-- **需求：** Loading計算<2秒
-- **測試條件：** 15位工程師、30個Active案件
-- **優先級：** 必須 (Must Have)
-
-#### NFR-PERF-004：報表產出效能
-- **需求：** 報表產出<5秒
-- **測試條件：** 單一案件、100個測項
-- **優先級：** 應該 (Should Have)
-
----
-
-### 7.2 安全需求 (Security)
-
-#### NFR-SEC-001：密碼安全
-- **需求：** 密碼採Hash不可逆儲存
-- **標準：** 使用bcrypt或類似演算法
-- **優先級：** 必須 (Must Have)
-
-#### NFR-SEC-002：身份驗證
-- **需求：** 所有API需驗證身份
-- **標準：** 使用JWT Token機制
-- **優先級：** 必須 (Must Have)
-
-#### NFR-SEC-003：權限控管
-- **需求：** 依角色控管功能存取
-- **標準：** Engineer不能存取Manager功能
-- **優先級：** 必須 (Must Have)
-
-#### NFR-SEC-004：資料隔離
-- **需求：** 工程師只能看自己的資料
-- **標準：** 查詢需加入UserId過濾
-- **優先級：** 必須 (Must Have)
-
-#### NFR-SEC-005：密碼複雜度
-- **需求：** 密碼需符合複雜度規則
-- **標準：** 8-20字元、含英文數字
-- **優先級：** 必須 (Must Have)
-
-#### NFR-SEC-006：登入失敗鎖定
-- **需求：** 連續失敗5次鎖定10分鐘
-- **標準：** IP或帳號層級鎖定
-- **優先級：** 應該 (Should Have)
-
-#### NFR-SEC-007：JWT 結構與簽章安全
-- **需求：** JWT Token 必須使用對稱簽章演算法 HMAC-SHA256（HS256），並妥善保護伺服器端密鑰。  
-- **說明：**
-  - Header.alg = "HS256"，Header.typ = "JWT"
-  - Signature = HMAC-SHA256( base64UrlEncode(header) + "." + base64UrlEncode(payload), SecretKey )
-  - SecretKey 僅存放於伺服器端設定檔，不得硬編碼在程式碼中，也不得傳到前端。
-- **優先級：** 必須 (Must Have)
-
-#### NFR-SEC-008：JWT Payload 資料最小化
-- **需求：** JWT Payload 只保留授權必須的資訊，避免敏感資料外洩風險。  
-- **說明：**
-  - Payload 建議欄位：
-    - `sub`：UserId
-    - `name`：顯示名稱
-    - `role` 或 `roles`：角色列表（Engineer / Manager / Admin）
-    - `perms`：必要的 PermissionCode 清單或壓縮表示
-    - `exp`：Token 過期時間
-  - **不得**在 Payload 放入：
-    - 密碼或 Hash
-    - 完整工時內容（WorkLog 詳細資料）
-    - Email 內文、重設連結等敏感資訊
-  - 前端若需要工時或報表內容，必須透過 API 以授權身分查詢，而不是從 Token 讀取。
-- **優先級：** 必須 (Must Have)
-
----
-
-### 7.3 可用性需求 (Usability)
-
-#### NFR-USAB-001：學習曲線
-- **需求：** 新使用者30分鐘內可完成基本操作
-- **衡量：** 使用者測試達成率>80%
-- **優先級：** 應該 (Should Have)
-
-#### NFR-USAB-002：錯誤訊息
-- **需求：** 錯誤訊息清楚明確
-- **標準：** 告知原因與解決方式
-- **優先級：** 必須 (Must Have)
-
-#### NFR-USAB-003：操作直覺性
-- **需求：** 不需查閱手冊可完成90%操作
-- **衡量：** 使用者測試回饋
-- **優先級：** 應該 (Should Have)
-
-#### NFR-USAB-004：回饋及時性
-- **需求：** 操作後立即顯示結果
-- **標準：** 載入中顯示進度指示
-- **優先級：** 必須 (Must Have)
-
----
-
-### 7.4 可靠性需求 (Reliability)
-
-#### NFR-RELI-001：可用性
-- **需求：** 系統可用性>99%
-- **測試條件：** 每月統計
-- **優先級：** 應該 (Should Have)
-
-#### NFR-RELI-002：資料完整性
-- **需求：** 資料異動需Transaction保護
-- **標準：** 關鍵操作全成功或全失敗
-- **優先級：** 必須 (Must Have)
-
-#### NFR-RELI-003：資料備份
-- **需求：** 每日自動備份
-- **標準：** 保留30天備份
-- **優先級：** 必須 (Must Have)
-
-#### NFR-RELI-004：錯誤處理
-- **需求：** 系統錯誤不導致資料遺失
-- **標準：** 異常回滾、記錄日誌
-- **優先級：** 必須 (Must Have)
-
----
-
-### 7.5 可維護性需求 (Maintainability)
-
-#### NFR-MAIN-001：日誌記錄
-- **需求：** 記錄系統運作日誌
-- **標準：** 包含錯誤、警告、資訊層級
-- **優先級：** 必須 (Must Have)
-
-#### NFR-MAIN-002：版本控制
-- **需求：** 程式碼使用版本控管
-- **標準：** Git或類似工具
-- **優先級：** 必須 (Must Have)
-
----
-
-### 7.6 擴充性需求 (Scalability)
-
-#### NFR-SCAL-001：使用者數量
-- **需求：** 支援至少20名同時使用者
-- **測試條件：** 並發操作測試
-- **優先級：** 必須 (Must Have)
-
-#### NFR-SCAL-002：資料量
-- **需求：** 支援至少500個Active案件
-- **測試條件：** 效能不明顯下降
-- **優先級：** 應該 (Should Have)
-
-#### NFR-SCAL-003：功能擴充性
-- **需求：** 架構支援未來功能擴充
-- **標準：** 模組化設計
-- **優先級：** 應該 (Should Have)
-
----
-
-### 7.7 相容性需求 (Compatibility)
-
-#### NFR-COMP-001：作業系統
-- **需求：** 支援Windows 10/11
-- **優先級：** 必須 (Must Have)
-
-#### NFR-COMP-002：資料庫
-- **需求：** 使用SQL Server 2019以上
-- **優先級：** 必須 (Must Have)
-
-#### NFR-COMP-003：.NET版本
-- **需求：** 使用.NET 8
-- **優先級：** 必須 (Must Have)
-
----
-
-## 8. 業務規則
-
-### 8.1 時間相關規則
-
-#### BR-TIME-001：案件日期邏輯
-- **規則：** Project.EndDate必須≥Project.StartDate
-- **違反處理：** 前端阻擋送出，顯示錯誤訊息
-- **例外：** 無
-
-#### BR-TIME-002：法規日期範圍
-- **規則：** Regulation日期需在Project日期±30天內
-- **違反處理：** 顯示警告，允許繼續但需確認
-- **例外：** 特殊案件經主管核准
-
-#### BR-TIME-003：工時回報日期
-- **規則：** WorkLog.WorkDate不可晚於今天
-- **違反處理：** 前端阻擋送出
-- **例外：** 無
-
-#### BR-TIME-004：工時修改期限
-- **規則：** 工程師只能修改7天內的WorkLog
-- **違反處理：** 顯示錯誤，建議聯繫主管
-- **例外：** 主管可修改任何時間的WorkLog
-
----
-
-### 8.2 工時相關規則
-
-#### BR-HOUR-001：預估工時下限
-- **規則：** TestItem.EstimatedHours必須>0
-- **違反處理：** 前端阻擋送出
-- **例外：** 無
-
-#### BR-HOUR-002：單日工時上限
-- **規則：** 單日WorkLog.ActualHours≤12
-- **違反處理：** 顯示警告，允許繼續但需確認
-- **例外：** 緊急趕工案件
-
-#### BR-HOUR-003：分配工時合理性
-- **規則：** Σ(AssignedHours)與EstimatedHours差異不宜>20%
-- **違反處理：** 顯示警告，允許繼續
-- **例外：** 複雜案件難以精確預估
-
-#### BR-HOUR-004：累計工時警示
-- **規則：** 實際工時累計超過分配工時150%需警示
-- **違反處理：** 顯示警告，允許繼續
-- **例外：** 案件複雜度超出預期
-
----
-
-### 8.3 分配相關規則
-
-#### BR-ASSIGN-001：主要工程師必要性
-- **規則：** 每個TestItem至少需1位Main工程師
-- **違反處理：** 前端阻擋送出
-- **例外：** 無
-
-#### BR-ASSIGN-002：工程師唯一性
-- **規則：** 同一TestItem不可重複分配同一工程師
-- **違反處理：** 前端阻擋送出
-- **例外：** 無
-
-#### BR-ASSIGN-003：Loading合理性
-- **規則：** 分配工作時顯示工程師當前Loading
-- **違反處理：** >100%顯示警告，允許繼續
-- **例外：** 緊急案件或短期超載可接受
-
----
-
-### 8.4 延遲相關規則
-
-#### BR-DELAY-001：延遲原因必填
-- **規則：** WorkLog.Status=Delayed時必須選延遲原因
-- **違反處理：** 前端阻擋送出
-- **例外：** 無
-
-#### BR-DELAY-002：延遲原因多選
-- **規則：** 可選擇多個延遲原因
-- **說明：** 延遲可能由多種因素造成
-- **例外：** 無
-
-#### BR-DELAY-003：延遲原因刪除限制
-- **規則：** 已被使用的DelayReason不可刪除
-- **違反處理：** 顯示錯誤，建議改為停用
-- **例外：** 無
-
----
-
-### 8.5 刪除相關規則
-
-#### BR-DELETE-001：軟刪除原則
-- **規則：** Project/Regulation/TestItem/TestItemEngineer採Soft Delete
-- **說明：** 設定IsDeleted=true，資料實際保留
-- **例外：** WorkLog一律不刪除
-
-#### BR-DELETE-002：連動刪除
-- **規則：** 刪除Project時連動刪除下層Regulation與TestItem
-- **說明：** 採Soft Delete，資料皆保留
-- **例外：** 無
-
-#### BR-DELETE-003：工時記錄保留
-- **規則：** WorkLog不因上層刪除而刪除
-- **說明：** 用於稽核與歷史查詢
-- **例外：** 無
-
-#### BR-DELETE-004：停用工程師處理
-- **規則：** 停用工程師前需檢查負責的未完成測項
-- **違反處理：** 顯示警告，列出受影響測項
-- **例外：** 可強制停用，但測項需重新分配
-
----
-
-### 8.6 狀態轉換規則
-
-#### BR-STATUS-001：測項狀態自動更新
-- **規則：** TestItem.Status依WorkLog自動計算
-- **邏輯：**
-  - 任一WorkLog=Delayed → TestItem=Delayed
-  - 所有工程師最後WorkLog=Completed → TestItem=Completed
-  - 否則 → TestItem=InProgress
-- **例外：** 主管可手動設為OnHold
-
-#### BR-STATUS-002：案件狀態自動更新
-- **規則：** Project.Status依TestItem自動計算
-- **邏輯：**
-  - 任一TestItem=Delayed → Project=Delayed
-  - 所有TestItem=Completed → Project=Completed
-  - 有TestItem=InProgress → Project=Active
-- **例外：** 主管可手動設為OnHold
-
-#### BR-STATUS-003：補測版本狀態重設
-- **規則：** 建立TestItemRevision後，TestItem.Status改為InProgress
-- **說明：** 表示需要重新測試
-- **例外：** 無
-
----
-
-## 9. 資料需求概述
-
-### 9.1 主要資料實體
-
-#### 9.1.1 User (使用者)
-
-- **說明：** 系統使用者，包含工程師、主管、系統管理者，支援 Local 帳號與 AD 帳號兩種身份來源。
-- **關鍵屬性：**
-  - 帳號（Account，唯一）
-  - 密碼 Hash（PasswordHash，僅適用於 AuthType = Local）
-  - 顯示名稱（DisplayName）
-  - Email（唯一，用於登入身份合併。Local 與 AD 共用同一 Email 作為唯一識別鍵）
-  - 角色（Role：Engineer / Manager / Admin）— 保留為粗顆粒度分類
-  - 每週可用工時（WeeklyAvailableHours）
-  - 是否啟用（IsActive）
-  - 驗證類型（AuthType：Local / AD）
-  - AD 帳號（ADAccount，可為 DOMAIN\Account 或 sAMAccountName，僅 AuthType=AD 需要）
-  - 最後登入時間（LastLoginDate）
-  - 最後登入 IP（LastLoginIP）
-
-- **關聯：**
-  - 一位 User 可負責多個 TestItem（透過 TestItemEngineer）
-  - 一位 User 可有多筆 WorkLog
-  - 一位 User 可屬於多個 PermissionGroup（透過 UserGroup）
-  - 一位 User 可被授予多個個別 Permission（透過 UserPermission）
-
-#### 9.1.2 Project (案件)
-- **說明：** RF測試案件
-- **關鍵屬性：**
-  - 案件名稱（唯一）
-  - 客戶名稱
-  - 優先順序（High/Medium/Low）
-  - 狀態（Draft/Active/Completed/OnHold/Delayed）
-  - 預計開始日期
-  - 預計結束日期
-- **關聯：**
-  - 一個Project有多個Regulation
-
-#### 9.1.3 Regulation (法規)
-- **說明：** 案件需測試的法規
-- **關鍵屬性：**
-  - 法規名稱（FCC/NCC/CE/IC/TELEC等）
-  - 開始日期
-  - 結束日期
-- **關聯：**
-  - 隸屬於一個Project
-  - 一個Regulation有多個TestItem
-
-#### 9.1.4 TestItem (測試項目)
-- **說明：** 具體的測試項目
-- **關鍵屬性：**
-  - 測項名稱
-  - 測試類型（Conducted/Radiated等）
-  - 測試場地
-  - 預估工時
-  - 狀態（NotStarted/InProgress/Completed/Delayed/OnHold）
-- **關聯：**
-  - 隸屬於一個Regulation
-  - 可分配給多位工程師
-  - 可有多筆WorkLog
-  - 可有多個補測版本
-
-#### 9.1.5 TestItemEngineer (工程師分配)
-- **說明：** 測項與工程師的關聯
-- **關鍵屬性：**
-  - 角色類型（Main/Sub）
-  - 分配工時
-- **關聯：**
-  - 連結TestItem與User
-
-#### 9.1.6 WorkLog (工時記錄)
-- **說明：** 工程師的每日工時記錄
-- **關鍵屬性：**
-  - 工作日期
-  - 實際工時
-  - 狀態（InProgress/Completed/Delayed）
-  - 備註
-- **關聯：**
-  - 隸屬於一個TestItem
-  - 隸屬於一個User
-  - 可對應一個TestItemRevision
-  - 可關聯多個DelayReason
-
-#### 9.1.7 TestItemRevision (補測版本)
-- **說明：** 測項的補測版本記錄
-- **關鍵屬性：**
-  - 版本編號（v2/v3/v4...）
-  - 建立原因
-  - 預估工時
-- **關聯：**
-  - 隸屬於一個TestItem
-
-#### 9.1.8 DelayReason (延遲原因)
-- **說明：** 延遲原因字典
-- **關鍵屬性：**
-  - 原因文字
-  - 原因類型（Equipment/Customer/Engineer/Location）
-  - 是否啟用
-- **關聯：**
-  - 可被多個WorkLog參考
-
-#### 9.1.9 AuditLog (稽核日誌)
-- **說明：** 資料異動稽核記錄
-- **關鍵屬性：**
-  - 資料表名稱
-  - 記錄ID
-  - 操作類型（Create/Update/Delete）
-  - 變更前值（JSON）
-  - 變更後值（JSON）
-  - 操作人
-  - 操作時間
-  - 修改理由
-
-#### 9.1.10 Permission (權限)
-- **說明：** 系統內可被授與與檢查的最小權限單位，例如「建立案件」「查看所有工時」。
-- **關鍵屬性：**
-  - PermissionCode：權限代碼（唯一，如 PROJECT_CREATE, WORKLOG_VIEW_ALL）
-  - PermissionName：顯示名稱（如「建立案件」「查看所有工時」）
-  - Category：分類（Project / TestItem / WorkLog / User / Report...）
-  - Description：說明文字
-  - IsActive：是否啟用
-
----
-
-#### 9.1.11 PermissionGroup (權限群組)
-- **說明：** 權限的集合，用來對應「工程師」「主管」「系統管理者」這類角色，讓管理者不用一條一條勾選 Permission。
-- **關鍵屬性：**
-  - GroupName：群組名稱（例如 Engineer / Manager / Admin / Auditor）
-  - Description：說明
-  - IsActive：是否啟用
-- **關聯：**
-  - 一個 PermissionGroup 可以包含多個 Permission（透過 PermissionGroupMapping）
-  - 一個 User 可以屬於多個 PermissionGroup（透過 UserGroup）
-
----
-
-#### 9.1.12 PermissionGroupMapping (群組－權限對應)
-- **說明：** 定義「某個群組擁有哪些權限」的對應表。
-- **關鍵屬性：**
-  - GroupId：對應 PermissionGroup
-  - PermissionId：對應 Permission
-- **關聯：**
-  - 多筆 Mapping 組成一個群組的權限集合。
-  - 例如：Engineer 群組預設擁有 PROJECT_VIEW、TESTITEM_VIEW、WORKLOG_VIEW_OWN、WORKLOG_CREATE 等。
-
----
-
-#### 9.1.13 UserGroup / UserPermission (使用者群組與個別權限)
-- **UserGroup（使用者群組）：**
-  - **說明：** 表示某位使用者屬於哪些權限群組。
-  - **關鍵屬性：**
-    - UserId：使用者
-    - GroupId：權限群組
-    - AssignedDate：指派日期
-
-- **UserPermission（使用者個別權限）：**
-  - **說明：** 直接賦予某位使用者的個別權限，用來覆蓋或補充群組預設權限，例如「暫時授權某工程師查看所有工時」。
-  - **關鍵屬性：**
-    - UserId：使用者
-    - PermissionId：權限
-    - GrantedByUserId：授權人
-    - GrantedDate：授權日期
-    - ExpireDate：到期日（可為 NULL 表示永久）
-    - IsActive：是否有效
-
-- **權限判斷原則：**
-  - 使用者是否擁有某權限 =  
-    「UserPermission 中有效的授權」 **或** 「透過 UserGroup 所屬群組繼承而來」  
-  - 系統在 API 層根據 PermissionCode 檢查，無權限則回傳 403 Forbidden。
----
-
-#### 9.1.14 Email 唯一識別規則（新增）
-- Email 必須為 **唯一值（UNIQUE）**
-- Email 不可為 NULL
-- 所有身份來源（Local / AD）皆需提供 Email
-- Local 建立使用者時：
-  - 若 Email 已存在，系統不得再建立第二筆使用者
-- AD 登入時：
-  - 若 Email 已存在，必須合併至既有使用者
-
-### 9.2 資料關聯概念圖
-
-```
-User (使用者)
-  ├─ 建立/修改 → Project (案件)
-  ├─ 負責 → TestItem (測項) [透過TestItemEngineer]
-  └─ 回報 → WorkLog (工時記錄)
-
-Project (案件)
-  └─ 包含 → Regulation (法規)
-      └─ 包含 → TestItem (測項)
-          ├─ 分配給 → User (工程師) [透過TestItemEngineer]
-          ├─ 記錄 → WorkLog (工時記錄)
-          └─ 建立 → TestItemRevision (補測版本)
-
-WorkLog (工時記錄)
-  └─ 選擇 → DelayReason (延遲原因) [透過WorkLogDelayReason]
-
-AuditLog (稽核日誌)
-  └─ 記錄所有實體的異動
-```
----
-# 附錄 A：混合登入與 IAM
-
-## A.1 混合登入機制概觀
-
-本系統支援兩種身份來源：
-
-1. **Local 帳號登入**
-   - 使用者輸入系統帳號與密碼。
-   - 後端驗證 PasswordHash。
-   - 驗證成功後簽發 JWT Token，後續 API 皆須附帶 Token。
-
-2. **Windows 驗證登入**
-   - 適用於：每位使用者有專屬電腦、且系統部署於公司內部網路。
-   - 系統透過 Windows Authentication 取得目前登入 Windows 的使用者帳號。
-   - 伺服器端將 AD 帳號對應到系統 User 紀錄（必要時自動建立預設角色與群組）。
-   - 實驗室目前因「同一台電腦多個班別共用」情境。
-
-> 本系統使用 Email 作為跨登入來源（Local / AD）的唯一身份識別鍵。
-若 AD 帳號與 Local 帳號具有相同 Email，登入時視為同一使用者。
-
-### A.1.1 AD 登入 Email 合併流程（新增）
-
-AD 登入流程必須依 Email 進行合併：
-
-1. 取得 ADAccount、DisplayName、Email
-2. 若 Email = NULL → 拒絕登入（AUTH-101）
-3. 查詢：
-SELECT * FROM Users WHERE Email = {Email}
-4. 若已存在：
-- 視為同一使用者
-- 更新 ADAccount、AuthType、LastLoginType
-5. 若不存在：
-- 建立新 AD 使用者
-6. 簽發 JWT Token
----
-
-## A.2 JWT 與 IAM 的角色
-
-1. **JWT 負責：我是誰？（Who）**
-   - 通過登入後，由系統簽發 JWT Token。
-   - Token 內放 UserId / 顯示名稱 / 角色 / 關鍵 Permission。
-   - 每次呼叫 API 時，後端會驗證 Token 的：
-     - 簽章是否正確
-     - 是否過期
-     - 是否被系統列為無效（例如強制登出）
-
-2. **IAM 負責：我可以做什麼？（What）**
-   - 使用 Permission / PermissionGroup / UserGroup / UserPermission 四個實體，決定：
-     - 這個使用者可以「建立案件」嗎？
-     - 可以「修改別人的工時」嗎？
-     - 可以「查看所有工程師的 Loading」嗎？
-   - 未來新增功能，只要新增對應的 PermissionCode，不必重寫角色邏輯。
-
----
-
-## A.3 Engineer / Manager / Admin 的對應方式
-
-- **Engineer 群組預期權限：**
-  - 可查看自己相關的 Project / Regulation / TestItem。
-  - 可回報、查詢、修改「自己的」 WorkLog（7 天內）。
-  - 可查看自己的 Loading 與報表。
-
-- **Manager 群組預期權限：**
-  - 可建立 / 修改 / 刪除案件。
-  - 可分配工程師、建立補測版本。
-  - 可查看所有工程師的 Loading、工時統計、延遲分析。
-  - 可覆寫工時（含理由），可停用使用者。
-  - 可查詢 AuditLog。
-
-- **Admin 群組預期權限：**
-  - 擁有大部分或全部 Permission。
-  - 可維護 Permission / PermissionGroup / UserGroup / SystemSetting 等。
-
-> 對使用者來說，他只會看到「我是工程師」或「我是主管」這種簡單角色。  
-> 對系統來說，底層是用一堆 PermissionCode 去精準控制每顆按鈕、每支 API 能不能用。
-
-
+- **
