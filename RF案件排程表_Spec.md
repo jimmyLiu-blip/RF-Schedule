@@ -1,4 +1,4 @@
-# 📙 RF案件排程系統 — 系統規格書 (Spec v2.1)
+# 📙 RF案件排程系統 — 系統規格書 (Spec v2.2)
 
 ---
 
@@ -10,7 +10,8 @@
 - v1.0 (2025-11-14)：初版，僅包含Login模組
 - v2.0 (2025-11-17)：擴充完整功能模組
 - v2.1 (2025-11-19)：新增混合登入機制（Local + Windows AD）、IAM 權限管理介面、JWT Token 安全性規範、臨時權限授予功能
-
+- v2.2 (2025-11-20)：TestItem 狀態計算邏輯明確化、狀態逆向操作支援、Regulation狀態
+- v2.3 (2025-11-20)：WorkLog、TestItemRevision Soft Delete 機制說明、Regulation 狀態計算邏輯、DelayReason 停用機制說明、PermissionGroupMapping 欄位補充
 ---
 
 ## 1. 登入與帳號管理模組
@@ -582,7 +583,7 @@ cboAuthType.SelectedIndexChanged:
 | TextBox | - | txtGroupName | ✔ | 最大長度50 |
 | Label | 說明 | - | - | - |
 | TextBox (多行) | - | txtDescription | - | 最大長度200 |
-| CheckBox | 啟用群組 | chkIsActive | - | 預設勾選 |
+| CheckBox | 啟用群組 | chkIsActive | - | 預設勾選，**停用後不可指派給新用戶** |
 | Button | 確定 | btnOK | - | - |
 | Button | 取消 | btnCancel | - | - |
 
@@ -591,6 +592,13 @@ cboAuthType.SelectedIndexChanged:
 |---------|---------|
 | 群組名稱空白 | "請輸入群組名稱" |
 | 群組名稱重複 | "此群組名稱已存在" |
+
+**權限群組停用機制：**
+- PermissionGroup **不支持刪除**，僅能透過 `IsActive = false` 停用
+- 停用後該群組不可再指派給新用戶
+- 已指派該群組的用戶不受影響（保留既有權限）
+- 系統預設群組（Engineer/Manager/Admin）不可停用
+- 停用操作寫入 AuditLog
 
 ---
 
@@ -678,10 +686,18 @@ cboAuthType.SelectedIndexChanged:
 2. 呼叫 API: PUT /api/permissiongroups/{groupId}/permissions
 3. Request Body:
    ```json
-   {
-     "permissionIds": [1, 2, 5, 8, 12, ...]
-   }
-   ```
+  {
+  "mappingId": 123,
+  "groupId": 1,
+  "permissionId": 5,
+  "createdByUserId": 10,
+  "createdDate": "2025-11-20T10:30:00Z"
+  }
+**說明：**
+- 新增 `CreatedByUserId` 欄位記錄操作者
+- 新增 `CreatedDate` 欄位記錄建立時間
+- 變更權限對應時需寫入 AuditLog
+- 刪除舊對應時不實際刪除，而是建立完整的新對應集合
 4. 後端刪除舊的 PermissionGroupMapping，新增新的對應
 5. 寫入 AuditLog
 6. 關閉對話框
@@ -983,6 +999,68 @@ rdoDelayed.CheckedChanged:
 
 ---
 
+### 3.4 測項完成狀態取消功能 (SCR-WORKLOG-004) 【新增】
+
+**權限要求：** Engineer 或具備 `TESTITEM_STATUS_CANCEL` 權限
+
+**開啟方式：** SCR-WORKLOG-001 → 選擇已完成測項 → [取消完成]按鈕
+
+**功能目的：** 允許工程師取消自己誤按的測項完成狀態
+
+**畫面元素：**
+| 元素類型 | 標籤 | 控制項名稱 | 必填 | 說明 |
+|---------|------|-----------|------|------|
+| Label | 測項名稱 | - | - | 顯示要取消的測項 |
+| Label | 目前狀態 | - | - | Completed |
+| Label | 警告訊息 | - | - | 紅色文字，見下方 |
+| TextBox (多行) | 取消原因 | txtReason | ✓ | 寫入 AuditLog |
+| Button | 確定取消 | btnConfirm | - | - |
+| Button | 返回 | btnCancel | - | - |
+
+**警告訊息內容：**
+```
+⚠ 取消完成狀態後，此測項將改為「進行中」
+⚠ 此操作將寫入稽核日誌
+⚠ 請確認您確實需要取消完成狀態
+```
+
+**操作流程：**
+```
+1. 工程師選擇狀態為 Completed 的測項
+2. 點擊[取消完成]按鈕
+3. 系統檢查權限：TESTITEM_STATUS_CANCEL
+4. 開啟取消確認對話框
+5. 填寫取消原因
+6. 確認後呼叫 API: POST /api/testitems/{id}/cancel-completion
+7. 後端處理：
+   ├─ 檢查該測項是否為 Completed
+   ├─ 檢查操作者是否為該測項的負責工程師
+   ├─ 更新 TestItem.Status = InProgress
+   ├─ 寫入 AuditLog
+   │   - Action = StatusChange
+   │   - OldValue = Completed
+   │   - NewValue = InProgress
+   │   - Reason = 取消原因
+   └─ 重新計算 Regulation.Status 與 Project.Status
+8. 刷新測項清單
+```
+
+**驗證規則：**
+| 驗證項目 | 錯誤訊息 |
+|---------|---------|
+| 測項非 Completed 狀態 | "此測項目前不是已完成狀態" |
+| 非負責工程師 | "您不是此測項的負責工程師，無法取消完成狀態" |
+| 取消原因空白 | "請填寫取消原因" |
+| 取消原因過短 | "取消原因至少需10個字元" |
+
+**後端驗證規則：**
+| 情境 | HTTP狀態碼 | 錯誤訊息 |
+|------|-----------|---------|
+| 測項已有補測版本 | 409 | "此測項已建立補測版本，無法取消完成" |
+| 測項被主管設為 OnHold | 409 | "此測項已被主管設為暫停，請聯繫主管" |
+
+---
+
 ## 4. 案件管理模組 (Manager)
 
 ### 4.1 案件總覽畫面 (SCR-PROJECT-001)
@@ -1023,7 +1101,6 @@ rdoDelayed.CheckedChanged:
 
 [取消] [確定刪除]
 ```
-
 #### 【新增】Regulation 狀態 (Status) 定義與自動計算規則
 
 每個 Regulation 會自動根據其底下所有 TestItem 的狀態計算出 Regulation.Status。  
@@ -1032,22 +1109,30 @@ rdoDelayed.CheckedChanged:
 - **NotStarted**：所有 TestItem 均為 NotStarted  
 - **InProgress**：至少有 1 個 TestItem 為 InProgress  
 - **Delayed**：至少有 1 個 TestItem 為 Delayed  
-- **Completed**：所有 TestItem 均為 Completed
+- **Completed**：所有 TestItem 均為 Completed  
+- **OnHold**：主管手動設定
 
-計算順序（由高優先度到低）：
-IF 任一 TestItem.Status = Delayed → Regulation.Status = Delayed
+**計算順序（由高優先度到低）：**
+```
+IF 主管手動設定 OnHold → Regulation.Status = OnHold（最高優先級，手動狀態應被保留）
+ELSE IF 任一 TestItem.Status = Delayed → Regulation.Status = Delayed
 ELSE IF 所有 TestItem.Status = Completed → Regulation.Status = Completed
 ELSE IF 任一 TestItem.Status = InProgress → Regulation.Status = InProgress
-ELSE → NotStarted
+ELSE → Regulation.Status = NotStarted（初始狀態）
+```
 
-Regulation 狀態會在下列事件中自動更新：
-
-- 測項建立／刪除  
+**Regulation 狀態會在下列事件中自動更新：**
+- 測項建立/刪除  
 - 測項狀態變更（工時回報後自動變更）  
 - 補測版本完成  
 - 工時覆寫  
 
-Manager 不可手動修改 Regulation 狀態（唯讀）。
+**狀態手動覆寫：**
+- Manager 可手動將 Regulation.Status 設為 OnHold
+- 設定 `ManualStatusOverride = true` 標記
+- 手動設定 OnHold 後，不會被自動邏輯覆蓋
+- 取消手動狀態時，系統重新計算
+- 所有狀態變更寫入 AuditLog
 ---
 
 ### 4.2 案件詳細畫面 (SCR-PROJECT-002)
@@ -1103,6 +1188,20 @@ Manager 不可手動修改 Regulation 狀態（唯讀）。
 **開啟模式：** Modal Dialog
 
 **建立補測版本功能：**
+當建立 TestItemRevision 後，系統會：
+1. 自動將 TestItem.Status 設為 InProgress
+2. 清除 TestItem.ManualStatusOverride（如果之前被設為手動狀態）
+3. 寫入 AuditLog：
+   ```json
+   {
+     "Action": "RevisionCreated",
+     "OldValue": {"Status": "Completed", "ManualStatusOverride": true},
+     "NewValue": {"Status": "InProgress", "ManualStatusOverride": false},
+     "Reason": "建立補測版本 v2"
+   }
+   ```
+
+**⚠ 注意：** 即使測項被設為手動狀態，建立補測版本仍會自動改為 InProgress，但主管可在建立後再次手動修改。
 
 **建立原因選項：**
 - 測試不通過需重測
@@ -1126,6 +1225,76 @@ Manager 不可手動修改 Regulation 狀態（唯讀）。
 
 **驗證規則：**
 | 驗證項目 | 錯誤訊息 |
+
+---
+
+### 4.5 測項狀態手動覆寫功能 (SCR-TESTITEM-STATUS-001) 【新增】
+
+**權限要求：** Manager 或具備 `TESTITEM_STATUS_OVERRIDE` 權限
+
+**進入方式：** SCR-PROJECT-002 → TreeView右鍵 → [修改狀態]
+
+**開啟模式：** Modal Dialog
+
+**畫面元素：**
+| 元素類型 | 標籤 | 控制項名稱 | 必填 | 說明 |
+|---------|------|-----------|------|------|
+| Label | 測項名稱 | - | - | 顯示測項資訊 |
+| Label | 目前狀態 | - | - | 顯示當前狀態 |
+| ComboBox | 新狀態 | cboNewStatus | ✓ | NotStarted/InProgress/Completed/Delayed/OnHold |
+| CheckBox | 設為手動狀態 | chkManualOverride | - | 勾選後狀態不會被自動邏輯覆寫 |
+| TextBox (多行) | 修改理由 | txtReason | ✓ | 寫入 AuditLog |
+| Button | 確定 | btnOK | - | - |
+| Button | 取消 | btnCancel | - | - |
+
+**狀態選項說明：**
+| 狀態值 | 顯示文字 | 說明 |
+|--------|---------|------|
+| NotStarted | 未開始 | 測項尚未有任何工時回報 |
+| InProgress | 進行中 | 測項正在進行測試 |
+| Completed | 已完成 | 測項測試完成 |
+| Delayed | 延遲中 | 測項因故延遲 |
+| OnHold | 暫停 | 主管暫停此測項 |
+
+**設為手動狀態說明：**
+```
+☑ 勾選此選項後，此測項的狀態將不會被以下事件自動變更：
+  • 工程師回報工時
+  • 建立補測版本
+  • 其他自動狀態計算邏輯
+
+⚠ 手動狀態僅能由主管再次手動修改
+⚠ 如需恢復自動狀態計算，請將此選項取消勾選
+```
+
+**操作流程：**
+```
+1. 主管在測項上右鍵選擇[修改狀態]
+2. 系統檢查權限：TESTITEM_STATUS_OVERRIDE
+3. 開啟狀態修改對話框
+4. 選擇新狀態
+5. 決定是否勾選「設為手動狀態」
+6. 填寫修改理由
+7. 確認後呼叫 API: PUT /api/testitems/{id}/status
+8. 後端處理：
+   ├─ 檢查權限
+   ├─ 更新 TestItem.Status = NewStatus
+   ├─ 更新 TestItem.ManualStatusOverride = chkManualOverride
+   ├─ 寫入 AuditLog
+   │   - Action = StatusOverride
+   │   - OldValue = JSON{Status, ManualStatusOverride}
+   │   - NewValue = JSON{NewStatus, NewManualOverride}
+   │   - Reason = 修改理由
+   └─ 重新計算 Regulation.Status 與 Project.Status
+9. 刷新測項狀態顯示
+```
+
+**驗證規則：**
+| 驗證項目 | 錯誤訊息 |
+|---------|---------|
+| 新狀態與目前相同 | "新狀態與目前狀態相同" |
+| 修改理由空白 | "請填寫修改理由" |
+| 修改理由過短 | "修改理由至少需10個字元" |
 
 ---
 
@@ -1203,6 +1372,65 @@ END IF
 | 原因文字重複 | "此原因已存在" |
 
 ---
+### 6.3 工時記錄查詢畫面 (SCR-WORKLOG-003) - 刪除規則
+**⚠️ 重要說明：**
+- WorkLog 採用 **Soft Delete** 機制
+- 刪除後 `IsDeleted = true`，資料保留於資料庫
+- 刪除記錄寫入 `DeletedByUserId` 與 `DeletedDate`
+- 已刪除的 WorkLog 不會出現在一般查詢中，但保留於稽核追蹤
+- Manager 可透過特殊查詢介面查看已刪除的工時記錄
+
+**刪除限制：**
+- 僅 Manager 具有刪除 WorkLog 的權限（需 `WORKLOG_DELETE` 權限）
+- 一般工程師無法刪除工時記錄，僅能修改
+- 刪除操作需填寫刪除理由，寫入 AuditLog
+
+---
+### 6.4 測項管理畫面 (SCR-TESTITEM-001) - 建立補測版本功能
+**TestItemRevision Soft Delete 機制：**
+- TestItemRevision 採用 **Soft Delete**
+- 刪除時設定 `IsDeleted = true`，記錄 `DeletedByUserId` 與 `DeletedDate`
+- 已刪除的版本不影響已關聯的 WorkLog 查詢
+- 版本編號（RevisionNumber）不可重複，即使被刪除
+
+**刪除補測版本規則：**
+- 僅 Manager 可刪除補測版本（需 `TESTITEM_UPDATE` 權限）
+- 若該版本已有 WorkLog 關聯，刪除前需顯示警告
+- 刪除理由寫入 AuditLog
+- 已刪除版本不出現在下拉選單中
+
+---
+### 6.5 延遲原因管理畫面 (SCR-DELAY-001) - 操作規則
+**操作規則：**
+- **DelayReason 採用 IsActive 機制（不使用 Soft Delete）**
+- 使用次數 > 0 的原因：
+  - **不可刪除**（實體刪除會破壞 WorkLog 關聯）
+  - 僅能透過 `IsActive = false` 停用
+  - 停用後不顯示在工時回報畫面的下拉選單
+  - 歷史資料仍可查詢與顯示
+- 使用次數 = 0 的原因：
+  - 可實體刪除
+- 停用/啟用操作需寫入 AuditLog
+
+**停用延遲原因流程：**
+```
+1. Manager 選擇欲停用的延遲原因
+2. 系統檢查該原因是否被使用（COUNT WorkLogDelayReason）
+3. IF 使用次數 > 0 THEN
+     設定 IsActive = false
+     寫入 AuditLog
+     顯示「已停用，歷史記錄不受影響」
+   ELSE
+     詢問「此原因尚未被使用，是否直接刪除？」
+     允許實體刪除或停用
+4. 前端刷新清單
+```
+
+**查詢規則：**
+- 工時回報下拉選單：僅顯示 `IsActive = true` 的原因
+- 延遲原因管理畫面：顯示所有原因（含已停用）
+- 工時記錄查詢：顯示完整原因文字（即使已停用）
+- 延遲分析報表：包含所有原因（含已停用）
 
 ## 7. 稽核日誌模組 (Manager)
 
@@ -1436,6 +1664,16 @@ END IF
 | Token 被竄改 | 驗證簽章 | "驗證失敗，請重新登入" |
 | 權限已過期 | 檢查 UserPermission.ExpireDate | "您的臨時權限已過期" |
 | 使用者已停用 | 檢查 User.IsActive | "帳號已停用，請聯繫主管" |
+
+### 10.7 測項狀態變更防呆 【新增】
+
+| 情境 | 驗證規則 | 錯誤訊息 |
+|------|---------|---------|
+| 工程師取消非自己的測項完成 | 檢查 TestItemEngineer | "您不是此測項的負責工程師" |
+| 工程師取消已有補測版本的測項 | 檢查 TestItemRevision | "此測項已建立補測版本，無法取消完成" |
+| 主管覆寫狀態但未填理由 | 檢查 Reason 欄位 | "請填寫修改理由" |
+| 手動狀態被自動邏輯覆寫 | 檢查 ManualStatusOverride | 應被阻擋，寫入錯誤日誌 |
+| 建立補測時測項非 Completed | 顯示警告 | "此測項尚未完成，確定要建立補測？" |
 
 ---
 
@@ -1840,6 +2078,70 @@ Token有效？
      結束
 ```
 
+### 11.6 測項狀態計算流程 【新增】
+
+```
+觸發事件
+  ↓
+[系統檢查 TestItem.ManualStatusOverride]
+  ├─ true → 保持目前狀態，不執行自動計算 → 結束
+  └─ false ↓
+
+┌─────────────────────────────────────────┐
+│ 狀態計算優先順序（由高到低）              │
+└─────────────────────────────────────────┘
+  ↓
+[1. 檢查是否為補測事件]
+  └─ IF 剛建立 TestItemRevision
+      → TestItem.Status = InProgress
+      → ManualStatusOverride = false
+      → 寫入 AuditLog
+      → 結束
+  ↓
+[2. 檢查 WorkLog 是否有 Delayed]
+  └─ IF 任一 WorkLog.Status = Delayed
+      → TestItem.Status = Delayed
+      → 寫入 AuditLog
+      → 結束
+  ↓
+[3. 檢查是否所有工程師都完成]
+  └─ IF 所有負責工程師最後一筆 WorkLog.Status = Completed
+      → TestItem.Status = Completed
+      → 寫入 AuditLog
+      → 結束
+  ↓
+[4. 檢查是否有 WorkLog]
+  └─ IF 存在任何 WorkLog 記錄
+      → TestItem.Status = InProgress
+      → 寫入 AuditLog
+      → 結束
+  ↓
+[5. 預設狀態]
+  → TestItem.Status = NotStarted
+  → 結束
+
+┌─────────────────────────────────────────┐
+│ 連鎖更新                                 │
+└─────────────────────────────────────────┘
+  ↓
+[重新計算 Regulation.Status]
+  ├─ IF Regulation.ManualStatusOverride = true → 保持目前狀態，不執行自動計算
+  ├─ ELSE IF 任一 TestItem = Delayed → Regulation.Status = Delayed
+  ├─ ELSE IF 所有 TestItem = Completed → Regulation.Status = Completed
+  ├─ ELSE IF 任一 TestItem = InProgress → Regulation.Status = InProgress
+  └─ ELSE → Regulation.Status = NotStarted
+  ↓
+  寫入 AuditLog（記錄 Regulation 狀態變更原因）
+  ↓
+[重新計算 Project.Status]
+  ├─ IF 任一 Regulation = Delayed → Project.Status = Delayed
+  ├─ ELSE IF 所有 Regulation = Completed → Project.Status = Completed
+  ├─ ELSE IF 任一 Regulation = InProgress → Project.Status = Active
+  └─ ELSE → Project.Status = Draft
+  ↓
+結束
+```
+
 ---
 
 ## 12. API端點規範 (API Endpoints Specification)
@@ -1989,7 +2291,9 @@ Token有效？
 | /api/testitems/{id}/engineers | POST | 分配工程師 | TESTITEM_UPDATE |
 | /api/testitems/{id}/revisions | GET | 取得補測版本清單 | TESTITEM_VIEW |
 | /api/testitems/{id}/revisions | POST | 建立補測版本 | TESTITEM_UPDATE |
-
+| /api/testitems/{id}/cancel-completion | POST | 工程師取消測項完成狀態 | TESTITEM_STATUS_CANCEL |
+| /api/testitems/{id}/status | PUT | 主管手動覆寫測項狀態 | TESTITEM_STATUS_OVERRIDE |
+| /api/testitems/revisions/{id} | DELETE | 刪除補測版本(Soft) | TESTITEM_UPDATE |
 ---
 
 ### 12.8 工時管理 (WorkLogs)
@@ -2008,6 +2312,12 @@ Token有效？
 - `WORKLOG_VIEW_ALL`：可查看所有工程師的工時
 - `WORKLOG_UPDATE_OWN`：只能修改自己7天內的工時
 - `WORKLOG_OVERRIDE`：可修改任何工時（含理由）
+
+**WorkLog 刪除機制：**
+- 採用 Soft Delete（`IsDeleted = true`）
+- 僅 Manager 具有 `WORKLOG_DELETE` 權限
+- 刪除需填寫理由，寫入 AuditLog
+- 一般工程師無法刪除工時，僅能修改（7天內）
 
 ---
 
@@ -2029,9 +2339,14 @@ Token有效？
 | /api/delayreasons/{id} | GET | 取得延遲原因詳細 | DELAY_VIEW |
 | /api/delayreasons | POST | 新增延遲原因 | DELAY_MANAGE |
 | /api/delayreasons/{id} | PUT | 更新延遲原因 | DELAY_MANAGE |
-| /api/delayreasons/{id}/deactivate | POST | 停用延遲原因 | DELAY_MANAGE |
-| /api/delayreasons/{id} | DELETE | 刪除延遲原因 | DELAY_MANAGE |
+| /api/delayreasons/{id}/deactivate | POST | 停用延遲原因（IsActive=false） | DELAY_MANAGE |
+| /api/delayreasons/{id}/activate | POST | 啟用延遲原因（IsActive=true） | DELAY_MANAGE |
+| /api/delayreasons/{id} | DELETE | 刪除延遲原因（僅限未使用者） | DELAY_MANAGE |
 
+**DELETE 端點補充說明：**
+- 實體刪除僅適用於 `使用次數 = 0` 的延遲原因
+- 若使用次數 > 0，後端回傳 409 Conflict
+- 錯誤訊息：「此原因已被使用，無法刪除，請改用停用功能」
 ---
 
 ### 12.11 稽核日誌 (Audit Logs)
@@ -2130,7 +2445,13 @@ Token有效？
 | BIZ005 | 409 | 延遲原因已被使用，無法刪除 | 提示只能停用 |
 | BIZ006 | 409 | 資料已被他人修改 | 提供重新載入按鈕 |
 | BIZ007 | 400 | AD帳號不支援密碼重設 | 提示聯繫IT部門 |
-
+| BIZ008 | 403 | 非負責工程師無法取消完成 | 顯示錯誤，隱藏取消按鈕 |
+| BIZ009 | 409 | 測項已有補測版本無法取消完成 | 顯示警告，說明原因 |
+| BIZ010 | 409 | 測項被設為手動狀態，自動邏輯被阻擋 | 記錄日誌，通知主管 |
+| BIZ011 | 409 | 補測版本已有工時記錄，無法刪除 | 顯示警告，說明影響範圍 |
+| BIZ012 | 409 | 延遲原因已被使用，無法刪除 | 提示僅能停用，提供停用按鈕 |
+| BIZ013 | 409 | 權限群組已被使用，無法刪除 | 提示僅能停用 |
+| BIZ014 | 403 | 系統預設群組不可停用 | 顯示錯誤，隱藏停用按鈕 |
 ---
 
 ### 13.5 系統錯誤 (SYS)
@@ -2224,6 +2545,8 @@ Token有效？
 | TESTITEM_CREATE | 建立測項 | 可新增測試項目 |
 | TESTITEM_UPDATE | 編輯測項 | 可修改測項、分配工程師、建立補測版本 |
 | TESTITEM_DELETE | 刪除測項 | 可刪除測項（Soft Delete） |
+| TESTITEM_STATUS_CANCEL | 取消測項完成 | 可取消自己負責測項的完成狀態 |
+| TESTITEM_STATUS_OVERRIDE | 覆寫測項狀態 | 可手動修改任何測項的狀態 |
 
 ---
 
@@ -2236,7 +2559,7 @@ Token有效？
 | WORKLOG_CREATE | 回報工時 | 可新增工時記錄 |
 | WORKLOG_UPDATE_OWN | 修改工時(7天內) | 可修改自己7天內的工時 |
 | WORKLOG_OVERRIDE | 覆寫工時 | 可修改任何工時記錄（含理由） |
-
+| WORKLOG_DELETE | 刪除工時記錄 | 可刪除工時記錄（Soft Delete，僅限Manager） |
 ---
 
 ### 15.4 Loading 分析 (Loading Analysis)
@@ -2311,6 +2634,7 @@ Token有效？
 **包含權限：**
 - PROJECT_VIEW
 - TESTITEM_VIEW
+- TESTITEM_STATUS_CANCEL  【新增】
 - WORKLOG_VIEW_OWN
 - WORKLOG_CREATE
 - WORKLOG_UPDATE_OWN
@@ -2332,8 +2656,10 @@ Token有效？
 - TESTITEM_CREATE
 - TESTITEM_UPDATE
 - TESTITEM_DELETE
+- TESTITEM_STATUS_OVERRIDE  【新增】
 - WORKLOG_VIEW_ALL
 - WORKLOG_OVERRIDE
+- WORKLOG_DELETE
 - LOADING_VIEW_ALL
 - DELAY_VIEW
 - DELAY_MANAGE
@@ -2343,6 +2669,7 @@ Token有效？
 - USER_RESET_PASSWORD
 - AUDIT_VIEW
 - REPORT_VIEW_ALL
+
 
 **說明：** 主管擁有完整的案件管理、工時查看、Loading分析、延遲管理、人員管理與報表查看權限。
 
