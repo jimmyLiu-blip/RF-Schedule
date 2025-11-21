@@ -1,0 +1,115 @@
+PROJECT_VIEW 查看所有案件（只要有權限）
+
+PROJECT_CREATE 新增案件（Wizard）
+
+PROJECT_UPDATE 編輯案件
+
+PROJECT_DELETE 刪除案件（Soft Delete）
+
+PROJECT_VIEW_ASSIGNED 定義在 SD → 工程師預設權限
+
+PROJECT_*（Manager 群組用）SD Manager 群組：PROJECT_*
+
+---------------------------
+
+REGULATION_VIEW_ASSIGNED 工程師只能看自己負責測項所在的法規
+
+REGULATION_*（SD Manager 群組）主管有全部 Regulation 管理權
+
+---------------------------
+
+TESTITEM_VIEW 
+
+TESTITEM_CREATE 
+
+TESTITEM_UPDATE 
+
+TESTITEM_DELETE
+
+TESTITEM_VIEW_ASSIGNED（SD）SD 工程師預設權限
+
+TESTITEM_COMPLETE（SD） 工程師按下「完成測項」用的權限
+
+TESTITEM_STATUS_CANCEL  取消完成狀態（工程師自己取消）
+
+TESTITEM_STATUS_OVERRIDE（Spec）主管可覆寫任何測項狀態
+
+TESTITEM_*（SD Manager 群組）星號代表主管擁有所有測項權限
+
+---------------------------
+
+查看自己的工時 → WORKLOG_VIEW_OWN
+
+查看所有人 → WORKLOG_VIEW_ALL
+
+新增工時 → WORKLOG_CREATE
+
+修改自己 7 天內工時 → WORKLOG_UPDATE_OWN
+
+刪除工時 → WORKLOG_DELETE（主管限定）
+
+WORKLOG_OVERRIDE（Spec）主管可以修改別人的工時（需理由）
+
+WORKLOG_EDIT_ALL（SD）WORKLOG_OVERRIDE 的擴大版本（主管可編輯所有工時）
+
+---------------------------
+
+LOADING_VIEW_OWN → 查看自己的 Loading
+
+LOADING_VIEW_ALL → 主管查看所有工程師 Loading
+
+---------------------------
+
+DELAY_VIEW（Spec）查看延遲原因列表（工程師只讀）
+
+DELAY_MANAGE（Spec）主管可：新增延遲原因、編輯延遲原因、停用 / 啟用
+
+---------------------------
+
+USER_VIEW 
+
+USER_CREATE 
+
+USER_UPDATE 
+
+USER_RESET_PASSWORD
+
+USER_DISABLE（SD）主管權限：停用使用者（IsActive=false）
+
+USER_MANAGE_PERMISSION（Spec）Admin 專屬：管理使用者的「個別權限」
+
+USER_MANAGE（SD）SD Admin 群組定義：「全部 User 權限」
+
+---------------------------
+
+PERMISSION_VIEW（Spec）查看權限清單
+
+PERMISSION_MANAGE（Spec） Admin 能：新增 Permission、修改 Permission、停用 Permission
+
+PERMISSION_GROUP_MANAGE（SD）管理「權限群組」有哪些權限
+
+---------------------------
+
+AUDITLOG_VIEW 查看稽核日誌
+
+---------------------------
+
+REPORT_VIEW_ALL 主管 / 稽核 / Admin
+
+REPORT_VIEW_OWN 工程師自己查看 Loading、進度、個人統計
+
+---------------------------
+
+SYSTEM_SETTING（Spec）→ Admin 修改系統參數、預設值
+
+
+缺少
+
+TESTITEM_REVISION_CREATE（建立補測版本）
+
+TESTITEM_REVISION_ROLLBACK（回滾版本）
+
+AUDITLOG_VIEW（SD 名稱），Spec  AUDIT_VIEW 名稱是沒有一致
+
+Spec： SYSTEM_SETTING，SD： SYSTEM_SETTING_MANAGE 名稱是沒有一致
+
