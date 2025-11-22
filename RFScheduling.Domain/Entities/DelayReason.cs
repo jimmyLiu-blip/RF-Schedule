@@ -18,13 +18,19 @@ namespace RFScheduling.Domain.Entities
 
         // ICreatable & IModifiable
         public int CreatedByUserId { get; set; }
+
         public DateTime CreatedDate { get; set; }
+
+        public int? ModifiedByUserId { get; set; }
+
         public DateTime? ModifiedDate { get; set; }
 
         // Navigation Properties
 
         public User CreatedBy { get; set; } = null!;
 
-        public ICollection<WorkLogDelayReason> WorkLogDelayReasons { get; set; } = new List<WorkLogDelayReason>();
+        public User? ModifiedBy { get; set; }
+
+        public ICollection<WorkLog> WorkLogs { get; set; } = new List<WorkLog>();
     }
 }

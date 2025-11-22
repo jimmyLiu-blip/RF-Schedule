@@ -33,6 +33,10 @@ namespace RFScheduling.Domain.Entities
         [MaxLength(500)]
         public string? ModificationReason { get; set; }
 
+        // Concurrency Token
+        [Timestamp]
+        public byte[] RowVersion { get; set; } = Array.Empty<byte>();
+
         // Navigation Properties
 
         public TestItem TestItem { get; set; } = null!;

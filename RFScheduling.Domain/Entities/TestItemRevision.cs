@@ -30,6 +30,10 @@ namespace RFScheduling.Domain.Entities
         public int? DeletedByUserId { get; set; }
         public DateTime? DeletedDate { get; set; }
 
+        // Concurrency Token
+        [Timestamp]
+        public byte[] RowVersion { get; set; } = Array.Empty<byte>();
+
         // Navigation Properties
 
         public TestItem TestItem { get; set; } = null!;

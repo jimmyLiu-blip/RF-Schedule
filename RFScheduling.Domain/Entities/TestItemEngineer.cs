@@ -1,5 +1,6 @@
-﻿using RFScheduling.Domain.Interfaces;
-using RFScheduling.Domain.Enums;
+﻿using RFScheduling.Domain.Enums;
+using RFScheduling.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace RFScheduling.Domain.Entities
 {
@@ -24,6 +25,10 @@ namespace RFScheduling.Domain.Entities
         public bool IsDeleted { get; set; }
         public int? DeletedByUserId { get; set; }
         public DateTime? DeletedDate { get; set; }
+
+        // Concurrency Token
+        [Timestamp]
+        public byte[] RowVersion { get; set; } = Array.Empty<byte>();
 
         // Navigation Properties
         public TestItem TestItem { get; set; } = null!;

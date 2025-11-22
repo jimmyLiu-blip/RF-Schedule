@@ -105,7 +105,7 @@ RF測試實驗室目前面臨的挑戰:
 | 登入方式 | Email 來源 | 使用欄位 |
 |----------|------------|----------|
 | Local 帳密登入 | 使用者輸入 | Account + Email |
-| AD 驗證登入 | AD 提供 | ADAccount + Email |
+| AD 驗證登入    | AD 提供   | ADAccount + Email |
 
 無論使用者以哪種方式登入,Email 相同即視為同一使用者。
 
@@ -268,10 +268,10 @@ AD 登入:
 ┌───────────────────────────────────────
 │   RF案件排程系統 (本系統)             │
 │                                     │
-│  ┌──────  ┌──────  ┌──────       │
+│  ┌──────  ┌──────  ┌──────          │
 │  │案件  │  │工時  │  │Loading│       │
 │  │管理  │  │管理  │  │分析  │        │
-│  └──────  └──────  └──────       │ 
+│  └──────  └──────  └──────          │ 
 │                                     │
 └─────────────────────────────────────┘
          ↓ (Email)
@@ -1143,269 +1143,248 @@ ELSE → Regulation.Status = NotStarted(初始狀態)
 
 #### 8.1.1 完整 ERD 圖 **【v2.2 補充完整圖】**
 
-```
-┌──────────────────────┐
-│   Users              │
-├──────────────────────┤
-│ UserId (PK)          │
-│ Account              │◄────────────┐
-│ ADAccount            │             │
-│ Email (UNIQUE) ★     │             │
-│ PasswordHash         │             │
-│ DisplayName          │             │
-│ Role                 │             │
-│ AuthType             │             │
-│ IsActive             │             │
-│ WeeklyWorkHours      │             │
-│ LastLoginDate        │             │
-│ FailedLoginAttempts  │             │
-│ LockoutEndTime       │             │
-│ CreatedDate          │             │
-│ ModifiedDate         │             │
-└──────────────────────┘             │
-         │ 1                         │
-         │                           │
-         │                           │
-         │ N                         │
-┌──────────────────────┐             │
-│   Projects           │             │
-├──────────────────────┤             │
-│ ProjectId (PK)       │             │
-│ ProjectName (UNIQUE) │             │
-│ CustomerName         │             │
-│ Priority             │             │
-│ StartDate            │             │
-│ EndDate              │             │
-│ Status               │             │
-│ ManualStatusOverride │             │
-│ Description          │             │
-│ IsDeleted            │             │
-│ CreatedByUserId (FK) ├─────────────┘
-│ CreatedDate          │
-│ ModifiedByUserId (FK)│
-│ ModifiedDate         │
-│ DeletedByUserId (FK) │
-│ DeletedDate          │
-└──────────────────────┘
-         │ 1
-         │
-         │
-         │ N
-┌──────────────────────┐
-│   Regulations        │
-├──────────────────────┤
-│ RegulationId (PK)    │
-│ ProjectId (FK)       ├───────┐
-│ RegulationType       │       │
-│ RegulationName       │       │
-│ StartDate            │       │
-│ EndDate              │       │
-│ Status               │       │
-│ ManualStatusOverride │       │
-│ IsDeleted            │       │
-│ CreatedByUserId (FK) │       │
-│ CreatedDate          │       │
-│ ModifiedByUserId (FK)│       │
-│ ModifiedDate         │       │
-│ DeletedByUserId (FK) │       │
-│ DeletedDate          │       │
-└──────────────────────┘       │
-         │ 1                   │
-         │                     │
-         │                     │
-         │ N                   │
-┌──────────────────────┐       │
-│   TestItems          │       │
-├──────────────────────┤       │
-│ TestItemId (PK)      │       │
-│ RegulationId (FK)    ├───────┘
-│ TestItemName         │
-│ TestType             │
-│ Location             │
-│ EstimatedHours       │
-│ Status               │
-│ ManualStatusOverride │
-│ IsDeleted            │
-│ CreatedByUserId (FK) │
-│ CreatedDate          │
-│ ModifiedByUserId (FK)│
-│ ModifiedDate         │
-│ DeletedByUserId (FK) │
-│ DeletedDate          │
-└──────────────────────┘
-         │ 1                    
-         │                      
-         ├────────────────────┐
-         │ N                  │ N
-┌──────────────────────┐  ┌──────────────────────┐
-│ TestItemEngineer     │  │ TestItemRevision     │
-├──────────────────────┤  ├──────────────────────┤
-│ TestItemEngineerId(PK│  │ RevisionId (PK)      │
-│ TestItemId (FK)      │  │ TestItemId (FK)      ├───┐
-│ UserId (FK)          │  │ RevisionNumber       │   │
-│ RoleType ★           │  │ RevisionType ★       │   │
-│ AssignedHours        │  │ EstimatedHours       │   │
-│ CreatedByUserId (FK) │  │ Reason               │   │
-│ CreatedDate          │  │ Description          │   │
-│ ModifiedByUserId (FK)│  │ IsDeleted ★          │   │
-│ ModifiedDate         │  │ CreatedByUserId (FK) │   │
-└──────────────────────┘  │ CreatedDate          │   │
-                          │ ModifiedByUserId (FK)│   │
-                          │ ModifiedDate         │   │
-                          │ DeletedByUserId (FK) │   │
-                          │ DeletedDate          │   │
-                          └──────────────────────┘   │
-                                   │ 1               │
-                                   │                 │
-                                   │                 │
-                                   │ N               │
-┌──────────────────────┐           │                 │
-│   WorkLogs           │           │                 │
-├──────────────────────┤           │                 │
-│ WorkLogId (PK)       │           │                 │
-│ TestItemId (FK)      ├───────────┘                 │
-│ UserId (FK)          │                             │
-│ RevisionId (FK) ★    ├─────────────────────────────┘
-│ WorkDate             │
-│ Hours                │
-│ Status               │
-│ Note                 │
-│ IsDeleted ★          │
-│ CreatedDate          │
-│ ModifiedByUserId (FK)│
-│ ModifiedDate         │
-│ DeletedByUserId (FK) │
-│ DeletedDate          │
-└──────────────────────┘
-         │ N
-         │
-         │
-         │ N
-┌──────────────────────┐
-│ WorkLogDelayReason   │
-├──────────────────────┤
-│ WorkLogDelayReasonId │
-│ WorkLogId (FK)       │
-│ DelayReasonId (FK)   ├───┐
-│ CreatedDate          │   │
-└──────────────────────┘   │
-                           │
-                           │ N
-┌──────────────────────┐   │
-│   DelayReasons       │   │
-├──────────────────────┤   │
-│ DelayReasonId (PK)   │◄──┘
-│ ReasonText           │
-│ ReasonType           │
-│ IsActive ★           │
-│ CreatedDate          │
-│ ModifiedDate         │
-└──────────────────────┘
+erDiagram
 
-┌──────────────────────┐
-│   AuditLogs          │
-├──────────────────────┤
-│ AuditLogId (PK)      │
-│ TableName            │
-│ RecordId             │
-│ Operation            │
-│ UserId (FK)          │
-│ ChangedDate          │
-│ OldValues (JSON)     │
-│ NewValues (JSON)     │
-└──────────────────────┘
+    %% ============================
+    %%  USER / ROLE / IAM
+    %% ============================
 
-┌──────────────────────┐
-│ PasswordResetTokens  │
-├──────────────────────┤
-│ TokenId (PK)         │
-│ UserId (FK)          │
-│ Token (UNIQUE)       │
-│ ExpiryDate           │
-│ IsUsed               │
-│ CreatedDate          │
-└──────────────────────┘
+    USER ||--o{ ROLE : "RoleId"
+    USER ||--o{ USERGROUP : "UserId"
+    USER ||--o{ USERPERMISSION : "UserId"
+    USER ||--o{ TESTITEMENGINEER : "EngineerUserId"
+    USER ||--o{ TESTITEM : "CreatedBy / ModifiedBy"
+    USER ||--o{ PROJECT : "CreatedBy / ModifiedBy"
+    USER ||--o{ REGULATION : "CreatedBy / ModifiedBy"
+    USER ||--o{ WORKLOG : "Engineer / CreatedBy / ModifiedBy"
+    USER ||--o{ DELAYREASON : "CreatedBy / ModifiedBy"
 
-┌──────────────────────┐
-│   SystemSettings     │
-├──────────────────────┤
-│ SettingId (PK)       │
-│ SettingKey (UNIQUE)  │
-│ SettingValue         │
-│ Description          │
-│ ModifiedByUserId (FK)│
-│ ModifiedDate         │
-└──────────────────────┘
+    ROLE ||--o{ USER : "User.RoleId"
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-IAM 權限模型 (v2.1 補充)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    PERMISSION ||--o{ PERMISSIONGROUPMAPPING : "PermissionId"
+    PERMISSIONGROUP ||--o{ PERMISSIONGROUPMAPPING : "GroupId"
+    PERMISSIONGROUP ||--o{ USERGROUP : "GroupId"
 
-┌──────────────────────┐
-│   Permissions        │
-├──────────────────────┤
-│ PermissionId (PK)    │
-│ PermissionCode       │◄────────────┐
-│ PermissionName       │             │
-│ Description          │             │
-│ Category             │             │
-│ IsActive             │             │
-└──────────────────────┘             │
-         │ N                         │
-         │                           │
-         │                           │
-         │ N                         │ N
-┌──────────────────────────────┐    │
-│ PermissionGroupMapping       │    │
-├──────────────────────────────┤    │
-│ MappingId (PK)               │    │
-│ PermissionGroupId (FK) ──────┼────┤
-│ PermissionId (FK) ───────────┼────┘
-│ CreatedDate                  │
-└──────────────────────────────┘
-         │ N
-         │
-         │
-         │ 1
-┌──────────────────────┐
-│ PermissionGroups     │
-├──────────────────────┤
-│ PermissionGroupId(PK)│
-│ GroupName            │
-│ Description          │
-│ IsActive             │
-│ CreatedDate          │
-│ ModifiedDate         │
-└──────────────────────┘
-         │ N
-         │
-         │
-         │ N
-┌──────────────────────────────┐
-│ UserPermissions              │
-├──────────────────────────────┤
-│ UserPermissionId (PK)        │
-│ UserId (FK)                  │
-│ PermissionId (FK) (Nullable) │
-│ PermissionGroupId (FK) (N... │
-│ GrantType                    │
-│ ExpiryDate (Nullable)        │
-│ GrantedByUserId (FK)         │
-│ GrantedDate                  │
-│ RevokedDate (Nullable)       │
-└──────────────────────────────┘
+    %% ============================
+    %%  PROJECT → REGULATION → TESTITEM
+    %% ============================
 
-圖例:
-★ = v2.2 以後補充或更新的欄位
-```
+    PROJECT ||--o{ REGULATION : "ProjectId"
+    REGULATION ||--o{ TESTITEM : "RegulationId"
+    TESTITEM ||--o{ TESTITEMREVISION : "TestItemId"
+    TESTITEM ||--o{ TESTITEMENGINEER : "TestItemId"
+    TESTITEM ||--o{ WORKLOG : "TestItemId"
 
-**重點說明:**
-1. **三層狀態推算:** TestItem → Regulation → Project
-2. **Soft Delete 機制:** 多張表支援 IsDeleted + DeletedByUserId + DeletedDate
-3. **補測版本管理:** TestItemRevision 完整定義 **【v3.0】**
-4. **工時記錄:** WorkLog 關聯到 RevisionId
-5. **延遲原因:** 多對多關係(WorkLog ←→ DelayReason)
-6. **IAM 權限:** Permission / PermissionGroup / UserPermission
+    %% ============================
+    %%  WORKLOG 與 DelayReason（新版一對一）
+    %% ============================
+
+    DELAYREASON ||--o{ WORKLOG : "DelayReasonId"
+
+    %% ============================
+    %%  TABLE DEFINITIONS
+    %% ============================
+
+    USER {
+        int UserId PK
+        string Account
+        string PasswordHash
+        string DisplayName
+        string Email
+        int RoleId FK
+        decimal WeeklyAvailableHours
+        bool IsActive
+        string AuthType
+        string ADAccount
+        string ADDomain
+        datetime LastLoginDate
+        string LastLoginIP
+        int CreatedByUserId
+        datetime CreatedDate
+        int ModifiedByUserId
+        datetime ModifiedDate
+        rowversion RowVersion
+    }
+
+    ROLE {
+        int RoleId PK
+        string RoleName
+        string Description
+        bool IsActive
+        int CreatedByUserId
+        datetime CreatedDate
+        int ModifiedByUserId
+        datetime ModifiedDate
+    }
+
+    PROJECT {
+        int ProjectId PK
+        string ProjectName
+        string Customer
+        string Priority
+        string Status
+        date StartDate
+        date EndDate
+        string Note
+        int CreatedByUserId
+        datetime CreatedDate
+        int ModifiedByUserId
+        datetime ModifiedDate
+        bool IsDeleted
+        int DeletedByUserId
+        datetime DeletedDate
+        rowversion RowVersion
+    }
+
+    REGULATION {
+        int RegulationId PK
+        int ProjectId FK
+        string RegulationName
+        date StartDate
+        date EndDate
+        string Status
+        bool ManualStatusOverride
+        string Note
+        int CreatedByUserId
+        datetime CreatedDate
+        int ModifiedByUserId
+        datetime ModifiedDate
+        bool IsDeleted
+        int DeletedByUserId
+        datetime DeletedDate
+    }
+
+    TESTITEM {
+        int TestItemId PK
+        int RegulationId FK
+        string TestItemName
+        string TestType
+        string TestLocation
+        decimal EstimatedHours
+        string Status
+        bool ManualStatusOverride
+        string ManagerNote
+        int CreatedByUserId
+        datetime CreatedDate
+        int ModifiedByUserId
+        datetime ModifiedDate
+        bool IsDeleted
+        int DeletedByUserId
+        datetime DeletedDate
+        rowversion RowVersion
+    }
+
+    TESTITEMREVISION {
+        int RevisionId PK
+        int TestItemId FK
+        int RevisionNumber
+        string RevisionType
+        decimal EstimatedHours
+        string Reason
+        string Description
+        int CreatedByUserId
+        datetime CreatedDate
+        int ModifiedByUserId
+        datetime ModifiedDate
+        bool IsDeleted
+        int DeletedByUserId
+        datetime DeletedDate
+    }
+
+    TESTITEMENGINEER {
+        int AssignmentId PK
+        int TestItemId FK
+        int EngineerUserId FK
+        string RoleType
+        decimal AssignedHours
+        datetime AssignedDate
+        int AssignedByUserId FK
+        bool IsDeleted
+        int DeletedByUserId
+        datetime DeletedDate
+    }
+
+    WORKLOG {
+        int WorkLogId PK
+        int TestItemId FK
+        int RevisionId FK
+        int EngineerUserId FK
+        date WorkDate
+        decimal ActualHours
+        string Status
+        string Comment
+        int DelayReasonId FK
+        int CreatedByUserId
+        datetime CreatedDate
+        int ModifiedByUserId
+        datetime ModifiedDate
+        string ModificationReason
+        bool IsDeleted
+        int DeletedByUserId
+        datetime DeletedDate
+    }
+
+    DELAYREASON {
+        int DelayReasonId PK
+        string ReasonText
+        string ReasonType
+        bool IsActive
+        int CreatedByUserId
+        datetime CreatedDate
+        int ModifiedByUserId
+        datetime ModifiedDate
+    }
+
+    %% IAM
+
+    PERMISSION {
+        int PermissionId PK
+        string PermissionCode
+        string PermissionName
+        string Category
+        string Description
+        bool IsActive
+        int CreatedByUserId
+        datetime CreatedDate
+        int ModifiedByUserId
+        datetime ModifiedDate
+    }
+
+    PERMISSIONGROUP {
+        int GroupId PK
+        string GroupName
+        string Description
+        bool IsActive
+        int CreatedByUserId
+        datetime CreatedDate
+        int ModifiedByUserId
+        datetime ModifiedDate
+    }
+
+    PERMISSIONGROUPMAPPING {
+        int MappingId PK
+        int GroupId FK
+        int PermissionId FK
+        int CreatedByUserId
+        datetime CreatedDate
+    }
+
+    USERGROUP {
+        int UserGroupId PK
+        int UserId FK
+        int GroupId FK
+        datetime AssignedDate
+    }
+
+    USERPERMISSION {
+        int UserPermissionId PK
+        int UserId FK
+        int PermissionId FK
+        int GrantedByUserId
+        datetime GrantedDate
+        datetime ExpireDate
+        bool IsActive
+    }
 
 ---
 
@@ -1428,8 +1407,6 @@ IAM 權限模型 (v2.1 補充)
 | IsActive | BIT | ✓ | 是否啟用 |
 | WeeklyWorkHours | DECIMAL(5,2) | ✓ | 每週可用工時 |
 | LastLoginDate | DATETIME | ✗ | 最後登入時間 |
-| FailedLoginAttempts | INT | ✓ | 登入失敗次數 |
-| LockoutEndTime | DATETIME | ✗ | 鎖定結束時間 |
 | CreatedDate | DATETIME | ✓ | 建立時間 |
 | ModifiedDate | DATETIME | ✓ | 修改時間 |
 
@@ -1690,25 +1667,6 @@ IAM 權限模型 (v2.1 補充)
 **約束:**
 - ReasonType IN ('Equipment', 'Customer', 'Engineer', 'Site')
 - IsActive 預設值 = 1(啟用)
-
----
-
-#### 8.2.9 WorkLogDelayReason (工時延遲原因關聯)
-
-**用途:** 多對多關係,記錄工時對應的延遲原因
-
-| 欄位名稱 | 資料型別 | 必填 | 說明 |
-|---------|---------|------|------|
-| WorkLogDelayReasonId | INT | ✓ | 主鍵,自動遞增 |
-| WorkLogId | INT | ✓ | 工時ID(FK → WorkLogs) |
-| DelayReasonId | INT | ✓ | 延遲原因ID(FK → DelayReasons) |
-| CreatedDate | DATETIME | ✓ | 建立時間 |
-
-**索引:**
-- PK: WorkLogDelayReasonId
-- UNIQUE: (WorkLogId, DelayReasonId)
-- INDEX: WorkLogId
-- INDEX: DelayReasonId
 
 ---
 
@@ -3003,7 +2961,7 @@ EMAIL_FROM_ADDRESS          | noreply@...  | 寄件者 Email
 #### 10.2.1 Assigned Loading(分配負載)
 
 **計算公式:**
-```
+
 Assigned Loading = (Σ 分配工時) / (每週可用工時 × 目標週數) × 100%
 
 其中:
@@ -3012,14 +2970,13 @@ Assigned Loading = (Σ 分配工時) / (每週可用工時 × 目標週數) × 1
 #### 10.2.1 Assigned Loading(分配負載)
 
 **計算公式:**
-```
+
 Assigned Loading = (Σ 分配工時) / (每週可用工時 × 目標週數) × 100%
 
 其中:
 - 分配工時: SUM(TestItemEngineer.AssignedHours WHERE UserId = X AND TestItem 未完成)
 - 每週可用工時: Users.WeeklyWorkHours
 - 目標週數: 依案件結束日期計算
-```
 
 **計算範圍:**
 - 僅計算 Active 狀態案件
@@ -3037,14 +2994,14 @@ Assigned Loading = (Σ 分配工時) / (每週可用工時 × 目標週數) × 1
 #### 10.2.2 Actual Loading(實際負載)
 
 **計算公式:**
-```
+
 Actual Loading = (Σ 實際工時) / (每週可用工時 × 已過週數) × 100%
 
 其中:
 - 實際工時: SUM(WorkLogs.Hours WHERE UserId = X AND WorkDate >= ProjectStartDate)
 - 每週可用工時: Users.WeeklyWorkHours
 - 已過週數: (今天 - 案件開始日期) / 7
-```
+
 
 **計算範圍:**
 - 計算近期(如最近4週)實際工時
@@ -3285,7 +3242,6 @@ SELECT * FROM TestItemRevisions WHERE 1=1
 
 2. **查詢歷史工時時:**
    - 顯示完整原因文字(不受 IsActive 影響)
-   - 查詢: `SELECT DR.ReasonText FROM WorkLogDelayReason WLDR JOIN DelayReasons DR ON WLDR.DelayReasonId = DR.DelayReasonId`
 
 3. **統計報表時:**
    - 包含停用的原因(完整統計)
@@ -3301,35 +3257,6 @@ SELECT * FROM TestItemRevisions WHERE 1=1
 **啟用流程:**
 - 點擊[啟用]設定 IsActive = 1
 - 立即出現在延遲原因選單
-
----
-
-#### 10.6.2 延遲原因統計
-
-**統計範圍:**
-- 包含所有原因(不論 IsActive)
-- 統計欄位: 使用次數、最後使用日期
-
-**統計查詢:**
-```sql
-SELECT 
-  DR.DelayReasonId,
-  DR.ReasonText,
-  DR.ReasonType,
-  DR.IsActive,
-  COUNT(WLDR.WorkLogDelayReasonId) AS UsageCount,
-  MAX(WL.WorkDate) AS LastUsedDate
-FROM DelayReasons DR
-LEFT JOIN WorkLogDelayReason WLDR ON DR.DelayReasonId = WLDR.DelayReasonId
-LEFT JOIN WorkLogs WL ON WLDR.WorkLogId = WL.WorkLogId AND WL.IsDeleted = 0
-GROUP BY DR.DelayReasonId, DR.ReasonText, DR.ReasonType, DR.IsActive
-ORDER BY UsageCount DESC
-```
-
-**報表顯示:**
-- 圓餅圖:各原因類型佔比
-- 長條圖:各原因使用次數 Top 10
-- 標示停用的原因(不同顏色或加註「(已停用)」)
 
 ---
 
@@ -3423,7 +3350,6 @@ ORDER BY UsageCount DESC
 │ 系統執行 Transaction:                         │
 │ 1. INSERT WorkLog                            │
 │ 2. IF Delayed THEN                           │
-│      INSERT WorkLogDelayReason (N筆)         │
 │    END IF                                    │
 │ 3. 更新 TestItem.Status (依規則計算)          │
 │ 4. 更新 Regulation.Status (依規則計算)        │
@@ -3671,53 +3597,6 @@ SELECT * FROM TestItems WHERE IsDeleted = 0
 
 ---
 
-### 12.3 登入安全機制
-
-#### 12.3.1 失敗鎖定機制
-
-**規則:**
-1. 連續失敗5次 → 鎖定帳號10分鐘
-2. 記錄至 Users.FailedLoginAttempts
-3. 記錄鎖定時間至 Users.LockoutEndTime
-
-**流程:**
-```
-┌─────────────────────────────────────────────┐
-│ 使用者輸入帳號密碼                             │
-└───────────────┬─────────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────────┐
-│ 檢查 LockoutEndTime                          │
-│ IF LockoutEndTime > NOW() THEN               │
-│   返回「帳號已鎖定,請於 {時間} 後再試」        │
-│ END IF                                       │
-└───────────────┬─────────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────────┐
-│ 驗證帳號密碼                                  │
-└───────────────┬─────────────────────────────┘
-                │
-        ┌───────┴───────┐
-        │               │
-        ▼               ▼
-┌─────────────┐   ┌─────────────────────────┐
-│ 驗證成功     │   │ 驗證失敗                 │
-└──────┬──────┘   └──────┬──────────────────┘
-       │                 │
-       ▼                 ▼
-┌─────────────┐   ┌─────────────────────────┐
-│ 重設失敗次數 │   │ FailedLoginAttempts++    │
-│ = 0         │   │ IF >= 5 THEN             │
-│ 更新最後登入 │   │   LockoutEndTime =       │
-│ 時間         │   │   NOW() + 10分鐘         │
-│ 產生 JWT     │   │ END IF                   │
-└─────────────┘   └─────────────────────────┘
-```
-
----
-
 #### 12.3.2 密碼安全規則
 
 **密碼複雜度:**
@@ -3815,7 +3694,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 **需使用 Transaction 的操作:**
 1. **建案流程**(插入 Project + Regulations + TestItems + TestItemEngineers)
-2. **工時回報**(插入 WorkLog + WorkLogDelayReason + 更新狀態)
+2. **工時回報**(插入 WorkLog + DelayReason + 更新狀態)
 3. **補測建立**(插入 TestItemRevision + TestItemEngineers + 更新狀態)
 4. **工時覆寫**(更新 WorkLog + 插入 AuditLog)
 
@@ -4229,80 +4108,6 @@ public void TestItemStatus_WhenWorkLogDelayed_ShouldBeDelayed()
 
 ---
 
-## 16. 附錄
 
-### 16.1 術語表
 
-| 術語 | 英文 | 說明 |
-|------|------|------|
-| 案件 | Project | RF測試專案 |
-| 法規 | Regulation | 測試需符合的法規(FCC/NCC/CE等) |
-| 測項 | Test Item | 具體測試項目(Conducted/Radiated等) |
-| 工時 | Work Log | 工程師記錄的工作時數 |
-| 補測 | Revision | 測試項目的重新測試版本 |
-| Loading | Loading | 工程師的工作負載百分比 |
-| 延遲 | Delay | 測試項目未如期完成 |
-| 主責 | Main | 主要負責工程師(Main1/2/3) |
-| 支援 | Support | 協助測試的工程師 |
-| 軟刪除 | Soft Delete | 標記為刪除但保留資料 |
-| 稽核 | Audit | 記錄資料異動歷程 |
 
----
-
-### 16.2 參考文件
-
-**內部文件:**
-- 資料庫設計文件(Database Design Document)
-- API 規格文件(API Specification)
-- 使用者操作手冊(User Manual)
-- 系統管理手冊(Administrator Guide)
-
-**外部標準:**
-- JWT (RFC 7519)
-- RESTful API 設計最佳實踐
-- OWASP Top 10 安全指南
-- ISO 27001 資訊安全標準
-
----
-
-### 16.3 修訂歷史
-
-| 版本 | 日期 | 修訂者 | 修訂內容摘要 |
-|------|------|-------|-------------|
-| v1.0 | 2025-11-14 | SA Team | 初版分析文件 |
-| v2.0 | 2025-11-17 | SA Team | 調整職責邊界,移除技術實作細節 |
-| v2.1 | 2025-11-19 | SA Team | 補充混合登入、JWT 安全性、IAM 權限模型 |
-| v2.2 | 2025-11-20 | SA Team | 補充 TestItem 狀態計算、完整 ERD 圖 |
-| v2.3 | 2025-11-20 | SA Team | WorkLog/TestItemRevision Soft Delete、DelayReason 停用機制 |
-| **v3.0** | **2025-11-21** | **SA Team** | **重大更新:** <br>- TestItemRevision 完整定義(RevisionType、UI 流程)<br>- 工程師分配相關權限(TESTITEM_ASSIGN_ENGINEER/SUPPORT/REMOVE_ENGINEER)<br>- Regulation 維護權限與 UI(REGULATION_ADD/DISABLE/REMOVE)<br>- 補測版本管理權限(TESTITEM_REVISION_CREATE/ROLLBACK)<br>- 統一權限命名(AUDIT_VIEW、SYSTEM_SETTING)<br>- 補充 8 個缺少的 UI 介面定義<br>- 強化 Email 合併邏輯(首次由主管新增)<br>- TestItemEngineer RoleType 詳細定義<br>- 主管案件總覽改為 GridControl 列表模式<br>- 補充完整業務規則與流程圖 |
-
----
-
-## 17. 結語
-
-本系統分析文件(SA v3.0)定義了 RF 案件排程系統的完整需求與規格,包含:
-
-✅ **核心功能:** 案件管理、法規管理、測項管理、工時管理、Loading 分析、延遲管理
-✅ **權限機制:** 完整的 IAM 權限模型(Permission/PermissionGroup/UserPermission)
-✅ **安全機制:** JWT Token、密碼加密、登入鎖定、權限檢查
-✅ **補測管理:** 完整的版本管理機制(RevisionType、回滾功能)
-✅ **資料保護:** Soft Delete、稽核日誌、備份策略
-✅ **UI 規格:** 完整的介面定義與操作流程
-
-**後續步驟:**
-1. 技術團隊依據本文件進行系統設計(System Design)
-2. 開發團隊實作功能模組
-3. 測試團隊依據測試策略執行測試
-4. 專案經理追蹤專案進度與品質
-
-**文件維護:**
-- 本文件為活文件(Living Document)
-- 需求變更時需更新版本號與修訂歷史
-- 所有變更需經過變更控制流程(Change Control)
-
----
-
-**文件完成日期:** 2025-11-21  
-**文件版本:** v3.0  
-**文件狀態:** 已核准(Approved)  
-**下次審查日期:** 2025-12-21

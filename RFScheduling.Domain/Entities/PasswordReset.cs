@@ -8,12 +8,11 @@ namespace RFScheduling.Domain.Entities
 
         public int UserId { get; set; }
 
-        [MaxLength(255)]
-        public string Token { get; set; } = string.Empty;
+        public Guid Token { get; set; }
 
         public DateTime ExpireAt { get; set; } 
 
-        public DateTime? UsedAt { get; set; } 
+        public bool IsUsed { get; set; } = false;
 
         public DateTime CreatedDate { get; set; }
 
