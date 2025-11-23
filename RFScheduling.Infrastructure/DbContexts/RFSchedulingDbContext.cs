@@ -45,6 +45,27 @@ namespace RFScheduling.Infrastructure.DbContexts
 
         public DbSet<SystemSetting> SystemSettings { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
+            // 1.Soft Delete 全域過濾器
+
+            modelBuilder.Entity<Project>().HasQueryFilter(x => !x.IsDeleted);
+
+            modelBuilder.Entity<Regulation>().HasQueryFilter(x => !x.IsDeleted);
+            
+            modelBuilder.Entity<TestItem>().HasQueryFilter(x => !x.IsDeleted);
+            
+            modelBuilder.Entity<TestItemEngineer>().HasQueryFilter(x => !x.IsDeleted);
+           
+            modelBuilder.Entity<TestItemRevision>().HasQueryFilter(x => !x.IsDeleted);
+            
+            modelBuilder.Entity<WorkLog>().HasQueryFilter(x => !x.IsDeleted);
+
+            // 2.IsActive
+
+            modelBuilder.Entity<DelayReason>().HasQueryFilter(x => !x.IsActive);
+        }
     }
 }
