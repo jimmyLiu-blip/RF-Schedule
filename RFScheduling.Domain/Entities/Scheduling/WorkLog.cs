@@ -1,8 +1,9 @@
-﻿using RFScheduling.Domain.Enums;
+﻿using RFScheduling.Domain.Entities.Shared;
+using RFScheduling.Domain.Enums;
 using RFScheduling.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace RFScheduling.Domain.Entities
+namespace RFScheduling.Domain.Entities.Scheduling
 {
     public class WorkLog : ICreatableRequired, IModifiable
     {
@@ -23,10 +24,14 @@ namespace RFScheduling.Domain.Entities
         [MaxLength(500)]
         public string? Comment { get; set; }
 
+        public DelayReason? DelayReasonId { get; set; } 
+
         // ICreatable & IModifiable
         public int CreatedByUserId { get; set; }
 
         public DateTime CreatedDate { get; set; }
+
+        public int? ModifiedByUserId { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
 
@@ -44,6 +49,8 @@ namespace RFScheduling.Domain.Entities
         public TestItemRevision? TestItemRevision { get; set; }
 
         public User CreatedBy { get; set; } = null!;
+
+        public User? ModifiedBy { get; set; }
 
         public User Engineer { get; set; } = null!;
 

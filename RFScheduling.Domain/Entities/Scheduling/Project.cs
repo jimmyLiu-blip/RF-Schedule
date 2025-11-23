@@ -1,8 +1,9 @@
-﻿using RFScheduling.Domain.Enums;
+﻿using RFScheduling.Domain.Entities.Shared;
+using RFScheduling.Domain.Enums;
 using RFScheduling.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace RFScheduling.Domain.Entities
+namespace RFScheduling.Domain.Entities.Scheduling
 {
     public class Project : ISoftDeletable, ICreatableRequired, IModifiable
     {

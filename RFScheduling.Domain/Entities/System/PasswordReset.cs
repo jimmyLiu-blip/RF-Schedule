@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RFScheduling.Domain.Entities.Shared;
+using System.ComponentModel.DataAnnotations;
 
-namespace RFScheduling.Domain.Entities
+namespace RFScheduling.Domain.Entities.System
 {
     public class PasswordReset
     {

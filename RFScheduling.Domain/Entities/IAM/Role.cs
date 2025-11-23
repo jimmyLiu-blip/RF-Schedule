@@ -1,18 +1,18 @@
-﻿using RFScheduling.Domain.Enums;
+﻿using RFScheduling.Domain.Entities.Shared;
 using RFScheduling.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-
-namespace RFScheduling.Domain.Entities
+namespace RFScheduling.Domain.Entities.IAM
 {
-    public class DelayReason : ICreatableRequired, IModifiable
+    public class Role : ICreatableRequired, IModifiable
     {
-        public int DelayReasonId { get; set; }
+        public int RoleId { get; set; }
+
+        [MaxLength(50)]
+        public string RoleName { get; set; } = string.Empty;
 
         [MaxLength(200)]
-        public string ReasonText { get; set; } = string.Empty;
-
-        public DelayReasonType ReasonType { get; set; }
+        public string Description {  get; set; } = string.Empty;
 
         public bool IsActive { get; set; } = true;
 
@@ -26,11 +26,10 @@ namespace RFScheduling.Domain.Entities
         public DateTime? ModifiedDate { get; set; }
 
         // Navigation Properties
-
         public User CreatedBy { get; set; } = null!;
 
         public User? ModifiedBy { get; set; }
 
-        public ICollection<WorkLog> WorkLogs { get; set; } = new List<WorkLog>();
+        public ICollection<User> Users { get; set; } = new List<User>();
     }
 }
