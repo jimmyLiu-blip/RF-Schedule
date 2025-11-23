@@ -1,5 +1,4 @@
 ﻿using RFScheduling.Domain.Entities.Shared;
-using System.ComponentModel.DataAnnotations;
 
 namespace RFScheduling.Domain.Entities.System
 {

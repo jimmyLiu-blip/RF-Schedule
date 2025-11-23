@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RFScheduling.Domain.Entities.Scheduling
 {
-    public class WorkLog : ICreatableRequired, IModifiable
+    public class WorkLog : ISoftDeletable, ICreatableRequired, IModifiable
     {
         public int WorkLogId { get; set; }
 
@@ -24,7 +24,7 @@ namespace RFScheduling.Domain.Entities.Scheduling
         [MaxLength(500)]
         public string? Comment { get; set; }
 
-        public DelayReason? DelayReasonId { get; set; } 
+        public int? DelayReasonId { get; set; } 
 
         // ICreatable & IModifiable
         public int CreatedByUserId { get; set; }
@@ -37,6 +37,13 @@ namespace RFScheduling.Domain.Entities.Scheduling
 
         [MaxLength(500)]
         public string? ModificationReason { get; set; }
+
+        // ISoftDeletable
+        public bool IsDeleted { get; set; } = false;
+
+        public int? DeletedByUserId { get; set; }
+
+        public DateTime? DeletedDate { get; set; }
 
         // Concurrency Token
         [Timestamp]
@@ -54,6 +61,6 @@ namespace RFScheduling.Domain.Entities.Scheduling
 
         public User Engineer { get; set; } = null!;
 
-        public ICollection<WorkLogDelayReason> WorkLogDelayReasons {  get; set; } = new List<WorkLogDelayReason>();
+        public DelayReason? DelayReason { get; set; }
     }
 }

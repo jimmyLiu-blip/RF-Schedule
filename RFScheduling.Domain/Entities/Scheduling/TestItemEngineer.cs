@@ -1,7 +1,6 @@
 ﻿using RFScheduling.Domain.Entities.Shared;
 using RFScheduling.Domain.Enums;
 using RFScheduling.Domain.Interfaces;
-using System.ComponentModel.DataAnnotations;
 
 namespace RFScheduling.Domain.Entities.Scheduling
 {
