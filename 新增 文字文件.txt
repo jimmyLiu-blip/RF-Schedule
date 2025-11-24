@@ -113,3 +113,12 @@ AUDITLOG_VIEW（SD 名稱），Spec  AUDIT_VIEW 名稱是沒有一致
 
 Spec： SYSTEM_SETTING，SD： SYSTEM_SETTING_MANAGE 名稱是沒有一致
 
+
+                // Unique Indexes
+                // Relationships
+                // Audit CreatedBy
+                // RowVersion（併發控制）
+                // Default Values
+                // MaxLength 
+                // enum列舉
+

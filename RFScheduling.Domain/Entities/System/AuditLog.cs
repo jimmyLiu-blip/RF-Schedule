@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RFScheduling.Domain.Entities.Shared;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RFScheduling.Domain.Entities
+namespace RFScheduling.Domain.Entities.System
 {
     public class AuditLog
     {

@@ -2,7 +2,9 @@
 {
     public enum RoleType
     {
-        Main,  // 主要負責
-        Sub    // 支援
+        Main1,  // 主力1
+        Main2,  // 主力2
+        Main3,  // 主力3
+        Support     // 協助
     }
 }

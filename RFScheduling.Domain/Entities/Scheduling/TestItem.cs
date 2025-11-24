@@ -1,8 +1,9 @@
-﻿using RFScheduling.Domain.Enums;
+﻿using RFScheduling.Domain.Entities.Shared;
+using RFScheduling.Domain.Enums;
 using RFScheduling.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace RFScheduling.Domain.Entities
+namespace RFScheduling.Domain.Entities.Scheduling
 {
     public class TestItem : ISoftDeletable, ICreatableRequired, IModifiable
     {
@@ -23,12 +24,16 @@ namespace RFScheduling.Domain.Entities
 
         public TestItemStatus Status { get; set; } = TestItemStatus.NotStarted ;
 
+        public bool ManualStatusOverride { get; set; } = false ;
+
         [MaxLength(500)]
         public string? ManagerNote { get; set; }
 
         // ICreatable & IModifiable
         public int CreatedByUserId { get; set; }
         public DateTime CreatedDate { get; set; }
+
+        public int? ModifiedByUserId { get; set; }
         public DateTime? ModifiedDate { get; set; }
 
         // ISoftDeletable
@@ -42,9 +47,15 @@ namespace RFScheduling.Domain.Entities
 
         // Navigation Properties
         public Regulation Regulation { get; set; } = null!;
+
         public User CreatedBy { get; set; } = null!;
+
+        public User? ModifiedBy { get; set; }
+       
         public ICollection<TestItemEngineer> TestItemEngineers { get; set; } = new List<TestItemEngineer>();
+       
         public ICollection<TestItemRevision> Revisions { get; set; } = new List<TestItemRevision>();
+       
         public ICollection<WorkLog> WorkLogs { get; set; } = new List<WorkLog>();
     }
 }

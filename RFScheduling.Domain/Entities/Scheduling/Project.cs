@@ -1,8 +1,9 @@
-﻿using RFScheduling.Domain.Enums;
+﻿using RFScheduling.Domain.Entities.Shared;
+using RFScheduling.Domain.Enums;
 using RFScheduling.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace RFScheduling.Domain.Entities
+namespace RFScheduling.Domain.Entities.Scheduling
 {
     public class Project : ISoftDeletable, ICreatableRequired, IModifiable
     {
@@ -27,12 +28,18 @@ namespace RFScheduling.Domain.Entities
 
         // ICreatable & IModifiable
         public int CreatedByUserId { get; set; }
+
         public DateTime CreatedDate { get; set; }
+
+        public int? ModifiedByUserId { get; set; }
+
         public DateTime? ModifiedDate { get; set; }
 
         // ISoftDeletable
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
+
         public int? DeletedByUserId { get; set; }
+
         public DateTime? DeletedDate { get; set; }
 
         // Concurrency Token
@@ -41,6 +48,9 @@ namespace RFScheduling.Domain.Entities
 
         // Navigation Properties
         public User CreatedBy { get; set; } = null!;
+
+        public User? ModifiedBy { get; set; }
+
         public ICollection<Regulation> Regulations { get; set; } = new List<Regulation>();
     }
 }
