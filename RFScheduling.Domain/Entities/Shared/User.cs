@@ -29,7 +29,7 @@ namespace RFScheduling.Domain.Entities.Shared
         public bool IsActive { get; set; } = true;
 
         [MaxLength(20)]
-        public string AuthType {  get; set; } = string.Empty;
+        public string AuthType {  get; set; } = "Local";
 
         [MaxLength(100)]
         public string? ADAccount {  get; set; }
@@ -56,7 +56,7 @@ namespace RFScheduling.Domain.Entities.Shared
         // Navigation Properties
         public Role Role { get; set; } = null!;
 
-        public User? CreatedBy { get; set; } = null!;
+        public User? CreatedBy { get; set; }
 
         public User? ModifiedBy { get; set; }
        
