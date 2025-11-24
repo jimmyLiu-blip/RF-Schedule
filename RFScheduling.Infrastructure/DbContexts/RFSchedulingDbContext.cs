@@ -106,6 +106,16 @@ namespace RFScheduling.Infrastructure.DbContexts
                       .HasForeignKey(w => w.EngineerUserId)
                       .OnDelete(DeleteBehavior.Restrict);
 
+                // User 1 → 多 UserGroups（Restrict）
+                entity.HasMany(u => u.UserGroups)
+                      .WithOne(ug => ug.User)
+                      .HasForeignKey(ug => ug.UserId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // User 1 → 多 UserPermissions（Restrict）
+                entity.HasMany(u => u.UserPermissions)
+                      .WithOne()
+
                 // RowVersion（併發控制）
                 entity.Property(u => u.RowVersion)
                       .IsRowVersion();
@@ -167,6 +177,7 @@ namespace RFScheduling.Infrastructure.DbContexts
 
                 // MaxLength
                 entity.Property(e => e.RoleName).HasMaxLength(50);
+
                 entity.Property(e => e.Description).HasMaxLength(200);
 
             });
@@ -187,8 +198,8 @@ namespace RFScheduling.Infrastructure.DbContexts
 
                 // PermissionGroupMapping（一對多關聯）
                 entity.HasMany(p => p.PermissionGroupMappings)
-                      .WithOne(pg => pg.Permission)
-                      .HasForeignKey(pg => pg.PermissionId)
+                      .WithOne(pgm => pgm.Permission)
+                      .HasForeignKey(pgm => pgm.PermissionId)
                       .OnDelete(DeleteBehavior.Cascade);
 
                 // Relationships
@@ -217,8 +228,9 @@ namespace RFScheduling.Infrastructure.DbContexts
 
                 entity.Property(p => p.Description)
                       .HasMaxLength(200)
-                      .IsRequired();
+                      .IsRequired(false);
 
+                // enum列舉
                 entity.ToTable(tableBuilder =>
                 {
                     tableBuilder.HasCheckConstraint(
@@ -226,6 +238,106 @@ namespace RFScheduling.Infrastructure.DbContexts
                         "[Category] IN ('Project','Regulation','TestItem','WorkLog','User','Report','System')"
                         );
                 });
+            });
+
+            // 5. PermissionGroup
+            modelBuilder.Entity<PermissionGroup>(entity =>
+            {
+                // Unique Indexes
+                entity.HasIndex(x => x.GroupName).IsUnique();
+
+                // Relationships
+                entity.HasOne(pg => pg.CreatedBy)
+                      .WithMany()
+                      .HasForeignKey(pg => pg.CreatedByUserId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(pg => pg.ModifiedBy)
+                      .WithMany()
+                      .HasForeignKey(pg => pg.ModifiedByUserId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // 一對多
+                entity.HasMany(pg => pg.PermissionGroupMappings)
+                      .WithOne(pgm => pgm.PermissionGroup)
+                      .HasForeignKey(pgm => pgm.GroupId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(pg => pg.UserGroups)
+                      .WithOne(ug => ug.Group)
+                      .HasForeignKey(ug => ug.GroupId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Default Values
+                entity.Property(pg => pg.IsActive)
+                      .HasDefaultValue(true);
+
+                entity.Property(pg => pg.CreatedDate)
+                      .HasDefaultValueSql("GETDATE()");
+
+                entity.Property(pg => pg.GroupName).IsRequired();
+
+                entity.Property(pg => pg.Description).IsRequired(false);
+
+                // MaxLength 
+                entity.Property(pg => pg.GroupName)
+                      .HasMaxLength(50);
+
+                entity.Property(pg => pg.Description)
+                      .HasMaxLength(200);
+
+            });
+
+            // 6. PermissionGroupMapping
+            modelBuilder.Entity<PermissionGroupMapping>(entity =>
+            {
+                // Unique Indexes
+                entity.HasIndex(pgm => new { pgm.GroupId, pgm.PermissionId }).IsUnique();
+
+                // Audit CreatedBy
+                entity.HasOne(pgm => pgm.CreatedBy)
+                      .WithMany()
+                      .HasForeignKey(pgm => pgm.CreatedByUserId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Default Values
+                entity.Property(pgm => pgm.CreatedDate)
+                      .HasDefaultValueSql("GETDATE()");
+
+            });
+
+            // 7. UserGroup
+            modelBuilder.Entity<UserGroup>(entity =>
+            {
+                // Unique Indexes
+                entity.HasIndex(ug => new { ug.UserId, ug.GroupId }).IsUnique();
+
+                // Audit CreatedBy
+                entity.HasOne(ug => ug.CreatedBy)
+                      .WithMany()
+                      .HasForeignKey(u => u.CreatedByUserId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Default Values
+                entity.Property(ug => ug.CreatedDate)
+                      .HasDefaultValueSql("GETDATE()");
+            });
+
+            // 8. UserPermission
+            modelBuilder.Entity<UserPermission>(entity =>
+            {
+                // Audit CreatedBy
+                entity.HasOne(up => up.CreatedBy)
+                      .WithMany()
+                      .HasForeignKey(u => u.CreatedByUserId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Default Values
+                entity.Property(up => up.CreatedDate)
+                      .HasDefaultValueSql("GETDATE()");
+
+                entity.Property(up => up.IsActive).HasDefaultValue(true);
+
             });
 
 
@@ -272,10 +384,16 @@ namespace RFScheduling.Infrastructure.DbContexts
                 entity.Property(p => p.Note).IsRequired(false);
 
                 // MaxLength 
-                entity.Property(p => p.ProjectName).HasMaxLength(200);
-                entity.Property(p => p.Customer).HasMaxLength(200);
-                entity.Property(p => p.Note).HasMaxLength(1000);
+                entity.Property(p => p.ProjectName)
+                      .HasMaxLength(200);
 
+                entity.Property(p => p.Customer)
+                      .HasMaxLength(200);
+
+                entity.Property(p => p.Note)
+                      .HasMaxLength(1000);
+
+                // enum列舉
                 entity.ToTable(tableBuilder =>
                 {
                     tableBuilder.HasCheckConstraint(

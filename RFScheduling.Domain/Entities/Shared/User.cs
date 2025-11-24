@@ -61,11 +61,16 @@ namespace RFScheduling.Domain.Entities.Shared
         public User? ModifiedBy { get; set; }
        
         public ICollection<PasswordReset> PasswordResets { get; set; } = new List<PasswordReset>();
-        
+       
         public ICollection<Project> CreatedProjects { get; set; } = new List<Project>();
         
         public ICollection<TestItemEngineer> TestItemEngineers { get; set; } = new List<TestItemEngineer>();
        
         public ICollection<WorkLog> WorkLogs { get; set; } = new List<WorkLog>();
+
+        public ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
+
+        public ICollection<UserPermission> UserPermissions { get; set; } = new List<UserPermission>();
+
     }
 }
