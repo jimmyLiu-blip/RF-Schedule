@@ -28,3 +28,4 @@ TestResults/
 # Build outputs
 *.exe
 *.dll
+/RF案件排程表_Spec.md
