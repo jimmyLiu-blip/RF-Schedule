@@ -1,25 +1,21 @@
-﻿using System;
+﻿using DevExpress.XtraEditors;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace RF_Schedule
+namespace RF-Schedule
 {
-    public partial class MainForm : DevExpress.XtraEditors.XtraForm
+	public partial class MainForm : DevExpress.XtraEditors.XtraForm
+{
+    public MainForm()
     {
-        public MainForm()
-        {
-            InitializeComponent();
-
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
-        }
+        InitializeComponent();
     }
+}
 }
