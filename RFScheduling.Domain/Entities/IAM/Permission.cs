@@ -38,7 +38,7 @@ namespace RFScheduling.Domain.Entities.IAM
 
         public ICollection<PermissionGroupMapping> PermissionGroupMappings { get; set; } = new List<PermissionGroupMapping>();
 
-        public ICollection<Permission> Permissions { get; set; } = new List<Permission>();
+        public ICollection<UserPermission> UserPermissions { get; set; } = new List<UserPermission>();
 
     }
 }

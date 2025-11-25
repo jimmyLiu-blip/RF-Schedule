@@ -71,7 +71,7 @@ namespace RFScheduling.Infrastructure.DbContexts
                 entity.HasIndex(x => x.Email).IsUnique();
                 entity.HasIndex(x => x.Account).IsUnique();
 
-                // Role (1 → 多)
+                // Role 1 → 多 User
                 entity.HasOne(u => u.Role)
                       .WithMany(r => r.Users)             // Users 是指 Role 這個類別裡的 Navigation Property
                       .HasForeignKey(u => u.RoleId)
@@ -114,7 +114,9 @@ namespace RFScheduling.Infrastructure.DbContexts
 
                 // User 1 → 多 UserPermissions（Restrict）
                 entity.HasMany(u => u.UserPermissions)
-                      .WithOne()
+                      .WithOne(up => up.User)
+                      .HasForeignKey(up => up.UserId)
+                      .OnDelete(DeleteBehavior.Restrict);
 
                 // RowVersion（併發控制）
                 entity.Property(u => u.RowVersion)
@@ -150,19 +152,18 @@ namespace RFScheduling.Infrastructure.DbContexts
                 // Unique Indexes
                 entity.HasIndex(r => r.RoleName).IsUnique();
 
-                // Audit - CreatedBy
+                // CreatedBy / ModifiedBy（單向一對多）
                 entity.HasOne(r => r.CreatedBy)
                       .WithMany()
                       .HasForeignKey(r => r.CreatedByUserId)
                       .OnDelete(DeleteBehavior.Restrict);
 
-                // Audit - ModifiedBy
                 entity.HasOne(r => r.ModifiedBy)
                       .WithMany()
                       .HasForeignKey(r => r.ModifiedByUserId)
                       .OnDelete(DeleteBehavior.Restrict);
 
-                // Role 1 - * Users
+                // Role 1 → 多 Users（Restrict）
                 entity.HasMany(r => r.Users)
                       .WithOne(u => u.Role)
                       .HasForeignKey(u => u.RoleId)
@@ -196,13 +197,19 @@ namespace RFScheduling.Infrastructure.DbContexts
                 entity.Property(p => p.CreatedDate)
                       .HasDefaultValueSql("GETDATE()");
 
-                // PermissionGroupMapping（一對多關聯）
+                // Permission 1 →  多 PermissionGroupMapping
                 entity.HasMany(p => p.PermissionGroupMappings)
                       .WithOne(pgm => pgm.Permission)
                       .HasForeignKey(pgm => pgm.PermissionId)
                       .OnDelete(DeleteBehavior.Cascade);
 
-                // Relationships
+                // Permission 1 →  多  UserPermission
+                entity.HasMany(p => p.UserPermissions)
+                      .WithOne(up => up.Permission)
+                      .HasForeignKey(up => up.PermissionId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // CreatedBy / ModifiedBy（單向一對多）
                 entity.HasOne(p => p.CreatedBy)
                       .WithMany()
                       .HasForeignKey(p => p.CreatedByUserId)
@@ -246,7 +253,7 @@ namespace RFScheduling.Infrastructure.DbContexts
                 // Unique Indexes
                 entity.HasIndex(x => x.GroupName).IsUnique();
 
-                // Relationships
+                // CreatedBy / ModifiedBy（單向一對多）
                 entity.HasOne(pg => pg.CreatedBy)
                       .WithMany()
                       .HasForeignKey(pg => pg.CreatedByUserId)
@@ -257,12 +264,13 @@ namespace RFScheduling.Infrastructure.DbContexts
                       .HasForeignKey(pg => pg.ModifiedByUserId)
                       .OnDelete(DeleteBehavior.Restrict);
 
-                // 一對多
+                // PermissionGroup 1 → PermissionGroupMapping 多
                 entity.HasMany(pg => pg.PermissionGroupMappings)
                       .WithOne(pgm => pgm.PermissionGroup)
                       .HasForeignKey(pgm => pgm.GroupId)
                       .OnDelete(DeleteBehavior.Restrict);
 
+                // PermissionGroup 1 → UserGroup 多
                 entity.HasMany(pg => pg.UserGroups)
                       .WithOne(ug => ug.Group)
                       .HasForeignKey(ug => ug.GroupId)
@@ -349,7 +357,7 @@ namespace RFScheduling.Infrastructure.DbContexts
 
                 entity.HasIndex(p => new { p.Customer, p.ProjectName }).IsUnique();
 
-                // Relationships
+                // CreatedBy / ModifiedBy（單向一對多）
                 entity.HasOne(p => p.CreatedBy)
                       .WithMany(u => u.CreatedProjects)
                       .HasForeignKey(p => p.CreatedByUserId)

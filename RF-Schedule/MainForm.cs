@@ -9,13 +9,17 @@ using System.Windows.Forms;
 
 namespace RF_Schedule
 {
-    public partial class Form1 : DevExpress.XtraEditors.XtraForm
+    public partial class MainForm : DevExpress.XtraEditors.XtraForm
     {
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
         }
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
