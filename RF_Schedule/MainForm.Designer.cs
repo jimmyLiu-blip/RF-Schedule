@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            panelControl1 = new DevExpress.XtraEditors.PanelControl();
+            panelMainContent = new DevExpress.XtraEditors.PanelControl();
             accordionControl1 = new DevExpress.XtraBars.Navigation.AccordionControl();
             accordionControlElement1 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement2 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
@@ -52,19 +52,19 @@
             accordionControlElement19 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement20 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement21 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
-            ((System.ComponentModel.ISupportInitialize)panelControl1).BeginInit();
-            panelControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)panelMainContent).BeginInit();
+            panelMainContent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)accordionControl1).BeginInit();
             SuspendLayout();
             // 
-            // panelControl1
+            // panelMainContent
             // 
-            panelControl1.Controls.Add(accordionControl1);
-            panelControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            panelControl1.Location = new System.Drawing.Point(0, 0);
-            panelControl1.Name = "panelControl1";
-            panelControl1.Size = new System.Drawing.Size(1961, 934);
-            panelControl1.TabIndex = 0;
+            panelMainContent.Controls.Add(accordionControl1);
+            panelMainContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            panelMainContent.Location = new System.Drawing.Point(0, 0);
+            panelMainContent.Name = "panelMainContent";
+            panelMainContent.Size = new System.Drawing.Size(1961, 934);
+            panelMainContent.TabIndex = 0;
             // 
             // accordionControl1
             // 
@@ -90,6 +90,7 @@
             accordionControl1.Appearance.Item.Pressed.Options.UseFont = true;
             accordionControl1.Dock = System.Windows.Forms.DockStyle.Left;
             accordionControl1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] { accordionControlElement1 });
+            accordionControl1.ExpandElementMode = DevExpress.XtraBars.Navigation.ExpandElementMode.Single;
             accordionControl1.Location = new System.Drawing.Point(2, 2);
             accordionControl1.Name = "accordionControl1";
             accordionControl1.OptionsMinimizing.ElementHeight = 36;
@@ -293,12 +294,12 @@
             AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(1961, 934);
-            Controls.Add(panelControl1);
+            Controls.Add(panelMainContent);
             Margin = new System.Windows.Forms.Padding(5);
             Name = "MainForm";
             Text = "MainForm";
-            ((System.ComponentModel.ISupportInitialize)panelControl1).EndInit();
-            panelControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)panelMainContent).EndInit();
+            panelMainContent.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)accordionControl1).EndInit();
             ResumeLayout(false);
 
@@ -306,7 +307,7 @@
 
         #endregion
 
-        private DevExpress.XtraEditors.PanelControl panelControl1;
+        private DevExpress.XtraEditors.PanelControl panelMainContent;
         private DevExpress.XtraBars.Navigation.AccordionControl accordionControl1;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement1;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement2;
