@@ -30,13 +30,26 @@ namespace RF_Schedule
 
         private void repositoryActionButtons_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
         {
+            // Index 0 = 回報工時（已經有）
             if (e.Button.Index == 0)
             {
                 MessageBox.Show("回報工時 按下（之後會跳出工時回報視窗）");
+                return;
             }
-            else if (e.Button.Index == 1)
+
+            // Index 1 = 完成（現在要新增）
+            if (e.Button.Index == 1)
             {
-                MessageBox.Show("完成 按下（之後會把測項狀態改為 Completed）");
+                // 取得目前點擊的列
+                int rowHandle = gridView1.FocusedRowHandle;
+
+                // 模擬：把狀態改為 Completed
+                gridView1.SetRowCellValue(rowHandle, "Status", "Completed");
+
+                // 讓 UI 重新繪製
+                gridView1.RefreshRow(rowHandle);
+
+                MessageBox.Show("此測項已標記為 Completed（UI 模擬用）");
             }
         }
     }

@@ -99,7 +99,7 @@
             // 
             labelControl1.Appearance.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             labelControl1.Appearance.Options.UseFont = true;
-            labelControl1.Location = new System.Drawing.Point(583, 27);
+            labelControl1.Location = new System.Drawing.Point(1192, 35);
             labelControl1.Name = "labelControl1";
             labelControl1.Size = new System.Drawing.Size(45, 25);
             labelControl1.TabIndex = 6;
@@ -109,7 +109,7 @@
             // 
             lblProject.Appearance.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             lblProject.Appearance.Options.UseFont = true;
-            lblProject.Location = new System.Drawing.Point(50, 14);
+            lblProject.Location = new System.Drawing.Point(72, 35);
             lblProject.Name = "lblProject";
             lblProject.Size = new System.Drawing.Size(60, 25);
             lblProject.TabIndex = 0;
@@ -117,7 +117,7 @@
             // 
             // cmbProject
             // 
-            cmbProject.Location = new System.Drawing.Point(116, 11);
+            cmbProject.Location = new System.Drawing.Point(138, 34);
             cmbProject.Name = "cmbProject";
             cmbProject.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             cmbProject.Size = new System.Drawing.Size(150, 28);
@@ -125,7 +125,7 @@
             // 
             // btnSearch
             // 
-            btnSearch.Location = new System.Drawing.Point(840, 14);
+            btnSearch.Location = new System.Drawing.Point(1516, 22);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new System.Drawing.Size(80, 51);
             btnSearch.TabIndex = 2;
@@ -133,14 +133,14 @@
             // 
             // txtSearch
             // 
-            txtSearch.Location = new System.Drawing.Point(634, 27);
+            txtSearch.Location = new System.Drawing.Point(1252, 34);
             txtSearch.Name = "txtSearch";
             txtSearch.Size = new System.Drawing.Size(200, 28);
             txtSearch.TabIndex = 2;
             // 
             // cmbTestType
             // 
-            cmbTestType.Location = new System.Drawing.Point(116, 45);
+            cmbTestType.Location = new System.Drawing.Point(727, 34);
             cmbTestType.Name = "cmbTestType";
             cmbTestType.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             cmbTestType.Size = new System.Drawing.Size(150, 28);
@@ -150,7 +150,7 @@
             // 
             lblTestType.Appearance.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             lblTestType.Appearance.Options.UseFont = true;
-            lblTestType.Location = new System.Drawing.Point(10, 46);
+            lblTestType.Location = new System.Drawing.Point(612, 35);
             lblTestType.Name = "lblTestType";
             lblTestType.Size = new System.Drawing.Size(100, 25);
             lblTestType.TabIndex = 2;
@@ -158,7 +158,7 @@
             // 
             // cmbStatus
             // 
-            cmbStatus.Location = new System.Drawing.Point(364, 47);
+            cmbStatus.Location = new System.Drawing.Point(995, 34);
             cmbStatus.Name = "cmbStatus";
             cmbStatus.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             cmbStatus.Size = new System.Drawing.Size(150, 28);
@@ -168,7 +168,7 @@
             // 
             lblStatus.Appearance.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             lblStatus.Appearance.Options.UseFont = true;
-            lblStatus.Location = new System.Drawing.Point(298, 46);
+            lblStatus.Location = new System.Drawing.Point(929, 35);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new System.Drawing.Size(60, 25);
             lblStatus.TabIndex = 2;
@@ -176,7 +176,7 @@
             // 
             // cmbRegulation
             // 
-            cmbRegulation.Location = new System.Drawing.Point(364, 14);
+            cmbRegulation.Location = new System.Drawing.Point(406, 34);
             cmbRegulation.Name = "cmbRegulation";
             cmbRegulation.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             cmbRegulation.Size = new System.Drawing.Size(150, 28);
@@ -186,7 +186,7 @@
             // 
             lblRegulation.Appearance.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             lblRegulation.Appearance.Options.UseFont = true;
-            lblRegulation.Location = new System.Drawing.Point(298, 15);
+            lblRegulation.Location = new System.Drawing.Point(340, 35);
             lblRegulation.Name = "lblRegulation";
             lblRegulation.Size = new System.Drawing.Size(60, 25);
             lblRegulation.TabIndex = 2;
@@ -220,7 +220,7 @@
             gridColumn1.MinWidth = 30;
             gridColumn1.Name = "gridColumn1";
             gridColumn1.Visible = true;
-            gridColumn1.VisibleIndex = 0;
+            gridColumn1.VisibleIndex = 2;
             gridColumn1.Width = 253;
             // 
             // gridColumn2
@@ -230,7 +230,7 @@
             gridColumn2.MinWidth = 30;
             gridColumn2.Name = "gridColumn2";
             gridColumn2.Visible = true;
-            gridColumn2.VisibleIndex = 1;
+            gridColumn2.VisibleIndex = 0;
             gridColumn2.Width = 207;
             // 
             // gridColumn3
@@ -240,7 +240,7 @@
             gridColumn3.MinWidth = 30;
             gridColumn3.Name = "gridColumn3";
             gridColumn3.Visible = true;
-            gridColumn3.VisibleIndex = 2;
+            gridColumn3.VisibleIndex = 1;
             gridColumn3.Width = 204;
             // 
             // gridColumn4
@@ -281,7 +281,7 @@
             gridColumn7.Name = "gridColumn7";
             gridColumn7.Visible = true;
             gridColumn7.VisibleIndex = 6;
-            gridColumn7.Width = 316;
+            gridColumn7.Width = 247;
             // 
             // gridColumn8
             // 
@@ -291,12 +291,12 @@
             gridColumn8.Name = "gridColumn8";
             gridColumn8.Visible = true;
             gridColumn8.VisibleIndex = 7;
-            gridColumn8.Width = 405;
+            gridColumn8.Width = 474;
             // 
             // repositoryActionButtons
             // 
             repositoryActionButtons.AutoHeight = false;
-            repositoryActionButtons.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "回報工時", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "", null, null, DevExpress.Utils.ToolTipAnchor.Default), new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "完成", -1, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "", null, null, DevExpress.Utils.ToolTipAnchor.Default) });
+            repositoryActionButtons.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "回報工時", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "回報工時", null, null, DevExpress.Utils.ToolTipAnchor.Default), new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "完成", -1, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "標記為完成", null, null, DevExpress.Utils.ToolTipAnchor.Default) });
             repositoryActionButtons.Name = "repositoryActionButtons";
             repositoryActionButtons.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
             repositoryActionButtons.ButtonClick += repositoryActionButtons_ButtonClick;

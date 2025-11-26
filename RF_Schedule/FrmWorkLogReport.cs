@@ -22,5 +22,28 @@ namespace RF_Schedule
         {
 
         }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            XtraMessageBox.Show("工時已成功回報！（Prototype）",
+                        "成功",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+        }
+
+        private void cboStatus_EditValueChanged(object sender, EventArgs e)
+        {
+            string status = cboStatus.EditValue?.ToString();
+
+            if (status == "Delayed")
+            {
+                cboDelayReason.Enabled = true;
+            }
+            else
+            {
+                cboDelayReason.Enabled = false;
+                cboDelayReason.EditValue = null; // 清空
+            }
+        }
     }
 }
