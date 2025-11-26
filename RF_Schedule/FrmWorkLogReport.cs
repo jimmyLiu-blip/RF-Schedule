@@ -13,6 +13,13 @@ namespace RF_Schedule
 {
     public partial class FrmWorkLogReport : DevExpress.XtraEditors.XtraForm
     {
+        public string SelectedRevision { get; set; }
+        public decimal EnteredHours { get; set; }
+        public string SelectedStatus { get; set; }
+        public string SelectedDelayReason { get; set; }
+        public string Comment { get; set; }
+        public DateTime WorkDate { get; set; }
+
         public FrmWorkLogReport()
         {
             InitializeComponent();
@@ -25,6 +32,14 @@ namespace RF_Schedule
 
         private void btnOk_Click(object sender, EventArgs e)
         {
+            SelectedRevision = cboRevision.Text;
+            EnteredHours = Convert.ToDecimal(spinWorkHours.Value);
+            SelectedStatus = cboStatus.Text;
+            SelectedDelayReason = cboDelayReason.Text;
+            Comment = memoComment.Text;
+            WorkDate = dateWorkDate.DateTime;
+            this.DialogResult = DialogResult.OK;
+            this.Close();
             XtraMessageBox.Show("工時已成功回報！（Prototype）",
                         "成功",
                         MessageBoxButtons.OK,
@@ -44,6 +59,11 @@ namespace RF_Schedule
                 cboDelayReason.Enabled = false;
                 cboDelayReason.EditValue = null; // 清空
             }
+        }
+
+        private void FrmWorkLogReport_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

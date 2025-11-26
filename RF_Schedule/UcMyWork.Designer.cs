@@ -94,6 +94,7 @@
             panelFilter.Name = "panelFilter";
             panelFilter.Size = new System.Drawing.Size(2070, 80);
             panelFilter.TabIndex = 0;
+            panelFilter.Paint += panelFilter_Paint;
             // 
             // labelControl1
             // 

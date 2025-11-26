@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevExpress.XtraBars.Navigation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,5 +18,29 @@ namespace RF_Schedule
 
         }
 
+        public void LoadContent(UserControl uc)
+        {
+            panelMainContent.Controls.Clear();
+            uc.Dock = DockStyle.Fill;
+            panelMainContent.Controls.Add(uc);
+        }
+
+        private void panelMainContent_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void accordionControl1_ElementClick(object sender, DevExpress.XtraBars.Navigation.ElementClickEventArgs e)
+        {
+            if (e.Element == accordionControlElement5)
+            {
+                LoadContent(new UcMyWork());
+            }
+        }
     }
 }

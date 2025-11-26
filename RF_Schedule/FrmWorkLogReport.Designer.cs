@@ -251,6 +251,7 @@
             cboStatus.Name = "cboStatus";
             cboStatus.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             cboStatus.Properties.Items.AddRange(new object[] { "InProgress", "Completed", "Delayed" });
+            cboStatus.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             cboStatus.Size = new System.Drawing.Size(150, 28);
             cboStatus.TabIndex = 21;
             cboStatus.EditValueChanged += cboStatus_EditValueChanged;
@@ -262,6 +263,7 @@
             cboDelayReason.Name = "cboDelayReason";
             cboDelayReason.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             cboDelayReason.Properties.Items.AddRange(new object[] { "Equipment", "Customer", "Engineer", "Location", "Other" });
+            cboDelayReason.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             cboDelayReason.Size = new System.Drawing.Size(150, 28);
             cboDelayReason.TabIndex = 23;
             // 
@@ -298,8 +300,10 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmWorkLogReport";
+            ShowInTaskbar = false;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             Text = "回報工時";
+            Load += FrmWorkLogReport_Load;
             ((System.ComponentModel.ISupportInitialize)txtTestItemName.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)dateWorkDate.Properties.CalendarTimeProperties).EndInit();
             ((System.ComponentModel.ISupportInitialize)dateWorkDate.Properties).EndInit();

@@ -65,6 +65,7 @@
             panelMainContent.Name = "panelMainContent";
             panelMainContent.Size = new System.Drawing.Size(1961, 934);
             panelMainContent.TabIndex = 0;
+            panelMainContent.Paint += panelMainContent_Paint;
             // 
             // accordionControl1
             // 
@@ -96,6 +97,7 @@
             accordionControl1.OptionsMinimizing.ElementHeight = 36;
             accordionControl1.Size = new System.Drawing.Size(390, 930);
             accordionControl1.TabIndex = 0;
+            accordionControl1.ElementClick += accordionControl1_ElementClick;
             // 
             // accordionControlElement1
             // 
@@ -298,6 +300,7 @@
             Margin = new System.Windows.Forms.Padding(5);
             Name = "MainForm";
             Text = "MainForm";
+            Load += MainForm_Load;
             ((System.ComponentModel.ISupportInitialize)panelMainContent).EndInit();
             panelMainContent.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)accordionControl1).EndInit();
@@ -308,7 +311,6 @@
         #endregion
 
         private DevExpress.XtraEditors.PanelControl panelMainContent;
-        private DevExpress.XtraBars.Navigation.AccordionControl accordionControl1;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement1;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement2;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement3;
@@ -330,6 +332,7 @@
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement19;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement20;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement21;
+        public DevExpress.XtraBars.Navigation.AccordionControl accordionControl1;
     }
 }
 
