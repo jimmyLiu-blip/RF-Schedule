@@ -11,11 +11,16 @@ using System.Windows.Forms;
 
 namespace RF_Schedule
 {
-    public partial class FrmWorkLogReport : DevExpress.XtraEditors.XtraUserControl
+    public partial class FrmWorkLogReport : DevExpress.XtraEditors.XtraForm
     {
         public FrmWorkLogReport()
         {
             InitializeComponent();
+        }
+
+        private void lblTestItemName_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
