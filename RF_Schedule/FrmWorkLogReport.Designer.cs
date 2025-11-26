@@ -75,7 +75,7 @@
             // 
             // txtTestItemName
             // 
-            txtTestItemName.EditValue = "2.4G：Conducted Power";
+            txtTestItemName.EditValue = "WWAN：Conducted";
             txtTestItemName.Enabled = false;
             txtTestItemName.Location = new System.Drawing.Point(201, 66);
             txtTestItemName.Name = "txtTestItemName";

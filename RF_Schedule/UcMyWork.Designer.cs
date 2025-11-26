@@ -91,6 +91,7 @@
             panelFilter.Controls.Add(lblRegulation);
             panelFilter.Dock = System.Windows.Forms.DockStyle.Top;
             panelFilter.Location = new System.Drawing.Point(0, 0);
+            panelFilter.Margin = new System.Windows.Forms.Padding(0);
             panelFilter.Name = "panelFilter";
             panelFilter.Size = new System.Drawing.Size(2070, 80);
             panelFilter.TabIndex = 0;
@@ -100,7 +101,7 @@
             // 
             labelControl1.Appearance.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             labelControl1.Appearance.Options.UseFont = true;
-            labelControl1.Location = new System.Drawing.Point(1192, 35);
+            labelControl1.Location = new System.Drawing.Point(1120, 35);
             labelControl1.Name = "labelControl1";
             labelControl1.Size = new System.Drawing.Size(45, 25);
             labelControl1.TabIndex = 6;
@@ -126,7 +127,8 @@
             // 
             // btnSearch
             // 
-            btnSearch.Location = new System.Drawing.Point(1516, 22);
+            btnSearch.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            btnSearch.Location = new System.Drawing.Point(1389, 22);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new System.Drawing.Size(80, 51);
             btnSearch.TabIndex = 2;
@@ -134,14 +136,14 @@
             // 
             // txtSearch
             // 
-            txtSearch.Location = new System.Drawing.Point(1252, 34);
+            txtSearch.Location = new System.Drawing.Point(1171, 32);
             txtSearch.Name = "txtSearch";
             txtSearch.Size = new System.Drawing.Size(200, 28);
             txtSearch.TabIndex = 2;
             // 
             // cmbTestType
             // 
-            cmbTestType.Location = new System.Drawing.Point(727, 34);
+            cmbTestType.Location = new System.Drawing.Point(694, 34);
             cmbTestType.Name = "cmbTestType";
             cmbTestType.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             cmbTestType.Size = new System.Drawing.Size(150, 28);
@@ -151,7 +153,7 @@
             // 
             lblTestType.Appearance.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             lblTestType.Appearance.Options.UseFont = true;
-            lblTestType.Location = new System.Drawing.Point(612, 35);
+            lblTestType.Location = new System.Drawing.Point(588, 35);
             lblTestType.Name = "lblTestType";
             lblTestType.Size = new System.Drawing.Size(100, 25);
             lblTestType.TabIndex = 2;
@@ -159,7 +161,7 @@
             // 
             // cmbStatus
             // 
-            cmbStatus.Location = new System.Drawing.Point(995, 34);
+            cmbStatus.Location = new System.Drawing.Point(939, 34);
             cmbStatus.Name = "cmbStatus";
             cmbStatus.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             cmbStatus.Size = new System.Drawing.Size(150, 28);
@@ -169,7 +171,7 @@
             // 
             lblStatus.Appearance.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             lblStatus.Appearance.Options.UseFont = true;
-            lblStatus.Location = new System.Drawing.Point(929, 35);
+            lblStatus.Location = new System.Drawing.Point(882, 37);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new System.Drawing.Size(60, 25);
             lblStatus.TabIndex = 2;
@@ -177,9 +179,10 @@
             // 
             // cmbRegulation
             // 
-            cmbRegulation.Location = new System.Drawing.Point(406, 34);
+            cmbRegulation.Location = new System.Drawing.Point(391, 34);
             cmbRegulation.Name = "cmbRegulation";
             cmbRegulation.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
+            cmbRegulation.Properties.Name = "cmbRegulation";
             cmbRegulation.Size = new System.Drawing.Size(150, 28);
             cmbRegulation.TabIndex = 3;
             // 
@@ -187,7 +190,7 @@
             // 
             lblRegulation.Appearance.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             lblRegulation.Appearance.Options.UseFont = true;
-            lblRegulation.Location = new System.Drawing.Point(340, 35);
+            lblRegulation.Location = new System.Drawing.Point(325, 35);
             lblRegulation.Name = "lblRegulation";
             lblRegulation.Size = new System.Drawing.Size(60, 25);
             lblRegulation.TabIndex = 2;
@@ -200,6 +203,7 @@
             gridControl1.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] { gridLevelNode1 });
             gridControl1.Location = new System.Drawing.Point(0, 80);
             gridControl1.MainView = gridView1;
+            gridControl1.Margin = new System.Windows.Forms.Padding(0);
             gridControl1.Name = "gridControl1";
             gridControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] { repositoryActionButtons });
             gridControl1.Size = new System.Drawing.Size(2070, 970);
@@ -209,90 +213,146 @@
             // 
             // gridView1
             // 
+            gridView1.Appearance.HeaderPanel.Options.UseTextOptions = true;
+            gridView1.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridView1.AppearancePrint.HeaderPanel.Options.UseTextOptions = true;
+            gridView1.AppearancePrint.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn1, gridColumn2, gridColumn3, gridColumn4, gridColumn5, gridColumn6, gridColumn7, gridColumn8 });
             gridView1.GridControl = gridControl1;
             gridView1.Name = "gridView1";
             gridView1.OptionsView.ShowButtonMode = DevExpress.XtraGrid.Views.Base.ShowButtonModeEnum.ShowAlways;
+            gridView1.OptionsView.ShowGroupPanel = false;
             // 
             // gridColumn1
             // 
+            gridColumn1.AppearanceCell.Options.UseTextOptions = true;
+            gridColumn1.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridColumn1.AppearanceHeader.Options.UseTextOptions = true;
+            gridColumn1.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridColumn1.Caption = "測項名稱";
             gridColumn1.FieldName = "TestItemName";
             gridColumn1.MinWidth = 30;
             gridColumn1.Name = "gridColumn1";
+            gridColumn1.OptionsColumn.AllowEdit = false;
+            gridColumn1.OptionsColumn.AllowFocus = false;
+            gridColumn1.OptionsColumn.ReadOnly = true;
             gridColumn1.Visible = true;
             gridColumn1.VisibleIndex = 2;
-            gridColumn1.Width = 253;
+            gridColumn1.Width = 250;
             // 
             // gridColumn2
             // 
+            gridColumn2.AppearanceCell.Options.UseTextOptions = true;
+            gridColumn2.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridColumn2.Caption = "專案名稱";
             gridColumn2.FieldName = "ProjectName";
             gridColumn2.MinWidth = 30;
             gridColumn2.Name = "gridColumn2";
+            gridColumn2.OptionsColumn.AllowEdit = false;
+            gridColumn2.OptionsColumn.AllowFocus = false;
+            gridColumn2.OptionsColumn.ReadOnly = true;
             gridColumn2.Visible = true;
             gridColumn2.VisibleIndex = 0;
-            gridColumn2.Width = 207;
+            gridColumn2.Width = 250;
             // 
             // gridColumn3
             // 
+            gridColumn3.AppearanceCell.Options.UseTextOptions = true;
+            gridColumn3.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridColumn3.AppearanceHeader.Options.UseTextOptions = true;
+            gridColumn3.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridColumn3.Caption = "法規";
             gridColumn3.FieldName = "RegulationName";
             gridColumn3.MinWidth = 30;
             gridColumn3.Name = "gridColumn3";
+            gridColumn3.OptionsColumn.AllowEdit = false;
+            gridColumn3.OptionsColumn.AllowFocus = false;
+            gridColumn3.OptionsColumn.ReadOnly = true;
             gridColumn3.Visible = true;
             gridColumn3.VisibleIndex = 1;
-            gridColumn3.Width = 204;
+            gridColumn3.Width = 250;
             // 
             // gridColumn4
             // 
+            gridColumn4.AppearanceCell.Options.UseTextOptions = true;
+            gridColumn4.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridColumn4.AppearanceHeader.Options.UseTextOptions = true;
+            gridColumn4.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridColumn4.Caption = "狀態";
             gridColumn4.FieldName = "Status";
             gridColumn4.MinWidth = 30;
             gridColumn4.Name = "gridColumn4";
+            gridColumn4.OptionsColumn.AllowEdit = false;
+            gridColumn4.OptionsColumn.AllowFocus = false;
+            gridColumn4.OptionsColumn.ReadOnly = true;
             gridColumn4.Visible = true;
             gridColumn4.VisibleIndex = 3;
-            gridColumn4.Width = 173;
+            gridColumn4.Width = 200;
             // 
             // gridColumn5
             // 
+            gridColumn5.AppearanceCell.Options.UseTextOptions = true;
+            gridColumn5.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridColumn5.AppearanceHeader.Options.UseTextOptions = true;
+            gridColumn5.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridColumn5.Caption = "預估工時";
-            gridColumn5.FieldName = "EstimatedHours";
+            gridColumn5.FieldName = "EstimateHours";
             gridColumn5.MinWidth = 30;
             gridColumn5.Name = "gridColumn5";
+            gridColumn5.OptionsColumn.AllowEdit = false;
+            gridColumn5.OptionsColumn.AllowFocus = false;
+            gridColumn5.OptionsColumn.ReadOnly = true;
             gridColumn5.Visible = true;
             gridColumn5.VisibleIndex = 4;
-            gridColumn5.Width = 211;
+            gridColumn5.Width = 180;
             // 
             // gridColumn6
             // 
+            gridColumn6.AppearanceCell.Options.UseTextOptions = true;
+            gridColumn6.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridColumn6.AppearanceHeader.Options.UseTextOptions = true;
+            gridColumn6.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridColumn6.Caption = "實際工時";
             gridColumn6.FieldName = "ActualHours";
             gridColumn6.MinWidth = 30;
             gridColumn6.Name = "gridColumn6";
+            gridColumn6.OptionsColumn.AllowEdit = false;
+            gridColumn6.OptionsColumn.AllowFocus = false;
+            gridColumn6.OptionsColumn.ReadOnly = true;
             gridColumn6.Visible = true;
             gridColumn6.VisibleIndex = 5;
-            gridColumn6.Width = 265;
+            gridColumn6.Width = 180;
             // 
             // gridColumn7
             // 
+            gridColumn7.AppearanceCell.Options.UseTextOptions = true;
+            gridColumn7.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridColumn7.AppearanceHeader.Options.UseTextOptions = true;
+            gridColumn7.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridColumn7.Caption = "剩餘工時";
             gridColumn7.FieldName = "RemainingHours";
             gridColumn7.MinWidth = 30;
             gridColumn7.Name = "gridColumn7";
+            gridColumn7.OptionsColumn.AllowEdit = false;
+            gridColumn7.OptionsColumn.AllowFocus = false;
+            gridColumn7.OptionsColumn.ReadOnly = true;
             gridColumn7.Visible = true;
             gridColumn7.VisibleIndex = 6;
-            gridColumn7.Width = 247;
+            gridColumn7.Width = 180;
             // 
             // gridColumn8
             // 
+            gridColumn8.AppearanceCell.Options.UseTextOptions = true;
+            gridColumn8.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridColumn8.AppearanceHeader.Options.UseTextOptions = true;
+            gridColumn8.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridColumn8.Caption = "操作";
             gridColumn8.ColumnEdit = repositoryActionButtons;
             gridColumn8.MinWidth = 30;
             gridColumn8.Name = "gridColumn8";
             gridColumn8.Visible = true;
             gridColumn8.VisibleIndex = 7;
-            gridColumn8.Width = 474;
+            gridColumn8.Width = 544;
             // 
             // repositoryActionButtons
             // 
@@ -308,6 +368,7 @@
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(gridControl1);
             Controls.Add(panelFilter);
+            Margin = new System.Windows.Forms.Padding(0);
             Name = "UcMyWork";
             Size = new System.Drawing.Size(2070, 1050);
             Load += UcMyWork_Load;

@@ -29,8 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            
             panelMainContent = new DevExpress.XtraEditors.PanelControl();
             accordionControl1 = new DevExpress.XtraBars.Navigation.AccordionControl();
+
             accordionControlElement1 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement2 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement5 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
@@ -52,16 +54,15 @@
             accordionControlElement19 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement20 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement21 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
-            ((System.ComponentModel.ISupportInitialize)panelMainContent).BeginInit();
-            panelMainContent.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)accordionControl1).BeginInit();
-            SuspendLayout();
+
+            ((System.ComponentModel.ISupportInitialize)(this.panelMainContent)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.accordionControl1)).BeginInit();
+            this.SuspendLayout();
             // 
             // panelMainContent
             // 
-            panelMainContent.Controls.Add(accordionControl1);
             panelMainContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            panelMainContent.Location = new System.Drawing.Point(0, 0);
+            panelMainContent.Location = new System.Drawing.Point(390, 0);
             panelMainContent.Name = "panelMainContent";
             panelMainContent.Size = new System.Drawing.Size(1961, 934);
             panelMainContent.TabIndex = 0;
@@ -92,7 +93,7 @@
             accordionControl1.Dock = System.Windows.Forms.DockStyle.Left;
             accordionControl1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] { accordionControlElement1 });
             accordionControl1.ExpandElementMode = DevExpress.XtraBars.Navigation.ExpandElementMode.Single;
-            accordionControl1.Location = new System.Drawing.Point(2, 2);
+            accordionControl1.Location = new System.Drawing.Point(0, 0);
             accordionControl1.Name = "accordionControl1";
             accordionControl1.OptionsMinimizing.ElementHeight = 36;
             accordionControl1.Size = new System.Drawing.Size(390, 930);
@@ -297,6 +298,7 @@
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(1961, 934);
             Controls.Add(panelMainContent);
+            Controls.Add(accordionControl1);
             Margin = new System.Windows.Forms.Padding(5);
             Name = "MainForm";
             Text = "MainForm";

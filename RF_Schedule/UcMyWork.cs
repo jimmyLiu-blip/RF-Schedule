@@ -11,8 +11,21 @@ using System.Windows.Forms;
 
 namespace RF_Schedule
 {
+
     public partial class UcMyWork : DevExpress.XtraEditors.XtraUserControl
     {
+        public class WorkItem
+        {
+            public string ProjectName { get; set; }
+            public string RegulationName { get; set; }
+            public string TestItemName { get; set; }
+            public string Status { get; set; }
+            public decimal EstimateHours { get; set; }
+            public decimal ActualHours { get; set; }
+            public decimal RemainingHours { get; set; }
+            public string Action { get; set; }
+        }
+
         public UcMyWork()
         {
             InitializeComponent();
@@ -20,7 +33,32 @@ namespace RF_Schedule
 
         private void UcMyWork_Load(object sender, EventArgs e)
         {
+            var data = new List<WorkItem>
+          {
+             new WorkItem
+             {
+            ProjectName = "TE-2511000026",
+            RegulationName = "CE",
+            TestItemName = "WWAN : Conducted",
+            Status = "InProgress",
+            EstimateHours = 3,
+            ActualHours = 0,
+            RemainingHours = 3
+             },
 
+            new WorkItem
+            {
+            ProjectName = "TE-2511000026",
+            RegulationName = "FCC",
+            TestItemName = "WWAN : Conducted",
+            Status = "NotStarted",
+            EstimateHours = 5,
+            ActualHours = 0,
+            RemainingHours = 5
+            },
+          };
+
+            gridControl1.DataSource = data;
         }
 
         private void gridControl1_Click(object sender, EventArgs e)
