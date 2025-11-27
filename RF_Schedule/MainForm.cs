@@ -18,13 +18,6 @@ namespace RF_Schedule
 
         }
 
-        public void LoadContent(UserControl uc)
-        {
-            panelMainContent.Controls.Clear();
-            uc.Dock = DockStyle.Fill;
-            panelMainContent.Controls.Add(uc);
-        }
-
         private void panelMainContent_Paint(object sender, PaintEventArgs e)
         {
 
@@ -39,7 +32,7 @@ namespace RF_Schedule
         {
             if (e.Element == accordionControlElement5)
             {
-                LoadContent(new UcMyWork());
+                LoadUserControl(new UcMyWork());
             }
         }
 
@@ -61,6 +54,11 @@ namespace RF_Schedule
             panelMainContent.Controls.Clear();
             uc.Dock = DockStyle.Fill;
             panelMainContent.Controls.Add(uc);
+        }
+
+        private void accordionControlElement8_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcProjectList());
         }
     }
 }

@@ -165,6 +165,7 @@
             accordionControlElement8.Name = "accordionControlElement8";
             accordionControlElement8.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             accordionControlElement8.Text = "案件管理";
+            accordionControlElement8.Click += accordionControlElement8_Click;
             // 
             // accordionControlElement13
             // 
