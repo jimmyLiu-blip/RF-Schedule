@@ -34,6 +34,7 @@
             accordionControlElement1 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement2 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement5 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
+            accordionControlElement22 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement6 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement7 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement3 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
@@ -52,7 +53,6 @@
             accordionControlElement19 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement20 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement21 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
-            accordionControlElement22 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             ((System.ComponentModel.ISupportInitialize)panelMainContent).BeginInit();
             ((System.ComponentModel.ISupportInitialize)accordionControl1).BeginInit();
             SuspendLayout();
@@ -124,6 +124,13 @@
             accordionControlElement5.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             accordionControlElement5.Text = "我的工作";
             // 
+            // accordionControlElement22
+            // 
+            accordionControlElement22.Name = "accordionControlElement22";
+            accordionControlElement22.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
+            accordionControlElement22.Text = "其他工時回報";
+            accordionControlElement22.Click += accordionControlElement22_Click;
+            // 
             // accordionControlElement6
             // 
             accordionControlElement6.Appearance.Normal.Font = new System.Drawing.Font("微軟正黑體", 12F);
@@ -132,6 +139,7 @@
             accordionControlElement6.Name = "accordionControlElement6";
             accordionControlElement6.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             accordionControlElement6.Text = "工時紀錄";
+            accordionControlElement6.Click += accordionControlElement6_Click;
             // 
             // accordionControlElement7
             // 
@@ -289,13 +297,6 @@
             accordionControlElement21.Name = "accordionControlElement21";
             accordionControlElement21.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             accordionControlElement21.Text = "稽核日誌";
-            // 
-            // accordionControlElement22
-            // 
-            accordionControlElement22.Name = "accordionControlElement22";
-            accordionControlElement22.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            accordionControlElement22.Text = "其他工時回報";
-            accordionControlElement22.Click += accordionControlElement22_Click;
             // 
             // MainForm
             // 

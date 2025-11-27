@@ -50,5 +50,17 @@ namespace RF_Schedule
                 frm.ShowDialog(this);
             }
         }
+
+        private void accordionControlElement6_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcWorkLog());
+        }
+
+        public void LoadUserControl(UserControl uc)
+        {
+            panelMainContent.Controls.Clear();
+            uc.Dock = DockStyle.Fill;
+            panelMainContent.Controls.Add(uc);
+        }
     }
 }
