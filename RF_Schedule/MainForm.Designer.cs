@@ -109,7 +109,7 @@
             // 
             accordionControlElement2.Appearance.Normal.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
             accordionControlElement2.Appearance.Normal.Options.UseFont = true;
-            accordionControlElement2.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] { accordionControlElement5, accordionControlElement6, accordionControlElement22, accordionControlElement7 });
+            accordionControlElement2.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] { accordionControlElement5, accordionControlElement22, accordionControlElement6, accordionControlElement7 });
             accordionControlElement2.Expanded = true;
             accordionControlElement2.Height = 40;
             accordionControlElement2.Name = "accordionControlElement2";
@@ -295,6 +295,7 @@
             accordionControlElement22.Name = "accordionControlElement22";
             accordionControlElement22.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             accordionControlElement22.Text = "其他工時回報";
+            accordionControlElement22.Click += accordionControlElement22_Click;
             // 
             // MainForm
             // 

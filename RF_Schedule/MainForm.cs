@@ -42,5 +42,13 @@ namespace RF_Schedule
                 LoadContent(new UcMyWork());
             }
         }
+
+        private void accordionControlElement22_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmOtherWorkLog())
+            {
+                frm.ShowDialog(this);
+            }
+        }
     }
 }
