@@ -45,7 +45,6 @@ namespace RF_Schedule
             ActualHours = 0,
             RemainingHours = 3
              },
-
             new WorkItem
             {
             ProjectName = "TE-2511000026",
@@ -56,7 +55,78 @@ namespace RF_Schedule
             ActualHours = 0,
             RemainingHours = 5
             },
-          };
+             new WorkItem
+            {
+            ProjectName = "TE-2511000026",
+            RegulationName = "NCC",
+            TestItemName = "Wifi : Conducted",
+            Status = "NotStarted",
+            EstimateHours = 30,
+            ActualHours = 0,
+            RemainingHours = 30
+            },
+            new WorkItem
+            {
+            ProjectName = "TE-2511000026",
+            RegulationName = "FCC",
+            TestItemName = "Wifi : Conducted",
+            Status = "NotStarted",
+            EstimateHours = 60,
+            ActualHours = 0,
+            RemainingHours = 60
+            },
+            new WorkItem
+            {
+            ProjectName = "TE-2511000026",
+            RegulationName = "NCC",
+            TestItemName = "Radiated",
+            Status = "InProgress",
+            EstimateHours = 24,
+            ActualHours = 12,
+            RemainingHours = 12
+            },
+            new WorkItem
+            {
+            ProjectName = "TE-2511000026",
+            RegulationName = "FCC",
+            TestItemName = "Radiated",
+            Status = "NotStarted",
+            EstimateHours = 60,
+            ActualHours = 8,
+            RemainingHours = 52
+            },
+            new WorkItem
+            {
+            ProjectName = "TE-2511000026",
+            RegulationName = "CE",
+            TestItemName = "Adaptivity",
+            Status = "NotStarted",
+            EstimateHours = 56,
+            ActualHours = 0,
+            RemainingHours = 56
+            },
+            new WorkItem
+            {
+            ProjectName = "TE-2511000026",
+            RegulationName = "CE",
+            TestItemName = "Rx-Blocking",
+            Status = "NotStarted",
+            EstimateHours = 24,
+            ActualHours = 0,
+            RemainingHours = 24
+            },
+            new WorkItem
+            {
+            ProjectName = "TE-2511000026",
+            RegulationName = "Other",
+            TestItemName = "自定義",
+            Status = "NotStarted",
+            EstimateHours = 24,
+            ActualHours = 0,
+            RemainingHours = 24
+            },
+
+        };
 
             gridControl1.DataSource = data;
         }

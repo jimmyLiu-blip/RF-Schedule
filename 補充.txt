@@ -1,0 +1,122 @@
+工程師端《我的工作》狀態邏輯
+
+一、TestItem（測項）整體狀態
+
+這是測項本身的狀態，所有工程師共用：
+
+TestItem.Status	意義
+NotStarted	尚未開始，沒有任何 WorkLog
+InProgress	至少一位工程師正在做
+Delayed	有 Delayed WorkLog（今天or累積）
+Completed	測項已被結案（由主管、或主負責工程師按下完成）
+Canceled	主管取消測項
+
+只能看到：
+
+NotStarted / InProgress / Delayed
+❌ Completed 靠篩選才看得到
+❌ Canceled 工程師不應再看到
+
+二、Engineer–TestItem（個人與該測項的關係）
+
+多人一起做同一測項是最複雜的地方。
+所以必須定義「工程師個人」對該 TestItem 的局部狀態：
+
+個人狀態	意義
+AssignedOnly	還沒開始做（0 小時）
+Working	已經開始做（有 WorkLog）
+WaitingOther（可選）	自己暫停，但其他人還在做
+DoneByEngineer	自己完成，但其他人還沒完成
+DoneByOthers	他人已完成整體測項，但我還沒按完成
+
+三、「我的工作」頁面要不要顯示 TestItem？
+
+✔ 顯示的條件（任意符合即可）：
+
+我被分配到該測項（TestItemEngineer 有我的記錄）
+
+且 TestItem 整體狀態 ≠ Completed / Canceled
+
+或 TestItem 已完成但我還沒按完成（DoneByOthers）
+
+也就是：
+
+⭐ 只要我還沒完成自己的責任 → 一定顯示
+⭐ 只要整體 TestItem 已完成 → 只給未完成的人顯示
+⭐ 我的工作永遠只顯示「我需要處理的東西」
+
+四、多人協作狀態中的 UI 行為（最重要部分）
+
+假設 A、B 同時做 Radiated：
+
+🎯 情境 1：A 與 B 都在做（最常見）
+
+A：InProgress
+B：InProgress
+TestItem：InProgress
+
+💡 UI 行為：
+
+A、B 都看到 Radiated
+
+都可按「回報工時」
+
+都看不到 Completed 按鈕（因為還沒做完）
+
+🎯 情境 2：A 按了「完成」，B 還沒做完
+
+A：DoneByEngineer
+B：Working（還沒完成）
+TestItem：Completed（整體已結案）
+
+💡 UI：
+
+A → 不再看到 Radiated（因為他完成了）
+
+B → 仍然看到 Radiated（狀態 = InProgress）
+
+B → 仍然可以回報工時 & 按「完成」
+
+這跟你說的 完全一致，這是正確邏輯。
+
+⚠ 為什麼 B 還能看到？
+→ 因為他還沒完成自己的部分
+→ 他需要按「完成」來結束自己負責的動作
+
+🎯 情境 3：B 停止動作很久（例如待料），A 完成了
+
+A：DoneByEngineer
+B：WaitingOther
+TestItem：Completed
+
+💡 UI：
+
+A → 不看到
+
+B → 看到「Radiated」
+
+B → 不需要回報工時就能按「完成」（表示結束）
+
+🎯 情境 4：多人都完成後
+
+A：Done
+B：Done
+TestItem：Completed
+
+💡 UI：
+
+A：不顯示
+
+B：不顯示
+
+此 TestItem 從所有工程師的「我的工作」移除
+
+但可透過「狀態：Completed」篩選看到
+
+🟧 五、是否需要取消完成？
+
+✔1. 誤按完成 → 下次回報工時即可恢復 InProgress
+
+不需要取消完成，只要再回報「InProgress」的 WorkLog 就能覆蓋
+
+這更自然、更符合工程師使用習慣。

@@ -29,10 +29,8 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            
             panelMainContent = new DevExpress.XtraEditors.PanelControl();
             accordionControl1 = new DevExpress.XtraBars.Navigation.AccordionControl();
-
             accordionControlElement1 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement2 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement5 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
@@ -54,17 +52,17 @@
             accordionControlElement19 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement20 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement21 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
-
-            ((System.ComponentModel.ISupportInitialize)(this.panelMainContent)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.accordionControl1)).BeginInit();
-            this.SuspendLayout();
+            accordionControlElement22 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
+            ((System.ComponentModel.ISupportInitialize)panelMainContent).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)accordionControl1).BeginInit();
+            SuspendLayout();
             // 
             // panelMainContent
             // 
             panelMainContent.Dock = System.Windows.Forms.DockStyle.Fill;
             panelMainContent.Location = new System.Drawing.Point(390, 0);
             panelMainContent.Name = "panelMainContent";
-            panelMainContent.Size = new System.Drawing.Size(1961, 934);
+            panelMainContent.Size = new System.Drawing.Size(1571, 934);
             panelMainContent.TabIndex = 0;
             panelMainContent.Paint += panelMainContent_Paint;
             // 
@@ -96,7 +94,7 @@
             accordionControl1.Location = new System.Drawing.Point(0, 0);
             accordionControl1.Name = "accordionControl1";
             accordionControl1.OptionsMinimizing.ElementHeight = 36;
-            accordionControl1.Size = new System.Drawing.Size(390, 930);
+            accordionControl1.Size = new System.Drawing.Size(390, 934);
             accordionControl1.TabIndex = 0;
             accordionControl1.ElementClick += accordionControl1_ElementClick;
             // 
@@ -111,7 +109,7 @@
             // 
             accordionControlElement2.Appearance.Normal.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
             accordionControlElement2.Appearance.Normal.Options.UseFont = true;
-            accordionControlElement2.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] { accordionControlElement5, accordionControlElement6, accordionControlElement7 });
+            accordionControlElement2.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] { accordionControlElement5, accordionControlElement6, accordionControlElement22, accordionControlElement7 });
             accordionControlElement2.Expanded = true;
             accordionControlElement2.Height = 40;
             accordionControlElement2.Name = "accordionControlElement2";
@@ -292,6 +290,12 @@
             accordionControlElement21.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             accordionControlElement21.Text = "稽核日誌";
             // 
+            // accordionControlElement22
+            // 
+            accordionControlElement22.Name = "accordionControlElement22";
+            accordionControlElement22.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
+            accordionControlElement22.Text = "其他工時回報";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
@@ -304,7 +308,6 @@
             Text = "MainForm";
             Load += MainForm_Load;
             ((System.ComponentModel.ISupportInitialize)panelMainContent).EndInit();
-            panelMainContent.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)accordionControl1).EndInit();
             ResumeLayout(false);
 
@@ -335,6 +338,7 @@
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement20;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement21;
         public DevExpress.XtraBars.Navigation.AccordionControl accordionControl1;
+        private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement22;
     }
 }
 
