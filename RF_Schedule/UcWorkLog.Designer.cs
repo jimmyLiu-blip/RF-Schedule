@@ -28,6 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions1 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
             panelFilter = new DevExpress.XtraEditors.PanelControl();
             simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             textEdit1 = new DevExpress.XtraEditors.TextEdit();
@@ -53,9 +58,9 @@
             gridColumn8 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn9 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn10 = new DevExpress.XtraGrid.Columns.GridColumn();
-            gridColumn11 = new DevExpress.XtraGrid.Columns.GridColumn();
-            gridColumn12 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn13 = new DevExpress.XtraGrid.Columns.GridColumn();
+            gridColumn11 = new DevExpress.XtraGrid.Columns.GridColumn();
+            repositoryItemButtonEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             ((System.ComponentModel.ISupportInitialize)panelFilter).BeginInit();
             panelFilter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)textEdit1.Properties).BeginInit();
@@ -69,6 +74,7 @@
             panelGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gridWorkLog).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)repositoryItemButtonEdit1).BeginInit();
             SuspendLayout();
             // 
             // panelFilter
@@ -87,8 +93,9 @@
             panelFilter.Dock = System.Windows.Forms.DockStyle.Top;
             panelFilter.Location = new System.Drawing.Point(0, 0);
             panelFilter.Name = "panelFilter";
-            panelFilter.Size = new System.Drawing.Size(1821, 164);
+            panelFilter.Size = new System.Drawing.Size(1800, 164);
             panelFilter.TabIndex = 0;
+            panelFilter.Paint += panelFilter_Paint;
             // 
             // simpleButton1
             // 
@@ -190,7 +197,7 @@
             panelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             panelGrid.Location = new System.Drawing.Point(0, 164);
             panelGrid.Name = "panelGrid";
-            panelGrid.Size = new System.Drawing.Size(1821, 844);
+            panelGrid.Size = new System.Drawing.Size(1800, 836);
             panelGrid.TabIndex = 0;
             // 
             // gridWorkLog
@@ -199,14 +206,19 @@
             gridWorkLog.Location = new System.Drawing.Point(2, 2);
             gridWorkLog.MainView = gridView1;
             gridWorkLog.Name = "gridWorkLog";
-            gridWorkLog.Size = new System.Drawing.Size(1817, 840);
+            gridWorkLog.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] { repositoryItemButtonEdit1 });
+            gridWorkLog.Size = new System.Drawing.Size(1796, 832);
             gridWorkLog.TabIndex = 0;
             gridWorkLog.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView1 });
             gridWorkLog.Click += gridWorkLog_Click;
             // 
             // gridView1
             // 
-            gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn1, gridColumn2, gridColumn3, gridColumn4, gridColumn5, gridColumn6, gridColumn7, gridColumn8, gridColumn9, gridColumn10, gridColumn11, gridColumn12, gridColumn13 });
+            gridView1.Appearance.HeaderPanel.Options.UseTextOptions = true;
+            gridView1.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridView1.Appearance.Row.Options.UseTextOptions = true;
+            gridView1.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn1, gridColumn2, gridColumn3, gridColumn4, gridColumn5, gridColumn6, gridColumn7, gridColumn8, gridColumn9, gridColumn10, gridColumn13, gridColumn11 });
             gridView1.GridControl = gridWorkLog;
             gridView1.Name = "gridView1";
             gridView1.OptionsView.ShowGroupPanel = false;
@@ -279,6 +291,8 @@
             // 
             // gridColumn7
             // 
+            gridColumn7.AppearanceCell.Options.UseTextOptions = true;
+            gridColumn7.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
             gridColumn7.Caption = "版本";
             gridColumn7.FieldName = "RevisionName";
             gridColumn7.MinWidth = 30;
@@ -321,26 +335,6 @@
             gridColumn10.VisibleIndex = 9;
             gridColumn10.Width = 112;
             // 
-            // gridColumn11
-            // 
-            gridColumn11.Caption = "是否協助他人";
-            gridColumn11.FieldName = "IsSupportOtherDisplay";
-            gridColumn11.MinWidth = 30;
-            gridColumn11.Name = "gridColumn11";
-            gridColumn11.Visible = true;
-            gridColumn11.VisibleIndex = 10;
-            gridColumn11.Width = 112;
-            // 
-            // gridColumn12
-            // 
-            gridColumn12.Caption = "協助對象";
-            gridColumn12.FieldName = "SupportEngineerName";
-            gridColumn12.MinWidth = 30;
-            gridColumn12.Name = "gridColumn12";
-            gridColumn12.Visible = true;
-            gridColumn12.VisibleIndex = 11;
-            gridColumn12.Width = 112;
-            // 
             // gridColumn13
             // 
             gridColumn13.Caption = "建立時間";
@@ -350,8 +344,25 @@
             gridColumn13.MinWidth = 30;
             gridColumn13.Name = "gridColumn13";
             gridColumn13.Visible = true;
-            gridColumn13.VisibleIndex = 12;
+            gridColumn13.VisibleIndex = 10;
             gridColumn13.Width = 112;
+            // 
+            // gridColumn11
+            // 
+            gridColumn11.Caption = "操作";
+            gridColumn11.ColumnEdit = repositoryItemButtonEdit1;
+            gridColumn11.MinWidth = 30;
+            gridColumn11.Name = "gridColumn11";
+            gridColumn11.Visible = true;
+            gridColumn11.VisibleIndex = 11;
+            gridColumn11.Width = 112;
+            // 
+            // repositoryItemButtonEdit1
+            // 
+            repositoryItemButtonEdit1.AutoHeight = false;
+            repositoryItemButtonEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "編輯", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "", null, null, DevExpress.Utils.ToolTipAnchor.Default) });
+            repositoryItemButtonEdit1.Name = "repositoryItemButtonEdit1";
+            repositoryItemButtonEdit1.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
             // 
             // UcWorkLog
             // 
@@ -360,7 +371,7 @@
             Controls.Add(panelGrid);
             Controls.Add(panelFilter);
             Name = "UcWorkLog";
-            Size = new System.Drawing.Size(1821, 1008);
+            Size = new System.Drawing.Size(1800, 1000);
             ((System.ComponentModel.ISupportInitialize)panelFilter).EndInit();
             panelFilter.ResumeLayout(false);
             panelFilter.PerformLayout();
@@ -375,6 +386,7 @@
             panelGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)gridWorkLog).EndInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)repositoryItemButtonEdit1).EndInit();
             ResumeLayout(false);
         }
 
@@ -405,8 +417,8 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn8;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn9;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn10;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumn11;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumn12;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn13;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn11;
+        private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit repositoryItemButtonEdit1;
     }
 }

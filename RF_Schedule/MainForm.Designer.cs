@@ -39,10 +39,6 @@
             accordionControlElement7 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement3 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement8 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
-            accordionControlElement9 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
-            accordionControlElement10 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
-            accordionControlElement11 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
-            accordionControlElement12 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement13 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement14 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement15 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
@@ -154,7 +150,7 @@
             // 
             accordionControlElement3.Appearance.Normal.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
             accordionControlElement3.Appearance.Normal.Options.UseFont = true;
-            accordionControlElement3.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] { accordionControlElement8, accordionControlElement9, accordionControlElement10, accordionControlElement11, accordionControlElement12, accordionControlElement13, accordionControlElement14, accordionControlElement15 });
+            accordionControlElement3.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] { accordionControlElement8, accordionControlElement13, accordionControlElement14, accordionControlElement15 });
             accordionControlElement3.Expanded = true;
             accordionControlElement3.Height = 40;
             accordionControlElement3.Name = "accordionControlElement3";
@@ -169,42 +165,6 @@
             accordionControlElement8.Name = "accordionControlElement8";
             accordionControlElement8.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             accordionControlElement8.Text = "案件管理";
-            // 
-            // accordionControlElement9
-            // 
-            accordionControlElement9.Appearance.Normal.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            accordionControlElement9.Appearance.Normal.Options.UseFont = true;
-            accordionControlElement9.Height = 36;
-            accordionControlElement9.Name = "accordionControlElement9";
-            accordionControlElement9.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            accordionControlElement9.Text = "法規管理";
-            // 
-            // accordionControlElement10
-            // 
-            accordionControlElement10.Appearance.Normal.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            accordionControlElement10.Appearance.Normal.Options.UseFont = true;
-            accordionControlElement10.Height = 36;
-            accordionControlElement10.Name = "accordionControlElement10";
-            accordionControlElement10.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            accordionControlElement10.Text = "測項管理";
-            // 
-            // accordionControlElement11
-            // 
-            accordionControlElement11.Appearance.Normal.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            accordionControlElement11.Appearance.Normal.Options.UseFont = true;
-            accordionControlElement11.Height = 36;
-            accordionControlElement11.Name = "accordionControlElement11";
-            accordionControlElement11.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            accordionControlElement11.Text = "工程師指派";
-            // 
-            // accordionControlElement12
-            // 
-            accordionControlElement12.Appearance.Normal.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            accordionControlElement12.Appearance.Normal.Options.UseFont = true;
-            accordionControlElement12.Height = 36;
-            accordionControlElement12.Name = "accordionControlElement12";
-            accordionControlElement12.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            accordionControlElement12.Text = "補測版本管理";
             // 
             // accordionControlElement13
             // 
@@ -326,10 +286,6 @@
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement6;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement7;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement8;
-        private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement9;
-        private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement10;
-        private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement11;
-        private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement12;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement13;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement14;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement15;

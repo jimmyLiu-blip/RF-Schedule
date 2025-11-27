@@ -243,6 +243,7 @@
             cboRevision.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             cboRevision.Size = new System.Drawing.Size(150, 28);
             cboRevision.TabIndex = 20;
+            cboRevision.SelectedIndexChanged += cboRevision_SelectedIndexChanged;
             // 
             // cboStatus
             // 
