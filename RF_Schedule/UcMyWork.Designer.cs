@@ -57,11 +57,12 @@
             gridColumn2 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn3 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn4 = new DevExpress.XtraGrid.Columns.GridColumn();
-            gridColumn5 = new DevExpress.XtraGrid.Columns.GridColumn();
-            gridColumn6 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn7 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn8 = new DevExpress.XtraGrid.Columns.GridColumn();
             repositoryActionButtons = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
+            gridColumn5 = new DevExpress.XtraGrid.Columns.GridColumn();
+            gridColumn6 = new DevExpress.XtraGrid.Columns.GridColumn();
+            gridColumn9 = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)panelFilter).BeginInit();
             panelFilter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)cmbProject.Properties).BeginInit();
@@ -217,7 +218,7 @@
             gridView1.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridView1.AppearancePrint.HeaderPanel.Options.UseTextOptions = true;
             gridView1.AppearancePrint.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn1, gridColumn2, gridColumn3, gridColumn4, gridColumn5, gridColumn6, gridColumn7, gridColumn8 });
+            gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn1, gridColumn2, gridColumn3, gridColumn4, gridColumn7, gridColumn8, gridColumn5, gridColumn6, gridColumn9 });
             gridView1.GridControl = gridControl1;
             gridView1.Name = "gridView1";
             gridView1.OptionsView.ShowButtonMode = DevExpress.XtraGrid.Views.Base.ShowButtonModeEnum.ShowAlways;
@@ -237,8 +238,8 @@
             gridColumn1.OptionsColumn.AllowFocus = false;
             gridColumn1.OptionsColumn.ReadOnly = true;
             gridColumn1.Visible = true;
-            gridColumn1.VisibleIndex = 2;
-            gridColumn1.Width = 250;
+            gridColumn1.VisibleIndex = 3;
+            gridColumn1.Width = 252;
             // 
             // gridColumn2
             // 
@@ -253,7 +254,7 @@
             gridColumn2.OptionsColumn.ReadOnly = true;
             gridColumn2.Visible = true;
             gridColumn2.VisibleIndex = 0;
-            gridColumn2.Width = 250;
+            gridColumn2.Width = 252;
             // 
             // gridColumn3
             // 
@@ -269,8 +270,8 @@
             gridColumn3.OptionsColumn.AllowFocus = false;
             gridColumn3.OptionsColumn.ReadOnly = true;
             gridColumn3.Visible = true;
-            gridColumn3.VisibleIndex = 1;
-            gridColumn3.Width = 250;
+            gridColumn3.VisibleIndex = 2;
+            gridColumn3.Width = 252;
             // 
             // gridColumn4
             // 
@@ -286,42 +287,8 @@
             gridColumn4.OptionsColumn.AllowFocus = false;
             gridColumn4.OptionsColumn.ReadOnly = true;
             gridColumn4.Visible = true;
-            gridColumn4.VisibleIndex = 3;
-            gridColumn4.Width = 200;
-            // 
-            // gridColumn5
-            // 
-            gridColumn5.AppearanceCell.Options.UseTextOptions = true;
-            gridColumn5.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            gridColumn5.AppearanceHeader.Options.UseTextOptions = true;
-            gridColumn5.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            gridColumn5.Caption = "預估工時";
-            gridColumn5.FieldName = "EstimateHours";
-            gridColumn5.MinWidth = 30;
-            gridColumn5.Name = "gridColumn5";
-            gridColumn5.OptionsColumn.AllowEdit = false;
-            gridColumn5.OptionsColumn.AllowFocus = false;
-            gridColumn5.OptionsColumn.ReadOnly = true;
-            gridColumn5.Visible = true;
-            gridColumn5.VisibleIndex = 4;
-            gridColumn5.Width = 180;
-            // 
-            // gridColumn6
-            // 
-            gridColumn6.AppearanceCell.Options.UseTextOptions = true;
-            gridColumn6.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            gridColumn6.AppearanceHeader.Options.UseTextOptions = true;
-            gridColumn6.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            gridColumn6.Caption = "實際工時";
-            gridColumn6.FieldName = "ActualHours";
-            gridColumn6.MinWidth = 30;
-            gridColumn6.Name = "gridColumn6";
-            gridColumn6.OptionsColumn.AllowEdit = false;
-            gridColumn6.OptionsColumn.AllowFocus = false;
-            gridColumn6.OptionsColumn.ReadOnly = true;
-            gridColumn6.Visible = true;
-            gridColumn6.VisibleIndex = 5;
-            gridColumn6.Width = 180;
+            gridColumn4.VisibleIndex = 6;
+            gridColumn4.Width = 202;
             // 
             // gridColumn7
             // 
@@ -337,8 +304,8 @@
             gridColumn7.OptionsColumn.AllowFocus = false;
             gridColumn7.OptionsColumn.ReadOnly = true;
             gridColumn7.Visible = true;
-            gridColumn7.VisibleIndex = 6;
-            gridColumn7.Width = 180;
+            gridColumn7.VisibleIndex = 7;
+            gridColumn7.Width = 182;
             // 
             // gridColumn8
             // 
@@ -351,8 +318,8 @@
             gridColumn8.MinWidth = 30;
             gridColumn8.Name = "gridColumn8";
             gridColumn8.Visible = true;
-            gridColumn8.VisibleIndex = 7;
-            gridColumn8.Width = 544;
+            gridColumn8.VisibleIndex = 8;
+            gridColumn8.Width = 359;
             // 
             // repositoryActionButtons
             // 
@@ -361,6 +328,55 @@
             repositoryActionButtons.Name = "repositoryActionButtons";
             repositoryActionButtons.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
             repositoryActionButtons.ButtonClick += repositoryActionButtons_ButtonClick;
+            // 
+            // gridColumn5
+            // 
+            gridColumn5.AccessibleRole = System.Windows.Forms.AccessibleRole.OutlineButton;
+            gridColumn5.AppearanceCell.Options.UseTextOptions = true;
+            gridColumn5.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridColumn5.Caption = "預計開始";
+            gridColumn5.DisplayFormat.FormatString = "yyyy-MM-dd";
+            gridColumn5.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Custom;
+            gridColumn5.FieldName = "StartDate";
+            gridColumn5.MinWidth = 30;
+            gridColumn5.Name = "gridColumn5";
+            gridColumn5.OptionsColumn.AllowEdit = false;
+            gridColumn5.OptionsColumn.ReadOnly = true;
+            gridColumn5.Visible = true;
+            gridColumn5.VisibleIndex = 4;
+            gridColumn5.Width = 113;
+            // 
+            // gridColumn6
+            // 
+            gridColumn6.AccessibleRole = System.Windows.Forms.AccessibleRole.OutlineButton;
+            gridColumn6.AppearanceCell.Options.UseTextOptions = true;
+            gridColumn6.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridColumn6.Caption = "預計結束";
+            gridColumn6.DisplayFormat.FormatString = "yyyy-MM-dd";
+            gridColumn6.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            gridColumn6.FieldName = "EndDate";
+            gridColumn6.MinWidth = 30;
+            gridColumn6.Name = "gridColumn6";
+            gridColumn6.OptionsColumn.AllowEdit = false;
+            gridColumn6.OptionsColumn.ReadOnly = true;
+            gridColumn6.Visible = true;
+            gridColumn6.VisibleIndex = 5;
+            gridColumn6.Width = 206;
+            // 
+            // gridColumn9
+            // 
+            gridColumn9.AccessibleRole = System.Windows.Forms.AccessibleRole.OutlineButton;
+            gridColumn9.AppearanceCell.Options.UseTextOptions = true;
+            gridColumn9.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridColumn9.Caption = "優先度";
+            gridColumn9.FieldName = "Priority";
+            gridColumn9.MinWidth = 30;
+            gridColumn9.Name = "gridColumn9";
+            gridColumn9.OptionsColumn.AllowEdit = false;
+            gridColumn9.OptionsColumn.ReadOnly = true;
+            gridColumn9.Visible = true;
+            gridColumn9.VisibleIndex = 1;
+            gridColumn9.Width = 216;
             // 
             // UcMyWork
             // 
@@ -406,10 +422,11 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn2;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn3;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn4;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumn5;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumn6;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn7;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn8;
         private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit repositoryActionButtons;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn5;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn6;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn9;
     }
 }

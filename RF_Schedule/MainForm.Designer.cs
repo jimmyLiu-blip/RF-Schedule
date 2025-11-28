@@ -174,7 +174,7 @@
             accordionControlElement13.Height = 36;
             accordionControlElement13.Name = "accordionControlElement13";
             accordionControlElement13.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            accordionControlElement13.Text = "工時審核";
+            accordionControlElement13.Text = "其他工時審核";
             // 
             // accordionControlElement14
             // 

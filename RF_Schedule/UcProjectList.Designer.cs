@@ -28,10 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode2 = new DevExpress.XtraGrid.GridLevelNode();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode3 = new DevExpress.XtraGrid.GridLevelNode();
             panelFilter = new DevExpress.XtraEditors.PanelControl();
             panelGrid = new DevExpress.XtraEditors.PanelControl();
             gridControl1 = new DevExpress.XtraGrid.GridControl();
-            gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            viewProject = new DevExpress.XtraGrid.Views.Grid.GridView();
             gridColumn8 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn2 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -40,11 +43,25 @@
             gridColumn5 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn6 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn7 = new DevExpress.XtraGrid.Columns.GridColumn();
+            viewRegulation = new DevExpress.XtraGrid.Views.Grid.GridView();
+            viewTestItem = new DevExpress.XtraGrid.Views.Grid.GridView();
+            viewEngineer = new DevExpress.XtraGrid.Views.Grid.GridView();
+            gridColumn9 = new DevExpress.XtraGrid.Columns.GridColumn();
+            gridColumn10 = new DevExpress.XtraGrid.Columns.GridColumn();
+            gridColumn11 = new DevExpress.XtraGrid.Columns.GridColumn();
+            gridColumn12 = new DevExpress.XtraGrid.Columns.GridColumn();
+            gridColumn13 = new DevExpress.XtraGrid.Columns.GridColumn();
+            gridColumn14 = new DevExpress.XtraGrid.Columns.GridColumn();
+            gridColumn15 = new DevExpress.XtraGrid.Columns.GridColumn();
+            gridColumn16 = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)panelFilter).BeginInit();
             ((System.ComponentModel.ISupportInitialize)panelGrid).BeginInit();
             panelGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gridControl1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)gridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)viewProject).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)viewRegulation).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)viewTestItem).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)viewEngineer).BeginInit();
             SuspendLayout();
             // 
             // panelFilter
@@ -67,24 +84,31 @@
             // gridControl1
             // 
             gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            gridLevelNode1.LevelTemplate = viewRegulation;
+            gridLevelNode1.RelationName = "Level1";
+            gridLevelNode2.LevelTemplate = viewTestItem;
+            gridLevelNode2.RelationName = "Level2";
+            gridLevelNode3.LevelTemplate = viewEngineer;
+            gridLevelNode3.RelationName = "Level3";
+            gridControl1.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] { gridLevelNode1, gridLevelNode2, gridLevelNode3 });
             gridControl1.Location = new System.Drawing.Point(2, 2);
-            gridControl1.MainView = gridView1;
+            gridControl1.MainView = viewProject;
             gridControl1.Name = "gridControl1";
             gridControl1.Size = new System.Drawing.Size(1806, 854);
             gridControl1.TabIndex = 0;
-            gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView1 });
+            gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { viewProject, viewRegulation, viewTestItem, viewEngineer });
             gridControl1.Click += gridControl1_Click;
             // 
-            // gridView1
+            // viewProject
             // 
-            gridView1.Appearance.HeaderPanel.Options.UseTextOptions = true;
-            gridView1.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            gridView1.Appearance.Row.Options.UseTextOptions = true;
-            gridView1.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn8, gridColumn1, gridColumn2, gridColumn3, gridColumn4, gridColumn5, gridColumn6, gridColumn7 });
-            gridView1.GridControl = gridControl1;
-            gridView1.Name = "gridView1";
-            gridView1.OptionsView.ShowGroupPanel = false;
+            viewProject.Appearance.HeaderPanel.Options.UseTextOptions = true;
+            viewProject.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            viewProject.Appearance.Row.Options.UseTextOptions = true;
+            viewProject.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            viewProject.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn8, gridColumn1, gridColumn2, gridColumn3, gridColumn4, gridColumn5, gridColumn6, gridColumn7 });
+            viewProject.GridControl = gridControl1;
+            viewProject.Name = "viewProject";
+            viewProject.OptionsView.ShowGroupPanel = false;
             // 
             // gridColumn8
             // 
@@ -196,6 +220,104 @@
             gridColumn7.VisibleIndex = 7;
             gridColumn7.Width = 111;
             // 
+            // viewRegulation
+            // 
+            viewRegulation.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn9, gridColumn10 });
+            viewRegulation.GridControl = gridControl1;
+            viewRegulation.Name = "viewRegulation";
+            // 
+            // viewTestItem
+            // 
+            viewTestItem.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn11, gridColumn12, gridColumn13 });
+            viewTestItem.GridControl = gridControl1;
+            viewTestItem.Name = "viewTestItem";
+            // 
+            // viewEngineer
+            // 
+            viewEngineer.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn14, gridColumn15, gridColumn16 });
+            viewEngineer.GridControl = gridControl1;
+            viewEngineer.Name = "viewEngineer";
+            // 
+            // gridColumn9
+            // 
+            gridColumn9.Caption = "法規";
+            gridColumn9.FieldName = "RegulationName";
+            gridColumn9.MinWidth = 30;
+            gridColumn9.Name = "gridColumn9";
+            gridColumn9.Visible = true;
+            gridColumn9.VisibleIndex = 0;
+            gridColumn9.Width = 112;
+            // 
+            // gridColumn10
+            // 
+            gridColumn10.Caption = "狀態";
+            gridColumn10.FieldName = "Status";
+            gridColumn10.MinWidth = 30;
+            gridColumn10.Name = "gridColumn10";
+            gridColumn10.Visible = true;
+            gridColumn10.VisibleIndex = 1;
+            gridColumn10.Width = 112;
+            // 
+            // gridColumn11
+            // 
+            gridColumn11.Caption = "測試項目";
+            gridColumn11.FieldName = "TestItemName";
+            gridColumn11.MinWidth = 30;
+            gridColumn11.Name = "gridColumn11";
+            gridColumn11.Visible = true;
+            gridColumn11.VisibleIndex = 0;
+            gridColumn11.Width = 112;
+            // 
+            // gridColumn12
+            // 
+            gridColumn12.Caption = "測試預估時數";
+            gridColumn12.FieldName = "EstimateHours";
+            gridColumn12.MinWidth = 30;
+            gridColumn12.Name = "gridColumn12";
+            gridColumn12.Visible = true;
+            gridColumn12.VisibleIndex = 1;
+            gridColumn12.Width = 112;
+            // 
+            // gridColumn13
+            // 
+            gridColumn13.Caption = "狀態";
+            gridColumn13.FieldName = "Status";
+            gridColumn13.MinWidth = 30;
+            gridColumn13.Name = "gridColumn13";
+            gridColumn13.Visible = true;
+            gridColumn13.VisibleIndex = 2;
+            gridColumn13.Width = 112;
+            // 
+            // gridColumn14
+            // 
+            gridColumn14.Caption = "工程師";
+            gridColumn14.FieldName = "EngineerName";
+            gridColumn14.MinWidth = 30;
+            gridColumn14.Name = "gridColumn14";
+            gridColumn14.Visible = true;
+            gridColumn14.VisibleIndex = 0;
+            gridColumn14.Width = 112;
+            // 
+            // gridColumn15
+            // 
+            gridColumn15.Caption = "實際測試時數";
+            gridColumn15.FieldName = "AssignHours";
+            gridColumn15.MinWidth = 30;
+            gridColumn15.Name = "gridColumn15";
+            gridColumn15.Visible = true;
+            gridColumn15.VisibleIndex = 1;
+            gridColumn15.Width = 112;
+            // 
+            // gridColumn16
+            // 
+            gridColumn16.Caption = "工程師備註";
+            gridColumn16.FieldName = "Note";
+            gridColumn16.MinWidth = 30;
+            gridColumn16.Name = "gridColumn16";
+            gridColumn16.Visible = true;
+            gridColumn16.VisibleIndex = 2;
+            gridColumn16.Width = 112;
+            // 
             // UcProjectList
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
@@ -209,7 +331,10 @@
             ((System.ComponentModel.ISupportInitialize)panelGrid).EndInit();
             panelGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)gridControl1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)gridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)viewProject).EndInit();
+            ((System.ComponentModel.ISupportInitialize)viewRegulation).EndInit();
+            ((System.ComponentModel.ISupportInitialize)viewTestItem).EndInit();
+            ((System.ComponentModel.ISupportInitialize)viewEngineer).EndInit();
             ResumeLayout(false);
         }
 
@@ -218,7 +343,7 @@
         private DevExpress.XtraEditors.PanelControl panelFilter;
         private DevExpress.XtraEditors.PanelControl panelGrid;
         private DevExpress.XtraGrid.GridControl gridControl1;
-        private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
+        private DevExpress.XtraGrid.Views.Grid.GridView viewProject;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn8;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn1;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn2;
@@ -227,5 +352,16 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn5;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn6;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn7;
+        private DevExpress.XtraGrid.Views.Grid.GridView viewRegulation;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn9;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn10;
+        private DevExpress.XtraGrid.Views.Grid.GridView viewTestItem;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn11;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn12;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn13;
+        private DevExpress.XtraGrid.Views.Grid.GridView viewEngineer;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn14;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn15;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn16;
     }
 }

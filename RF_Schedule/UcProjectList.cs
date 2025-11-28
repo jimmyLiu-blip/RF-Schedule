@@ -86,6 +86,8 @@ namespace RF_Schedule
             }
 
             gridControl1.DataSource = dummy;
+
+
         }
 
 
