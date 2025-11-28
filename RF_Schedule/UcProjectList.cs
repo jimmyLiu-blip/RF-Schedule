@@ -150,6 +150,19 @@ namespace RF_Schedule
             viewProject.MasterRowGetRelationCount += viewProject_MasterRowGetRelationCount;
             viewProject.MasterRowGetRelationName += viewProject_MasterRowGetRelationName;
 
+            // 讓子 View 不顯示 Caption 列 (Regulations / TestItems / Engineers 那條灰條)
+
+            // 法規層
+            viewRegulation.ViewCaption = string.Empty;
+            viewRegulation.ViewCaptionHeight = 0;
+
+            // 測試項目層
+            viewTestItem.ViewCaption = string.Empty;
+            viewTestItem.ViewCaptionHeight = 0;
+
+            // 工程師層
+            viewEngineer.ViewCaption = string.Empty;
+            viewEngineer.ViewCaptionHeight = 0;
         }
 
 

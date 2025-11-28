@@ -69,6 +69,11 @@
             viewRegulation.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn9, gridColumn10 });
             viewRegulation.GridControl = gridControl1;
             viewRegulation.Name = "viewRegulation";
+            viewRegulation.OptionsBehavior.Editable = false;
+            viewRegulation.OptionsBehavior.ReadOnly = true;
+            viewRegulation.OptionsDetail.AllowOnlyOneMasterRowExpanded = true;
+            viewRegulation.OptionsDetail.AllowZoomDetail = false;
+            viewRegulation.OptionsDetail.ShowDetailTabs = false;
             viewRegulation.OptionsView.ShowGroupPanel = false;
             // 
             // gridColumn9
@@ -79,7 +84,7 @@
             gridColumn9.Name = "gridColumn9";
             gridColumn9.Visible = true;
             gridColumn9.VisibleIndex = 0;
-            gridColumn9.Width = 112;
+            gridColumn9.Width = 100;
             // 
             // gridColumn10
             // 
@@ -89,7 +94,7 @@
             gridColumn10.Name = "gridColumn10";
             gridColumn10.Visible = true;
             gridColumn10.VisibleIndex = 1;
-            gridColumn10.Width = 112;
+            gridColumn10.Width = 80;
             // 
             // gridControl1
             // 
@@ -114,6 +119,11 @@
             viewTestItem.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn11, gridColumn12, gridColumn13 });
             viewTestItem.GridControl = gridControl1;
             viewTestItem.Name = "viewTestItem";
+            viewTestItem.OptionsBehavior.Editable = false;
+            viewTestItem.OptionsBehavior.ReadOnly = true;
+            viewTestItem.OptionsDetail.AllowOnlyOneMasterRowExpanded = true;
+            viewTestItem.OptionsDetail.AllowZoomDetail = false;
+            viewTestItem.OptionsDetail.ShowDetailTabs = false;
             viewTestItem.OptionsView.ShowGroupPanel = false;
             // 
             // gridColumn11
@@ -151,6 +161,11 @@
             viewEngineer.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn14, gridColumn15, gridColumn16 });
             viewEngineer.GridControl = gridControl1;
             viewEngineer.Name = "viewEngineer";
+            viewEngineer.OptionsBehavior.Editable = false;
+            viewEngineer.OptionsBehavior.ReadOnly = true;
+            viewEngineer.OptionsDetail.AllowOnlyOneMasterRowExpanded = true;
+            viewEngineer.OptionsDetail.AllowZoomDetail = false;
+            viewEngineer.OptionsDetail.ShowDetailTabs = false;
             viewEngineer.OptionsView.ShowGroupPanel = false;
             // 
             // gridColumn14
@@ -175,7 +190,7 @@
             // 
             // gridColumn16
             // 
-            gridColumn16.Caption = "工程師備註";
+            gridColumn16.Caption = "給工程師的話";
             gridColumn16.FieldName = "Note";
             gridColumn16.MinWidth = 30;
             gridColumn16.Name = "gridColumn16";
@@ -185,13 +200,21 @@
             // 
             // viewProject
             // 
+            viewProject.Appearance.HeaderPanel.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 136);
+            viewProject.Appearance.HeaderPanel.Options.UseFont = true;
             viewProject.Appearance.HeaderPanel.Options.UseTextOptions = true;
             viewProject.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            viewProject.Appearance.Row.Font = new System.Drawing.Font("Microsoft JhengHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            viewProject.Appearance.Row.Options.UseFont = true;
             viewProject.Appearance.Row.Options.UseTextOptions = true;
             viewProject.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             viewProject.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn8, gridColumn1, gridColumn2, gridColumn3, gridColumn4, gridColumn5, gridColumn6, gridColumn7 });
             viewProject.GridControl = gridControl1;
             viewProject.Name = "viewProject";
+            viewProject.OptionsDetail.AllowOnlyOneMasterRowExpanded = true;
+            viewProject.OptionsDetail.AllowZoomDetail = false;
+            viewProject.OptionsDetail.ShowDetailTabs = false;
+            viewProject.OptionsView.RowAutoHeight = true;
             viewProject.OptionsView.ShowGroupPanel = false;
             // 
             // gridColumn8
@@ -204,7 +227,7 @@
             gridColumn8.OptionsColumn.ReadOnly = true;
             gridColumn8.Visible = true;
             gridColumn8.VisibleIndex = 0;
-            gridColumn8.Width = 111;
+            gridColumn8.Width = 200;
             // 
             // gridColumn1
             // 
@@ -216,7 +239,7 @@
             gridColumn1.OptionsColumn.ReadOnly = true;
             gridColumn1.Visible = true;
             gridColumn1.VisibleIndex = 1;
-            gridColumn1.Width = 111;
+            gridColumn1.Width = 150;
             // 
             // gridColumn2
             // 
@@ -232,7 +255,7 @@
             gridColumn2.OptionsColumn.ReadOnly = true;
             gridColumn2.Visible = true;
             gridColumn2.VisibleIndex = 2;
-            gridColumn2.Width = 111;
+            gridColumn2.Width = 120;
             // 
             // gridColumn3
             // 
@@ -248,7 +271,7 @@
             gridColumn3.OptionsColumn.ReadOnly = true;
             gridColumn3.Visible = true;
             gridColumn3.VisibleIndex = 3;
-            gridColumn3.Width = 111;
+            gridColumn3.Width = 220;
             // 
             // gridColumn4
             // 
@@ -262,7 +285,7 @@
             gridColumn4.OptionsColumn.ReadOnly = true;
             gridColumn4.Visible = true;
             gridColumn4.VisibleIndex = 4;
-            gridColumn4.Width = 111;
+            gridColumn4.Width = 265;
             // 
             // gridColumn5
             // 
@@ -276,7 +299,7 @@
             gridColumn5.OptionsColumn.ReadOnly = true;
             gridColumn5.Visible = true;
             gridColumn5.VisibleIndex = 5;
-            gridColumn5.Width = 111;
+            gridColumn5.Width = 265;
             // 
             // gridColumn6
             // 
@@ -288,7 +311,7 @@
             gridColumn6.Name = "gridColumn6";
             gridColumn6.Visible = true;
             gridColumn6.VisibleIndex = 6;
-            gridColumn6.Width = 111;
+            gridColumn6.Width = 265;
             // 
             // gridColumn7
             // 
@@ -302,7 +325,7 @@
             gridColumn7.OptionsColumn.ReadOnly = true;
             gridColumn7.Visible = true;
             gridColumn7.VisibleIndex = 7;
-            gridColumn7.Width = 111;
+            gridColumn7.Width = 285;
             // 
             // panelFilter
             // 
