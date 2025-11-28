@@ -35,8 +35,10 @@ namespace RF_Schedule
 
             var view = gridView1; // 你的 GridView 名稱
 
-            view.OptionsView.RowAutoHeight = true;    // 讓備註能自動變高
             view.OptionsBehavior.Editable = false;    // 預設不可編輯（不要讓工程師亂修改）
+
+            gridView1.Columns["Comment"].AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridView1.Columns["Comment"].AppearanceHeader.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center;
 
             // 日期欄位格式
             view.Columns["WorkDate"].DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
@@ -48,10 +50,7 @@ namespace RF_Schedule
 
             // 建立時間
             view.Columns["CreatedDate"].DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
-            view.Columns["CreatedDate"].DisplayFormat.FormatString = "yyyy-MM-dd HH:mm";
-
-            // 備註欄位：自動換行
-            view.Columns["Comment"].AppearanceCell.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
+            view.Columns["CreatedDate"].DisplayFormat.FormatString = "yyyy-MM-dd HH:mm";          
 
             // 設定欄位寬度（你可微調）
             view.Columns["WorkDate"].Width = 150;

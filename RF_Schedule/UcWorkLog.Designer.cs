@@ -218,6 +218,7 @@
             gridView1.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridView1.Appearance.Row.Options.UseTextOptions = true;
             gridView1.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            gridView1.ColumnPanelRowHeight = 25;
             gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn1, gridColumn2, gridColumn3, gridColumn4, gridColumn5, gridColumn6, gridColumn7, gridColumn8, gridColumn9, gridColumn10, gridColumn13, gridColumn11 });
             gridView1.GridControl = gridWorkLog;
             gridView1.Name = "gridView1";
@@ -229,6 +230,7 @@
             gridColumn1.DisplayFormat.FormatString = "yyyy-MM-dd";
             gridColumn1.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             gridColumn1.FieldName = "WorkDate";
+            gridColumn1.ImageOptions.Alignment = System.Drawing.StringAlignment.Center;
             gridColumn1.MinWidth = 30;
             gridColumn1.Name = "gridColumn1";
             gridColumn1.Visible = true;
@@ -292,7 +294,7 @@
             // gridColumn7
             // 
             gridColumn7.AppearanceCell.Options.UseTextOptions = true;
-            gridColumn7.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            gridColumn7.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridColumn7.Caption = "版本";
             gridColumn7.FieldName = "RevisionName";
             gridColumn7.MinWidth = 30;
@@ -324,6 +326,7 @@
             // gridColumn10
             // 
             gridColumn10.AppearanceCell.Options.UseTextOptions = true;
+            gridColumn10.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
             gridColumn10.AppearanceCell.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             gridColumn10.AppearanceHeader.Options.UseTextOptions = true;
             gridColumn10.AppearanceHeader.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
