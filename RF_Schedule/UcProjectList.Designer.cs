@@ -54,6 +54,10 @@
             gridColumn7 = new DevExpress.XtraGrid.Columns.GridColumn();
             panelFilter = new DevExpress.XtraEditors.PanelControl();
             panelGrid = new DevExpress.XtraEditors.PanelControl();
+            treeProject = new DevExpress.XtraTreeList.TreeList();
+            coltreeListColumn0 = new DevExpress.XtraTreeList.Columns.TreeListColumn();
+            coltreeListColumn1 = new DevExpress.XtraTreeList.Columns.TreeListColumn();
+            coltreeListColumn2 = new DevExpress.XtraTreeList.Columns.TreeListColumn();
             ((System.ComponentModel.ISupportInitialize)viewRegulation).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridControl1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)viewTestItem).BeginInit();
@@ -62,6 +66,7 @@
             ((System.ComponentModel.ISupportInitialize)panelFilter).BeginInit();
             ((System.ComponentModel.ISupportInitialize)panelGrid).BeginInit();
             panelGrid.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)treeProject).BeginInit();
             SuspendLayout();
             // 
             // viewRegulation
@@ -112,6 +117,7 @@
             gridControl1.Size = new System.Drawing.Size(1806, 854);
             gridControl1.TabIndex = 0;
             gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { viewTestItem, viewEngineer, viewProject, viewRegulation });
+            gridControl1.Visible = false;
             gridControl1.Click += gridControl1_Click;
             // 
             // viewTestItem
@@ -337,12 +343,48 @@
             // 
             // panelGrid
             // 
+            panelGrid.Controls.Add(treeProject);
             panelGrid.Controls.Add(gridControl1);
             panelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             panelGrid.Location = new System.Drawing.Point(0, 149);
             panelGrid.Name = "panelGrid";
             panelGrid.Size = new System.Drawing.Size(1810, 858);
             panelGrid.TabIndex = 1;
+            // 
+            // treeProject
+            // 
+            treeProject.Columns.AddRange(new DevExpress.XtraTreeList.Columns.TreeListColumn[] { coltreeListColumn0, coltreeListColumn1, coltreeListColumn2 });
+            treeProject.Dock = System.Windows.Forms.DockStyle.Fill;
+            treeProject.KeyFieldName = "Id";
+            treeProject.Location = new System.Drawing.Point(2, 2);
+            treeProject.Name = "treeProject";
+            treeProject.ParentFieldName = "ParentId";
+            treeProject.Size = new System.Drawing.Size(1806, 854);
+            treeProject.TabIndex = 1;
+            // 
+            // coltreeListColumn0
+            // 
+            coltreeListColumn0.Caption = "名稱";
+            coltreeListColumn0.FieldName = "Name";
+            coltreeListColumn0.Name = "coltreeListColumn0";
+            coltreeListColumn0.Visible = true;
+            coltreeListColumn0.VisibleIndex = 0;
+            // 
+            // coltreeListColumn1
+            // 
+            coltreeListColumn1.Caption = "狀態";
+            coltreeListColumn1.FieldName = "Status";
+            coltreeListColumn1.Name = "coltreeListColumn1";
+            coltreeListColumn1.Visible = true;
+            coltreeListColumn1.VisibleIndex = 1;
+            // 
+            // coltreeListColumn2
+            // 
+            coltreeListColumn2.Caption = "工時";
+            coltreeListColumn2.FieldName = "Hours";
+            coltreeListColumn2.Name = "coltreeListColumn2";
+            coltreeListColumn2.Visible = true;
+            coltreeListColumn2.VisibleIndex = 2;
             // 
             // UcProjectList
             // 
@@ -361,6 +403,7 @@
             ((System.ComponentModel.ISupportInitialize)panelFilter).EndInit();
             ((System.ComponentModel.ISupportInitialize)panelGrid).EndInit();
             panelGrid.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)treeProject).EndInit();
             ResumeLayout(false);
         }
 
@@ -389,5 +432,9 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn14;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn15;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn16;
+        private DevExpress.XtraTreeList.TreeList treeProject;
+        private DevExpress.XtraTreeList.Columns.TreeListColumn coltreeListColumn0;
+        private DevExpress.XtraTreeList.Columns.TreeListColumn coltreeListColumn1;
+        private DevExpress.XtraTreeList.Columns.TreeListColumn coltreeListColumn2;
     }
 }
