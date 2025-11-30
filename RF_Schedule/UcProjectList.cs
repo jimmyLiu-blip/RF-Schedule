@@ -235,7 +235,7 @@ namespace RF_Schedule
 
         private List<Regulation> GenerateFakeRegulations(Random rand)
         {
-            string[] regulationNames = { "FCC Part 22", "FCC Part 24", "FCC Part 27", "NCC PLMN", "CE RED", "IC RSS" };
+            string[] regulationNames = { "FCC", "NCC", "IC", "TELEC", "CE", "Other" };
 
             var list = new List<Regulation>();
             int count = rand.Next(2, 4); // 每個 Project 隨機 2~3 個 regulation
@@ -257,32 +257,32 @@ namespace RF_Schedule
 
         private List<TestItem> GenerateFakeTestItems(Random rand)
         {
-           string[] items =
-           {
-            "Conducted Emission",
-            "Radiated Spurious",
-            "Blocking",
-            "Receiver Sensitivity",
-            "EIRP",
-            "Power Density",
-            "OOB Test"
+            string[] items =
+            {
+            "WWAN_Conducted",
+            "WIFI_Conducted",
+            "Rx_Blocking",
+            "Adaptivity",
+            "Radiated",
+            "DFS",
+            "Other"
            };
 
-         var list = new List<TestItem>();
-         int count = rand.Next(2, 5); // 每個 Regulation 2~4 個 TestItem
+            var list = new List<TestItem>();
+            int count = rand.Next(2, 5); // 每個 Regulation 2~4 個 TestItem
 
-        for (int i = 0; i < count; i++)
-        {
-           list.Add(new TestItem
-           {
-              TestItemName = items[rand.Next(items.Length)],
-              Status = (i % 3 == 0) ? "未開始" : (i % 3 == 1) ? "進行中" : "完成",
-              EstimatedHours = rand.Next(8, 40),
-              Engineers = GenerateFakeEngineers(rand)
-           });
-        }
+            for (int i = 0; i < count; i++)
+            {
+                list.Add(new TestItem
+                {
+                    TestItemName = items[rand.Next(items.Length)],
+                    Status = (i % 3 == 0) ? "未開始" : (i % 3 == 1) ? "進行中" : "完成",
+                    EstimatedHours = rand.Next(8, 40),
+                    Engineers = GenerateFakeEngineers(rand)
+                });
+            }
 
-           return list;
+            return list;
         }
 
         private List<TestItemEngineer> GenerateFakeEngineers(Random rand)
@@ -305,5 +305,14 @@ namespace RF_Schedule
             return list;
         }
 
+        private void panelFilter_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void treeProject_FocusedNodeChanged(object sender, DevExpress.XtraTreeList.FocusedNodeChangedEventArgs e)
+        {
+
+        }
     }
 }

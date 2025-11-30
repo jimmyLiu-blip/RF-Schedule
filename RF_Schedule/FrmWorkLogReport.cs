@@ -32,10 +32,8 @@ namespace RF_Schedule
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            SelectedRevision = cboRevision.Text;
             EnteredHours = Convert.ToDecimal(spinWorkHours.Value);
             SelectedStatus = cboStatus.Text;
-            SelectedDelayReason = cboDelayReason.Text;
             Comment = memoComment.Text;
             WorkDate = dateWorkDate.DateTime;
             this.DialogResult = DialogResult.OK;
@@ -46,20 +44,6 @@ namespace RF_Schedule
                         MessageBoxIcon.Information);
         }
 
-        private void cboStatus_EditValueChanged(object sender, EventArgs e)
-        {
-            string status = cboStatus.EditValue?.ToString();
-
-            if (status == "Delayed")
-            {
-                cboDelayReason.Enabled = true;
-            }
-            else
-            {
-                cboDelayReason.Enabled = false;
-                cboDelayReason.EditValue = null; // 清空
-            }
-        }
 
         private void FrmWorkLogReport_Load(object sender, EventArgs e)
         {

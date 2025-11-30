@@ -60,5 +60,10 @@ namespace RF_Schedule
         {
             LoadUserControl(new UcProjectList());
         }
+
+        private void accordionControlElement_Gantt_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcProjectGanttChart());
+        }
     }
 }

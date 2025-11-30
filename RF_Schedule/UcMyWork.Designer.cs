@@ -57,7 +57,6 @@
             gridColumn2 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn3 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn4 = new DevExpress.XtraGrid.Columns.GridColumn();
-            gridColumn7 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn8 = new DevExpress.XtraGrid.Columns.GridColumn();
             repositoryActionButtons = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             gridColumn5 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -218,7 +217,7 @@
             gridView1.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridView1.AppearancePrint.HeaderPanel.Options.UseTextOptions = true;
             gridView1.AppearancePrint.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn1, gridColumn2, gridColumn3, gridColumn4, gridColumn7, gridColumn8, gridColumn5, gridColumn6, gridColumn9 });
+            gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn1, gridColumn2, gridColumn3, gridColumn4, gridColumn8, gridColumn5, gridColumn6, gridColumn9 });
             gridView1.GridControl = gridControl1;
             gridView1.Name = "gridView1";
             gridView1.OptionsView.ShowButtonMode = DevExpress.XtraGrid.Views.Base.ShowButtonModeEnum.ShowAlways;
@@ -290,23 +289,6 @@
             gridColumn4.VisibleIndex = 6;
             gridColumn4.Width = 202;
             // 
-            // gridColumn7
-            // 
-            gridColumn7.AppearanceCell.Options.UseTextOptions = true;
-            gridColumn7.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            gridColumn7.AppearanceHeader.Options.UseTextOptions = true;
-            gridColumn7.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            gridColumn7.Caption = "剩餘工時";
-            gridColumn7.FieldName = "RemainingHours";
-            gridColumn7.MinWidth = 30;
-            gridColumn7.Name = "gridColumn7";
-            gridColumn7.OptionsColumn.AllowEdit = false;
-            gridColumn7.OptionsColumn.AllowFocus = false;
-            gridColumn7.OptionsColumn.ReadOnly = true;
-            gridColumn7.Visible = true;
-            gridColumn7.VisibleIndex = 7;
-            gridColumn7.Width = 182;
-            // 
             // gridColumn8
             // 
             gridColumn8.AppearanceCell.Options.UseTextOptions = true;
@@ -318,7 +300,7 @@
             gridColumn8.MinWidth = 30;
             gridColumn8.Name = "gridColumn8";
             gridColumn8.Visible = true;
-            gridColumn8.VisibleIndex = 8;
+            gridColumn8.VisibleIndex = 7;
             gridColumn8.Width = 359;
             // 
             // repositoryActionButtons
@@ -422,7 +404,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn2;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn3;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn4;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumn7;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn8;
         private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit repositoryActionButtons;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn5;

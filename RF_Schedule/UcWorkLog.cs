@@ -144,7 +144,7 @@ namespace RF_Schedule
                     WorkTypeName = "測試",
                     ProjectNumber = "TE-2511000026",
                     RegulationName = "CE",
-                    TestItemName = "Wifi_Condcted",
+                    TestItemName = "WIFI_Condcted",
                     RevisionName = "v1",
                     StatusName = "進行中",
                     DelayReason = "",

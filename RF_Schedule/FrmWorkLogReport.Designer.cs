@@ -42,14 +42,8 @@
             txtRegulation = new DevExpress.XtraEditors.TextEdit();
             txtPriority = new DevExpress.XtraEditors.TextEdit();
             labelControl2 = new DevExpress.XtraEditors.LabelControl();
-            labelControl3 = new DevExpress.XtraEditors.LabelControl();
-            labelControl4 = new DevExpress.XtraEditors.LabelControl();
-            txtEstimateHours = new DevExpress.XtraEditors.TextEdit();
             labelControl5 = new DevExpress.XtraEditors.LabelControl();
-            labelControl6 = new DevExpress.XtraEditors.LabelControl();
-            cboRevision = new DevExpress.XtraEditors.ComboBoxEdit();
             cboStatus = new DevExpress.XtraEditors.ComboBoxEdit();
-            cboDelayReason = new DevExpress.XtraEditors.ComboBoxEdit();
             ((System.ComponentModel.ISupportInitialize)txtTestItemName.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dateWorkDate.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dateWorkDate.Properties.CalendarTimeProperties).BeginInit();
@@ -57,16 +51,13 @@
             ((System.ComponentModel.ISupportInitialize)memoComment.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)txtRegulation.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)txtPriority.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)txtEstimateHours.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)cboRevision.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)cboStatus.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)cboDelayReason.Properties).BeginInit();
             SuspendLayout();
             // 
             // lblTestItemName
             // 
             lblTestItemName.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            lblTestItemName.Location = new System.Drawing.Point(74, 66);
+            lblTestItemName.Location = new System.Drawing.Point(91, 87);
             lblTestItemName.Name = "lblTestItemName";
             lblTestItemName.Size = new System.Drawing.Size(90, 22);
             lblTestItemName.TabIndex = 0;
@@ -77,7 +68,7 @@
             // 
             txtTestItemName.EditValue = "WWAN：Conducted";
             txtTestItemName.Enabled = false;
-            txtTestItemName.Location = new System.Drawing.Point(201, 66);
+            txtTestItemName.Location = new System.Drawing.Point(226, 81);
             txtTestItemName.Name = "txtTestItemName";
             txtTestItemName.Properties.ContextImageOptions.SvgImageSize = new System.Drawing.Size(250, 0);
             txtTestItemName.Properties.ReadOnly = true;
@@ -87,7 +78,7 @@
             // 
             // lblWorkDate
             // 
-            lblWorkDate.Location = new System.Drawing.Point(74, 291);
+            lblWorkDate.Location = new System.Drawing.Point(91, 264);
             lblWorkDate.Name = "lblWorkDate";
             lblWorkDate.Size = new System.Drawing.Size(90, 22);
             lblWorkDate.TabIndex = 2;
@@ -96,7 +87,7 @@
             // dateWorkDate
             // 
             dateWorkDate.EditValue = null;
-            dateWorkDate.Location = new System.Drawing.Point(201, 291);
+            dateWorkDate.Location = new System.Drawing.Point(226, 261);
             dateWorkDate.Name = "dateWorkDate";
             dateWorkDate.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             dateWorkDate.Properties.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
@@ -105,16 +96,16 @@
             // 
             // lblWorkHours
             // 
-            lblWorkHours.Location = new System.Drawing.Point(38, 246);
+            lblWorkHours.Location = new System.Drawing.Point(55, 203);
             lblWorkHours.Name = "lblWorkHours";
             lblWorkHours.Size = new System.Drawing.Size(126, 22);
             lblWorkHours.TabIndex = 4;
-            lblWorkHours.Text = "實際工時 (hr)：";
+            lblWorkHours.Text = "今日工時 (hr)：";
             // 
             // spinWorkHours
             // 
             spinWorkHours.EditValue = new decimal(new int[] { 0, 0, 0, 0 });
-            spinWorkHours.Location = new System.Drawing.Point(201, 246);
+            spinWorkHours.Location = new System.Drawing.Point(226, 200);
             spinWorkHours.Name = "spinWorkHours";
             spinWorkHours.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             spinWorkHours.Properties.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
@@ -125,7 +116,7 @@
             // 
             // lblComment
             // 
-            lblComment.Location = new System.Drawing.Point(110, 426);
+            lblComment.Location = new System.Drawing.Point(128, 383);
             lblComment.Name = "lblComment";
             lblComment.Size = new System.Drawing.Size(54, 22);
             lblComment.TabIndex = 6;
@@ -159,7 +150,7 @@
             // 
             // labelControl1
             // 
-            labelControl1.Location = new System.Drawing.Point(110, 21);
+            labelControl1.Location = new System.Drawing.Point(127, 27);
             labelControl1.Name = "labelControl1";
             labelControl1.Size = new System.Drawing.Size(54, 22);
             labelControl1.TabIndex = 10;
@@ -169,7 +160,7 @@
             // 
             txtRegulation.EditValue = "CE";
             txtRegulation.Enabled = false;
-            txtRegulation.Location = new System.Drawing.Point(201, 21);
+            txtRegulation.Location = new System.Drawing.Point(226, 21);
             txtRegulation.Name = "txtRegulation";
             txtRegulation.Properties.ReadOnly = true;
             txtRegulation.Size = new System.Drawing.Size(150, 28);
@@ -179,7 +170,7 @@
             // 
             txtPriority.EditValue = "Medium";
             txtPriority.Enabled = false;
-            txtPriority.Location = new System.Drawing.Point(201, 111);
+            txtPriority.Location = new System.Drawing.Point(226, 140);
             txtPriority.Name = "txtPriority";
             txtPriority.Properties.ReadOnly = true;
             txtPriority.Size = new System.Drawing.Size(150, 28);
@@ -187,86 +178,30 @@
             // 
             // labelControl2
             // 
-            labelControl2.Location = new System.Drawing.Point(92, 111);
+            labelControl2.Location = new System.Drawing.Point(110, 146);
             labelControl2.Name = "labelControl2";
             labelControl2.Size = new System.Drawing.Size(72, 22);
             labelControl2.TabIndex = 13;
             labelControl2.Text = "優先級：";
             // 
-            // labelControl3
-            // 
-            labelControl3.Location = new System.Drawing.Point(110, 156);
-            labelControl3.Name = "labelControl3";
-            labelControl3.Size = new System.Drawing.Size(54, 22);
-            labelControl3.TabIndex = 14;
-            labelControl3.Text = "版本：";
-            // 
-            // labelControl4
-            // 
-            labelControl4.Location = new System.Drawing.Point(38, 201);
-            labelControl4.Name = "labelControl4";
-            labelControl4.Size = new System.Drawing.Size(126, 22);
-            labelControl4.TabIndex = 15;
-            labelControl4.Text = "預估工時 (hr)：";
-            // 
-            // txtEstimateHours
-            // 
-            txtEstimateHours.Enabled = false;
-            txtEstimateHours.Location = new System.Drawing.Point(201, 201);
-            txtEstimateHours.Name = "txtEstimateHours";
-            txtEstimateHours.Properties.ReadOnly = true;
-            txtEstimateHours.Size = new System.Drawing.Size(150, 28);
-            txtEstimateHours.TabIndex = 16;
-            // 
             // labelControl5
             // 
-            labelControl5.Location = new System.Drawing.Point(110, 336);
+            labelControl5.Location = new System.Drawing.Point(127, 327);
             labelControl5.Name = "labelControl5";
             labelControl5.Size = new System.Drawing.Size(54, 22);
             labelControl5.TabIndex = 18;
             labelControl5.Text = "狀態：";
             // 
-            // labelControl6
-            // 
-            labelControl6.Location = new System.Drawing.Point(74, 381);
-            labelControl6.Name = "labelControl6";
-            labelControl6.Size = new System.Drawing.Size(90, 22);
-            labelControl6.TabIndex = 19;
-            labelControl6.Text = "延遲原因：";
-            // 
-            // cboRevision
-            // 
-            cboRevision.Location = new System.Drawing.Point(201, 156);
-            cboRevision.Name = "cboRevision";
-            cboRevision.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
-            cboRevision.Properties.Items.AddRange(new object[] { "v1 - 原始", "v2 - 補測(Command)", "v3 - 補測(Retest)" });
-            cboRevision.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            cboRevision.Size = new System.Drawing.Size(150, 28);
-            cboRevision.TabIndex = 20;
-            cboRevision.SelectedIndexChanged += cboRevision_SelectedIndexChanged;
-            // 
             // cboStatus
             // 
             cboStatus.EditValue = "InProgress";
-            cboStatus.Location = new System.Drawing.Point(201, 336);
+            cboStatus.Location = new System.Drawing.Point(226, 324);
             cboStatus.Name = "cboStatus";
             cboStatus.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
-            cboStatus.Properties.Items.AddRange(new object[] { "InProgress", "Completed", "Delayed" });
+            cboStatus.Properties.Items.AddRange(new object[] { "InProgress", "Completed", "Fail" });
             cboStatus.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             cboStatus.Size = new System.Drawing.Size(150, 28);
             cboStatus.TabIndex = 21;
-            cboStatus.EditValueChanged += cboStatus_EditValueChanged;
-            // 
-            // cboDelayReason
-            // 
-            cboDelayReason.Enabled = false;
-            cboDelayReason.Location = new System.Drawing.Point(201, 381);
-            cboDelayReason.Name = "cboDelayReason";
-            cboDelayReason.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
-            cboDelayReason.Properties.Items.AddRange(new object[] { "Equipment", "Customer", "Engineer", "Location", "Other" });
-            cboDelayReason.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            cboDelayReason.Size = new System.Drawing.Size(150, 28);
-            cboDelayReason.TabIndex = 23;
             // 
             // FrmWorkLogReport
             // 
@@ -275,14 +210,8 @@
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             CancelButton = btnCancel;
             ClientSize = new System.Drawing.Size(603, 756);
-            Controls.Add(cboDelayReason);
             Controls.Add(cboStatus);
-            Controls.Add(cboRevision);
-            Controls.Add(labelControl6);
             Controls.Add(labelControl5);
-            Controls.Add(txtEstimateHours);
-            Controls.Add(labelControl4);
-            Controls.Add(labelControl3);
             Controls.Add(labelControl2);
             Controls.Add(txtPriority);
             Controls.Add(txtRegulation);
@@ -312,10 +241,7 @@
             ((System.ComponentModel.ISupportInitialize)memoComment.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)txtRegulation.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)txtPriority.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)txtEstimateHours.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)cboRevision.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)cboStatus.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)cboDelayReason.Properties).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -336,13 +262,7 @@
         private DevExpress.XtraEditors.TextEdit txtRegulation;
         private DevExpress.XtraEditors.TextEdit txtPriority;
         private DevExpress.XtraEditors.LabelControl labelControl2;
-        private DevExpress.XtraEditors.LabelControl labelControl3;
-        private DevExpress.XtraEditors.LabelControl labelControl4;
-        private DevExpress.XtraEditors.TextEdit txtEstimateHours;
         private DevExpress.XtraEditors.LabelControl labelControl5;
-        private DevExpress.XtraEditors.LabelControl labelControl6;
-        private DevExpress.XtraEditors.ComboBoxEdit cboRevision;
         private DevExpress.XtraEditors.ComboBoxEdit cboStatus;
-        private DevExpress.XtraEditors.ComboBoxEdit cboDelayReason;
     }
 }
