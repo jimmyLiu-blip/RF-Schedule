@@ -28,140 +28,107 @@
         /// </summary>
         private void InitializeComponent()
         {
-            splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
-            treeList1 = new DevExpress.XtraTreeList.TreeList();
-            NodeType = new DevExpress.XtraTreeList.Columns.TreeListColumn();
-            ColumnName = new DevExpress.XtraTreeList.Columns.TreeListColumn();
-            Status = new DevExpress.XtraTreeList.Columns.TreeListColumn();
-            StartDate = new DevExpress.XtraTreeList.Columns.TreeListColumn();
-            EndDate = new DevExpress.XtraTreeList.Columns.TreeListColumn();
             ganttControl1 = new DevExpress.XtraGantt.GanttControl();
-            ((System.ComponentModel.ISupportInitialize)splitContainerControl1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)splitContainerControl1.Panel1).BeginInit();
-            splitContainerControl1.Panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)splitContainerControl1.Panel2).BeginInit();
-            splitContainerControl1.Panel2.SuspendLayout();
-            splitContainerControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)treeList1).BeginInit();
+            coltreeListColumn0 = new DevExpress.XtraTreeList.Columns.TreeListColumn();
+            coltreeListColumn1 = new DevExpress.XtraTreeList.Columns.TreeListColumn();
+            coltreeListColumn2 = new DevExpress.XtraTreeList.Columns.TreeListColumn();
+            coltreeListColumn3 = new DevExpress.XtraTreeList.Columns.TreeListColumn();
+            coltreeListColumn4 = new DevExpress.XtraTreeList.Columns.TreeListColumn();
             ((System.ComponentModel.ISupportInitialize)ganttControl1).BeginInit();
             SuspendLayout();
             // 
-            // splitContainerControl1
-            // 
-            splitContainerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            splitContainerControl1.Location = new System.Drawing.Point(0, 0);
-            splitContainerControl1.Name = "splitContainerControl1";
-            // 
-            // splitContainerControl1.Panel1
-            // 
-            splitContainerControl1.Panel1.Controls.Add(treeList1);
-            splitContainerControl1.Panel1.Text = "Panel1";
-            // 
-            // splitContainerControl1.Panel2
-            // 
-            splitContainerControl1.Panel2.Controls.Add(ganttControl1);
-            splitContainerControl1.Panel2.Text = "Panel2";
-            splitContainerControl1.Size = new System.Drawing.Size(1833, 1005);
-            splitContainerControl1.SplitterPosition = 537;
-            splitContainerControl1.TabIndex = 0;
-            // 
-            // treeList1
-            // 
-            treeList1.Columns.AddRange(new DevExpress.XtraTreeList.Columns.TreeListColumn[] { NodeType, ColumnName, Status, StartDate, EndDate });
-            treeList1.Dock = System.Windows.Forms.DockStyle.Fill;
-            treeList1.Location = new System.Drawing.Point(0, 0);
-            treeList1.Name = "treeList1";
-            treeList1.BeginUnboundLoad();
-            treeList1.AppendNode(new object[] { null, "Conducted_1", null, null, null }, -1);
-            treeList1.AppendNode(new object[] { null, "TE0123456789", "IN-Progress", new System.DateTime(2025, 11, 20, 0, 0, 0), new System.DateTime(2025, 12, 10, 0, 0, 0) }, 0);
-            treeList1.AppendNode(new object[] { null, "FCC", "Completed", new System.DateTime(2025, 11, 20, 0, 0, 0), new System.DateTime(2025, 11, 30, 0, 0, 0) }, 1);
-            treeList1.AppendNode(new object[] { null, "WIFI_Conducted", "Completed", new System.DateTime(2025, 11, 20, 0, 0, 0), new System.DateTime(2025, 11, 30, 0, 0, 0) }, 2);
-            treeList1.AppendNode(new object[] { null, "NCC", null, null, null }, 1);
-            treeList1.AppendNode(new object[] { null, "WIFI_Conducted", "IN-Progress", new System.DateTime(2025, 11, 30, 0, 0, 0), new System.DateTime(2025, 12, 10, 0, 0, 0) }, 4);
-            treeList1.EndUnboundLoad();
-            treeList1.Size = new System.Drawing.Size(537, 1005);
-            treeList1.TabIndex = 1;
-            // 
-            // NodeType
-            // 
-            NodeType.Caption = "類型";
-            NodeType.FieldName = "treeListColumn0";
-            NodeType.MinWidth = 16;
-            NodeType.Name = "NodeType";
-            NodeType.UnboundType = DevExpress.XtraTreeList.Data.UnboundColumnType.String;
-            NodeType.Width = 16;
-            // 
-            // Status
-            // 
-            Status.Caption = "狀態";
-            Status.FieldName = "treeListColumn2";
-            Status.Name = "Status";
-            Status.UnboundType = DevExpress.XtraTreeList.Data.UnboundColumnType.String;
-            Status.Visible = true;
-            Status.VisibleIndex = 1;
-            Status.Width = 97;
-            // 
-            // StartDate
-            // 
-            StartDate.Caption = "開始日期";
-            StartDate.FieldName = "treeListColumn3";
-            StartDate.Format.FormatString = "yyyy/MM/dd";
-            StartDate.Format.FormatType = DevExpress.Utils.FormatType.DateTime;
-            StartDate.Name = "StartDate";
-            StartDate.UnboundType = DevExpress.XtraTreeList.Data.UnboundColumnType.DateTime;
-            StartDate.Visible = true;
-            StartDate.VisibleIndex = 2;
-            StartDate.Width = 116;
-            // 
-            // EndDate
-            // 
-            EndDate.Caption = "結束日期";
-            EndDate.FieldName = "treeListColumn4";
-            EndDate.Format.FormatString = "yyyy/MM/dd";
-            EndDate.Format.FormatType = DevExpress.Utils.FormatType.DateTime;
-            EndDate.Name = "EndDate";
-            EndDate.UnboundType = DevExpress.XtraTreeList.Data.UnboundColumnType.DateTime;
-            EndDate.Visible = true;
-            EndDate.VisibleIndex = 3;
-            EndDate.Width = 121;
-            // 
             // ganttControl1
             // 
+            ganttControl1.Columns.AddRange(new DevExpress.XtraTreeList.Columns.TreeListColumn[] { coltreeListColumn0, coltreeListColumn1, coltreeListColumn2, coltreeListColumn3, coltreeListColumn4 });
             ganttControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             ganttControl1.Location = new System.Drawing.Point(0, 0);
             ganttControl1.Name = "ganttControl1";
-            ganttControl1.Size = new System.Drawing.Size(1281, 1005);
-            ganttControl1.SplitterPosition = 189;
+            ganttControl1.Size = new System.Drawing.Size(1843, 1027);
+            ganttControl1.SplitterPosition = 604;
             ganttControl1.TabIndex = 0;
+            ganttControl1.ViewStyle = DevExpress.XtraTreeList.TreeListViewStyle.TreeList;
             ganttControl1.FocusedNodeChanged += ganttControl1_FocusedNodeChanged;
+            // 
+            // coltreeListColumn0
+            // 
+            coltreeListColumn0.Caption = "名稱";
+            coltreeListColumn0.FieldName = "ColumnName";
+            coltreeListColumn0.Name = "coltreeListColumn0";
+            coltreeListColumn0.OptionsColumn.AllowEdit = false;
+            coltreeListColumn0.OptionsColumn.AllowFocus = false;
+            coltreeListColumn0.OptionsColumn.ReadOnly = true;
+            coltreeListColumn0.Visible = true;
+            coltreeListColumn0.VisibleIndex = 0;
+            coltreeListColumn0.Width = 192;
+            // 
+            // coltreeListColumn1
+            // 
+            coltreeListColumn1.Caption = "開始日期";
+            coltreeListColumn1.FieldName = "StartDate";
+            coltreeListColumn1.Format.FormatString = "yyyy/MM/dd";
+            coltreeListColumn1.Format.FormatType = DevExpress.Utils.FormatType.DateTime;
+            coltreeListColumn1.Name = "coltreeListColumn1";
+            coltreeListColumn1.OptionsColumn.AllowEdit = false;
+            coltreeListColumn1.OptionsColumn.AllowFocus = false;
+            coltreeListColumn1.OptionsColumn.ReadOnly = true;
+            coltreeListColumn1.Visible = true;
+            coltreeListColumn1.VisibleIndex = 1;
+            coltreeListColumn1.Width = 116;
+            // 
+            // coltreeListColumn2
+            // 
+            coltreeListColumn2.Caption = "結束日期";
+            coltreeListColumn2.FieldName = "EndDate";
+            coltreeListColumn2.Format.FormatString = "yyyy/MM/dd";
+            coltreeListColumn2.Format.FormatType = DevExpress.Utils.FormatType.DateTime;
+            coltreeListColumn2.Name = "coltreeListColumn2";
+            coltreeListColumn2.OptionsColumn.AllowEdit = false;
+            coltreeListColumn2.OptionsColumn.AllowFocus = false;
+            coltreeListColumn2.OptionsColumn.ReadOnly = true;
+            coltreeListColumn2.Visible = true;
+            coltreeListColumn2.VisibleIndex = 2;
+            coltreeListColumn2.Width = 116;
+            // 
+            // coltreeListColumn3
+            // 
+            coltreeListColumn3.Caption = "狀態";
+            coltreeListColumn3.FieldName = "Status";
+            coltreeListColumn3.Name = "coltreeListColumn3";
+            coltreeListColumn3.OptionsColumn.AllowEdit = false;
+            coltreeListColumn3.OptionsColumn.ReadOnly = true;
+            coltreeListColumn3.Visible = true;
+            coltreeListColumn3.VisibleIndex = 3;
+            coltreeListColumn3.Width = 91;
+            // 
+            // coltreeListColumn4
+            // 
+            coltreeListColumn4.Caption = "工程師";
+            coltreeListColumn4.FieldName = "Engineer";
+            coltreeListColumn4.Name = "coltreeListColumn4";
+            coltreeListColumn4.OptionsColumn.AllowEdit = false;
+            coltreeListColumn4.OptionsColumn.ReadOnly = true;
+            coltreeListColumn4.Visible = true;
+            coltreeListColumn4.VisibleIndex = 4;
+            coltreeListColumn4.Width = 89;
             // 
             // UcProjectGanttChart
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            Controls.Add(splitContainerControl1);
+            Controls.Add(ganttControl1);
             Name = "UcProjectGanttChart";
-            Size = new System.Drawing.Size(1833, 1005);
-            ((System.ComponentModel.ISupportInitialize)splitContainerControl1.Panel1).EndInit();
-            splitContainerControl1.Panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)splitContainerControl1.Panel2).EndInit();
-            splitContainerControl1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)splitContainerControl1).EndInit();
-            splitContainerControl1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)treeList1).EndInit();
+            Size = new System.Drawing.Size(1843, 1027);
             ((System.ComponentModel.ISupportInitialize)ganttControl1).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private DevExpress.XtraEditors.SplitContainerControl splitContainerControl1;
         private DevExpress.XtraGantt.GanttControl ganttControl1;
-        private DevExpress.XtraTreeList.TreeList treeList1;
-        private DevExpress.XtraTreeList.Columns.TreeListColumn NodeType;
-        private DevExpress.XtraTreeList.Columns.TreeListColumn ColumnName;
-        private DevExpress.XtraTreeList.Columns.TreeListColumn Status;
-        private DevExpress.XtraTreeList.Columns.TreeListColumn StartDate;
-        private DevExpress.XtraTreeList.Columns.TreeListColumn EndDate;
+        private DevExpress.XtraTreeList.Columns.TreeListColumn coltreeListColumn0;
+        private DevExpress.XtraTreeList.Columns.TreeListColumn coltreeListColumn1;
+        private DevExpress.XtraTreeList.Columns.TreeListColumn coltreeListColumn2;
+        private DevExpress.XtraTreeList.Columns.TreeListColumn coltreeListColumn3;
+        private DevExpress.XtraTreeList.Columns.TreeListColumn coltreeListColumn4;
     }
 }
