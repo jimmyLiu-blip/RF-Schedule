@@ -36,53 +36,23 @@ namespace RF_Schedule
 
         private void ConfigureGantt()
         {
+            // TreeList 結構綁定
             ganttControl1.TreeListMappings.KeyFieldName = "Id";
             ganttControl1.TreeListMappings.ParentFieldName = "ParentId";
             ganttControl1.TreeListMappings.TreeViewFieldName = "ColumnName";
+
+            // 甘特條綁定
             ganttControl1.ChartMappings.StartDateFieldName = "StartDate";
             ganttControl1.ChartMappings.FinishDateFieldName = "EndDate";
-
-            ganttControl1.Columns.Clear();
-
-            var col0 = ganttControl1.Columns.AddField("ColumnName");
-            col0.Caption = "名稱";
-            col0.Visible = true;
-            col0.VisibleIndex = 0;
-            col0.Width = 150;  // 明確設定寬度
-
-            var col1 = ganttControl1.Columns.AddField("StartDate");
-            col1.Caption = "開始日期";
-            col1.Visible = true;
-            col1.VisibleIndex = 1;
-            col1.Width = 100;
-
-            var col2 = ganttControl1.Columns.AddField("EndDate");
-            col2.Caption = "結束日期";
-            col2.Visible = true;
-            col2.VisibleIndex = 2;
-            col2.Width = 100;
-
-            var col3 = ganttControl1.Columns.AddField("Status");
-            col3.Caption = "狀態";
-            col3.Visible = true;
-            col3.VisibleIndex = 3;
-            col3.Width = 80;
-
-            var col4 = ganttControl1.Columns.AddField("Engineer");
-            col4.Caption = "工程師";
-            col4.Visible = true;
-            col4.VisibleIndex = 4;
-            col4.Width = 80;
         }
+
 
 
         private void LoadSampleData()
         {
             var list = new List<GanttNode>();
-
             int id = 1;
 
-            // 工具函數：快速建立節點
             GanttNode Node(string name, string type, int parent,
                            DateTime? s = null, DateTime? e = null,
                            string status = "", string eng = "")
@@ -100,103 +70,118 @@ namespace RF_Schedule
                 };
             }
 
-            //===============================
-            // 場地清單
-            //===============================
-            var locations = new[]
+            // 固定 mapping（你指定的）
+            var locationMap = new Dictionary<string, (string[] testItems, string[] engineers)>
             {
-        "Conducted 1", "Conducted 2", "Conducted 3",
-        "Conducted 4", "Conducted 5", "Conducted 6",
-        "966-1", "966-2", "966-3", "1166"
+                ["Conducted 1"] = (new[] { "WIFI_Conducted" }, new[] { "Chris" }),
+                ["Conducted 2"] = (new[] { "WIFI_Conducted" }, new[] { "Ian" }),
+                ["Conducted 3"] = (new[] { "WWAN_Conducted" }, new[] { "Thomas", "Darren" }),
+                ["Conducted 4"] = (new[] { "WWAN_Conducted" }, new[] { "Brian" }),
+                ["Conducted 5"] = (new[] { "Rx-Blocking", "Adaptivity" }, new[] { "Billy" }),
+                ["Conducted 6"] = (new[] { "DFS", "PWS" }, new[] { "Zen" }),
+                ["966-1"] = (new[] { "Radiated" }, new[] { "WJ", "Alex" }),
+                ["966-2"] = (new[] { "Radiated" }, new[] { "Bob", "GN" }),
+                ["966-3"] = (new[] { "Radiated" }, new[] { "Nick", "Dante" }),
+                ["1166"] = (new[] { "Radiated" }, new[] { "Jack", "Kane" }),
             };
 
-            // Level 1：場地
+            var regulations = new[] { "FCC", "NCC", "CE", "IC", "TELEC" };
+            var statuses = new[] { "NotStarted", "InProgress", "Fail" };
+
+            Random rnd = new Random();
+
+            // ——————————————————————————
+            // ① 加入場地（root node）
+            // ——————————————————————————
             var locId = new Dictionary<string, int>();
 
-            foreach (var loc in locations)
+            foreach (var loc in locationMap.Keys)
             {
                 var n = Node(loc, "Location", 0);
                 list.Add(n);
                 locId[loc] = n.Id;
             }
 
-            //===============================
-            // 每個場地給一個 Project（示例）
-            //===============================
-            string projectName = "TE-2511000026";
-
-            //===============================
-            // 多種測項名稱
-            //===============================
-            var WIFI = "WIFI_Conducted";
-            var WWAN = "WWAN_Conducted";
-            var BLOCK = "Rx-Blocking";
-            var ADAPT = "Adaptivity";
-            var DFS = "DFS";
-            var PWS = "PWS";
-            var RAD = "Radiated";
-
-            //===============================
-            // 場地對應測項
-            //===============================
-            var map = new Dictionary<string, string[]>
-            {
-                ["Conducted 1"] = new[] { WIFI },
-                ["Conducted 2"] = new[] { WIFI },
-                ["Conducted 3"] = new[] { WWAN },
-                ["Conducted 4"] = new[] { WWAN },
-                ["Conducted 5"] = new[] { BLOCK, ADAPT },
-                ["Conducted 6"] = new[] { DFS, PWS },
-                ["966-1"] = new[] { RAD },
-                ["966-2"] = new[] { RAD },
-                ["966-3"] = new[] { RAD },
-                ["1166"] = new[] { RAD },
-            };
-
-            Random rnd = new Random();
-
-            string[] engineers = { "東海", "小賴", "利特", "神童", "銀赫" };
-            string[] statuses = { "NotStarted", "InProgress", "Completed", "Fail" };
-
-            //===============================
-            // 逐一建立 Project → Regulation → TestItem
-            //===============================
-            foreach (var loc in locations)
+            // ——————————————————————————
+            // ② 每個場地下 2～5 組假資料
+            // ——————————————————————————
+            foreach (var loc in locationMap.Keys)
             {
                 int locNodeId = locId[loc];
+                var (testItems, engineers) = locationMap[loc];
 
-                // Project
-                var p = Node(projectName, "Project", locNodeId);
-                list.Add(p);
+                int projectCount = rnd.Next(2, 6);  // 2～5
 
-                // Regulation（為簡化用 FCC）
-                var r = Node("FCC", "Regulation", p.Id);
-                list.Add(r);
-
-                // 該場地負責哪些 TestItem
-                foreach (var ti in map[loc])
+                for (int pIdx = 0; pIdx < projectCount; pIdx++)
                 {
-                    // 隨機 3~7 天的甘特條
-                    var start = new DateTime(2025, 12, rnd.Next(1, 10));
-                    var end = start.AddDays(rnd.Next(2, 6));
+                    string projName = $"TE2511-{rnd.Next(100000, 999999)}";
 
-                    list.Add(Node(
-                        ti,
-                        "TestItem",
-                        r.Id,
-                        start,
-                        end,
-                        statuses[rnd.Next(statuses.Length)],
-                        engineers[rnd.Next(engineers.Length)]
-                    ));
+                    // Project
+                    var project = Node(projName, "Project", locNodeId);
+                    list.Add(project);
+
+                    // 每個專案 2～4 法規
+                    int regCount = rnd.Next(2, 5);
+
+                    for (int rIdx = 0; rIdx < regCount; rIdx++)
+                    {
+                        string reg = regulations[rnd.Next(regulations.Length)];
+
+                        var regNode = Node(reg, "Regulation", project.Id);
+                        list.Add(regNode);
+
+                        // 每個法規底下：場地固定的測項們
+                        foreach (var ti in testItems)
+                        {
+                            // 日期：限制到 2026/01/20
+                            var start = RandomDate(new DateTime(2025, 12, 1), new DateTime(2026, 1, 10));
+                            var end = start.AddDays(rnd.Next(2, 8));
+
+                            if (end > new DateTime(2026, 1, 20))
+                                end = new DateTime(2026, 1, 20);
+
+                            string eng = engineers[rnd.Next(engineers.Length)];
+
+                            list.Add(Node(
+                                ti,
+                                "TestItem",
+                                regNode.Id,
+                                start,
+                                end,
+                                statuses[rnd.Next(statuses.Length)],
+                                eng
+                            ));
+                        }
+                    }
+                }
+            }
+
+            // ——————————————————————————
+            // ③ 組合顯示欄位（甘特圖左側顯示用）
+            // ——————————————————————————
+            foreach (var node in list)
+            {
+                if (node.NodeType == "TestItem")
+                {
+                    string sDate = node.StartDate?.ToString("MM/dd") ?? "";
+                    string eDate = node.EndDate?.ToString("MM/dd") ?? "";
+
+                    node.ColumnName =
+                        $"{node.ColumnName}   [{sDate} ~ {eDate}]   ({node.Status})   - {node.Engineer}";
                 }
             }
 
             ganttControl1.DataSource = list;
-
-            ganttControl1.RefreshDataSource();
-            ganttControl1.BestFitColumns();
         }
 
+        // ——————————————————————————
+        // 亂數日期 (含結束限制邏輯)
+        // ——————————————————————————
+        private DateTime RandomDate(DateTime min, DateTime max)
+        {
+            var rnd = new Random();
+            int range = (max - min).Days;
+            return min.AddDays(rnd.Next(range));
+        }
     }
 }

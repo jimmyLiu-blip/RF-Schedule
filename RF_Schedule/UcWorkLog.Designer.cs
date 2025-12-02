@@ -54,9 +54,7 @@
             gridColumn4 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn5 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn6 = new DevExpress.XtraGrid.Columns.GridColumn();
-            gridColumn7 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn8 = new DevExpress.XtraGrid.Columns.GridColumn();
-            gridColumn9 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn10 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn13 = new DevExpress.XtraGrid.Columns.GridColumn();
             gridColumn11 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -219,7 +217,7 @@
             gridView1.Appearance.Row.Options.UseTextOptions = true;
             gridView1.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             gridView1.ColumnPanelRowHeight = 25;
-            gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn1, gridColumn2, gridColumn3, gridColumn4, gridColumn5, gridColumn6, gridColumn7, gridColumn8, gridColumn9, gridColumn10, gridColumn13, gridColumn11 });
+            gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridColumn1, gridColumn2, gridColumn3, gridColumn4, gridColumn5, gridColumn6, gridColumn8, gridColumn10, gridColumn13, gridColumn11 });
             gridView1.GridControl = gridWorkLog;
             gridView1.Name = "gridView1";
             gridView1.OptionsView.ShowGroupPanel = false;
@@ -291,18 +289,6 @@
             gridColumn6.VisibleIndex = 5;
             gridColumn6.Width = 112;
             // 
-            // gridColumn7
-            // 
-            gridColumn7.AppearanceCell.Options.UseTextOptions = true;
-            gridColumn7.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            gridColumn7.Caption = "版本";
-            gridColumn7.FieldName = "RevisionName";
-            gridColumn7.MinWidth = 30;
-            gridColumn7.Name = "gridColumn7";
-            gridColumn7.Visible = true;
-            gridColumn7.VisibleIndex = 6;
-            gridColumn7.Width = 112;
-            // 
             // gridColumn8
             // 
             gridColumn8.Caption = "狀態";
@@ -310,18 +296,8 @@
             gridColumn8.MinWidth = 30;
             gridColumn8.Name = "gridColumn8";
             gridColumn8.Visible = true;
-            gridColumn8.VisibleIndex = 7;
+            gridColumn8.VisibleIndex = 6;
             gridColumn8.Width = 112;
-            // 
-            // gridColumn9
-            // 
-            gridColumn9.Caption = "延遲原因";
-            gridColumn9.FieldName = "DelayReason";
-            gridColumn9.MinWidth = 30;
-            gridColumn9.Name = "gridColumn9";
-            gridColumn9.Visible = true;
-            gridColumn9.VisibleIndex = 8;
-            gridColumn9.Width = 112;
             // 
             // gridColumn10
             // 
@@ -335,7 +311,7 @@
             gridColumn10.MinWidth = 30;
             gridColumn10.Name = "gridColumn10";
             gridColumn10.Visible = true;
-            gridColumn10.VisibleIndex = 9;
+            gridColumn10.VisibleIndex = 7;
             gridColumn10.Width = 112;
             // 
             // gridColumn13
@@ -347,7 +323,7 @@
             gridColumn13.MinWidth = 30;
             gridColumn13.Name = "gridColumn13";
             gridColumn13.Visible = true;
-            gridColumn13.VisibleIndex = 10;
+            gridColumn13.VisibleIndex = 8;
             gridColumn13.Width = 112;
             // 
             // gridColumn11
@@ -357,7 +333,7 @@
             gridColumn11.MinWidth = 30;
             gridColumn11.Name = "gridColumn11";
             gridColumn11.Visible = true;
-            gridColumn11.VisibleIndex = 11;
+            gridColumn11.VisibleIndex = 9;
             gridColumn11.Width = 112;
             // 
             // repositoryItemButtonEdit1
@@ -416,9 +392,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn4;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn5;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn6;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumn7;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn8;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumn9;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn10;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn13;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn11;

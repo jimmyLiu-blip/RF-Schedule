@@ -59,9 +59,7 @@ namespace RF_Schedule
             view.Columns["ProjectNumber"].Width = 180;
             view.Columns["RegulationName"].Width = 85;
             view.Columns["TestItemName"].Width = 180;
-            view.Columns["RevisionName"].Width = 100;
             view.Columns["StatusName"].Width = 70;
-            view.Columns["DelayReason"].Width = 150;
             view.Columns["Comment"].Width = 200;
             view.Columns["CreatedDate"].Width = 150;
 
@@ -116,7 +114,7 @@ namespace RF_Schedule
                     RegulationName = "CE",
                     TestItemName = "Rx-Blocking",
                     RevisionName = "v2 - 補測(Command)",
-                    StatusName = "延遲",
+                    StatusName = "進行中",
                     DelayReason = "設備故障",
                     Comment = "設備校正延後",
                     CreatedDate = DateTime.Now.AddDays(-3),
